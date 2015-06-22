@@ -49,10 +49,10 @@ my $readmeIssue;
 sub main()
 {
 	start_ccm();
-	reconfigure_dev_proj_and_compile(); 
+	#reconfigure_dev_proj_and_compile(); 
 	reconfigure_del_project();
-	delivery();
-	send_email();
+	#delivery();
+	#send_email();
 	#create_childcrs();
 	#move_cr_status();
 	ccm_stop();
