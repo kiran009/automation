@@ -111,7 +111,7 @@ sub reconfigure_del_project()
 	    chdir "$workarea/Provident_Delivery";
 	}
 	# Execute gmake clean delivery
-	$ENV{'PATH'}="$workarea/Provident_Delivery:$ENV{'PATH'}";
+	$ENV{'PATH'}="$workarea/Provident_Delivery/:./:$ENV{'PATH'}";
 	`/usr/bin/gmake clean deliver 2>&1 1>/tmp/gmake_$delprojectname.log`;
 	open OP, "< /tmp/gmake_$delprojectname.log";
 	@op=<OP>;
