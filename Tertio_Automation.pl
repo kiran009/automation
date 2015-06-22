@@ -17,7 +17,7 @@ $dbbmloc="/data/ccmbm/provident/";
 $result=GetOptions("project=s"=>\$devprojectname,"project=s"=>\$delprojectname,"servername=s"=>\$servername);
 if(!$result)
 {
-	print "Please provide devprojectname, servername \n";
+	print "Please provide devprojectname, delprojectname & servername \n";
 	exit;
 }
 if(!$devprojectname)
@@ -40,7 +40,6 @@ $platformlist;
 $hostname;
 @platforms;
 $workarea;
-$ftpdir;
 #$mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com Girish.Desai@evolving.com Pradeep.Kumar@evolving.com';
 $mailto='kiran.daadhi@evolving.com';
 %hash;
@@ -66,7 +65,6 @@ sub reconfigure_dev_proj_and_compile()
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	$workarea=~ s/^\s+|\s+$//g;
 	print "***************CCM WorkArea is: $workarea and \$hostsname value is: $servername\n***************\n";
-
 	#`$CCM folder -modify -add_task @tasks 2>&1 1>/dev/null`;
 	#`$CCM reconfigure -rs -r -p $devprojectname`;
 	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>/data/ccmbm/final_script/kiran_test/reconfigure_devproject_$devprojectname_$servername.log`;
@@ -84,7 +82,7 @@ sub reconfigure_dev_proj_and_compile()
 	open OP, "< /data/ccmbm/final_script/kiran_test/gmake_$devprojectname_$servername.log";
 	my @op=<OP>;
 	close OP;
-	#print "Contents of gmake.log is: @op \n";	
+	print "Contents of gmake.log for development project is: @op \n";	
 }
 sub reconfigure_del_project()
 {
@@ -103,32 +101,36 @@ sub reconfigure_del_project()
 	}
 	# Execute gmake clean delivery
 	`/usr/bin/gmake clean deliver 2>&1 1>/data/ccmbm/final_script/kiran_test/gmake_$delprojectname_$servername.log`;
+	open OP, "< /data/ccmbm/final_script/kiran_test/gmake_$delprojectname_$servername.log";
+	my @op=<OP>;
+	close OP;
+	print "Contents of gmake.log for delivery project is: @op \n";
 }
 
 sub delivery()
 {
   print "Delivering binaries for the platform";
   if($delprojectname =~ /Java/)
- {
-		$delroot="$dbbmloc/$delprojectname/Provident_Delivery";
- }
-else
-{
-    $delroot="$dbbmloc/$delprojectname/Provident_Delivery/build";
- }
- copy("$delroot/tertio.tar","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy tertio.tar \n");
- copy("$delroot/tertio.txt","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy tertio.txt \n");
- copy("$delroot/CoreZSLPackage_1-0-0.Z","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy CoreZSLPackage_1-0-0.Z \n");
- copy("$delroot/gpsretrieve","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy gpsretrieve \n");
- copy("$delroot/adk.tar","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy adk.tar \n");
- copy("$delroot/testbench.tar","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy testbench.tar \n");
- $adkdir="/u/kkdaadhi/tertio_adk/";
- mkdir "$adkdir/7.7.0_build11",0755;
- chdir("$adkdir/7.7.0_build11");
-`tar -xf /data/ccmbm/provident/Provident_Delivery-RHEL6_7.7.0/Provident_Delivery/build/adk.tar`;
-`mv tertio-adk-7.7.0/* ./`;
-`rm -rf tertio-adk-7.7.0`;
-send_email("Tertio 7.7 build","/data/ccmbm/final_script/kiran_test/gmake_$delprojectname_$servername.log");
+  {
+	$delroot="$dbbmloc/$delprojectname/Provident_Delivery";
+  }
+  else
+  {
+  	$delroot="$dbbmloc/$delprojectname/Provident_Delivery/build";
+  }
+  copy("$delroot/tertio.tar","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy tertio.tar \n");
+  copy("$delroot/tertio.txt","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy tertio.txt \n");
+  copy("$delroot/CoreZSLPackage_1-0-0.Z","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy CoreZSLPackage_1-0-0.Z \n");
+  copy("$delroot/gpsretrieve","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy gpsretrieve \n");
+  copy("$delroot/adk.tar","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy adk.tar \n");
+  copy("$delroot/testbench.tar","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy testbench.tar \n");
+  $adkdir="/u/kkdaadhi/tertio_adk/";
+  mkdir "$adkdir/7.7.0_build11",0755;
+  chdir("$adkdir/7.7.0_build11");
+ `tar -xf /data/ccmbm/provident/Provident_Delivery-RHEL6_7.7.0/Provident_Delivery/build/adk.tar`;
+ `mv tertio-adk-7.7.0/* ./`;
+ `rm -rf tertio-adk-7.7.0`;
+ send_email("Tertio 7.7 build","/data/ccmbm/final_script/kiran_test/gmake_$delprojectname_$servername.log");
 }
 
 sub start_ccm()
