@@ -49,9 +49,9 @@ sub main()
 {
 	start_ccm();
 	reconfigure_dev_proj_and_compile(); 
-	reconfigure_del_project();
-	delivery();
-	send_email();
+	#reconfigure_del_project();
+	#delivery();
+	#send_email();
 	#create_childcrs();
 	#move_cr_status();
 	ccm_stop();
@@ -62,7 +62,7 @@ sub reconfigure_dev_proj_and_compile()
 	$ccmworkarea=`$CCM wa -show -recurse $devprojectname`;
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	$workarea=~ s/^\s+|\s+$//g;
-	print "***************CCM WorkArea is: $workarea \n***************\n";
+	print "***************CCM WorkArea is: $workarea***************\n";
 	#`$CCM folder -modify -add_task @tasks 2>&1 1>/dev/null`;
 	#`$CCM reconfigure -rs -r -p $devprojectname`;
 	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>/data/ccmbm/final_script/kiran_test/reconfigure_devproject_$devprojectname.log`;
