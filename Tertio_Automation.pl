@@ -14,7 +14,7 @@ $ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
 $CCM="$ENV{'CCM_HOME'}/bin/ccm";
 $database="/data/ccmdb/provident/";
 $dbbmloc="/data/ccmbm/provident/";
-$result=GetOptions("project=s"=>\$devprojectname,"project=s"=>\$delprojectname);
+$result=GetOptions("devproject=s"=>\$devprojectname,"delproject=s"=>\$delprojectname);
 if(!$result)
 {
 	print "Please provide devprojectname, delprojectname \n";
