@@ -97,6 +97,10 @@ sub reconfigure_del_project()
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	print "***************CCM WorkArea of Delivery Project is: $workarea ***************\n";	
 	`$CCM reconfigure -rs -r -p $delprojectname 2>&1 1>/tmp/reconfigure_$delprojectname.log`;
+	open OP, "< /tmp/reconfigure_$delprojectname.log";
+	@op=<OP>;
+	close OP;
+	print "Contents of gmake.log for delivery project is: @op \n";
 	$delprojectname=~ s/^\s+|\s+$//g;
 	if($delprojectname =~ /Java/)
 	{
@@ -107,6 +111,7 @@ sub reconfigure_del_project()
 	    chdir "$workarea/Provident_Delivery";
 	}
 	# Execute gmake clean delivery
+	$ENV{'PATH'}="$workarea/Provident_Delivery:$ENV{'PATH'}";
 	`/usr/bin/gmake clean deliver 2>&1 1>/tmp/gmake_$delprojectname.log`;
 	open OP, "< /tmp/gmake_$delprojectname.log";
 	@op=<OP>;
