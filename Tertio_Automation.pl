@@ -67,7 +67,8 @@ sub reconfigure_dev_proj_and_compile()
 	#`$CCM reconfigure -rs -r -p $devprojectname`;
 	$devprojectname=~ s/^\s+|\s+$//g;
 	print "Dev project name is :$devprojectname\n";
-	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>/data/ccmbm/final_script/kiran_test/reconfigure_devproject_$devprojectname.log`;
+	@reconlog=`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>/tmp/reconfigure_devproject_$devprojectname.log`;
+	print "Reconfigure log:@reconlog";
 	if($devprojectname =~ /Java/)
 	{
 		chdir "$workarea/Provident_Java";
@@ -78,9 +79,9 @@ sub reconfigure_dev_proj_and_compile()
 	    chdir "$workarea/Provident_Dev";
 	}
 	#`/usr/bin/rsh $hostname 'cd $workarea/DSA_FUR_Dev; /usr/bin/gmake clean all'`;
-	#`/usr/bin/rsh $hostname 'cd $workarea/DSA_FUR_Dev; /usr/bin/gmake clean all 2>&1 1>/data/ccmbm/final_script/kiran_test/gmake_$platform.log'`;
-	`/usr/bin/gmake clean all 2>&1 1>/data/ccmbm/final_script/kiran_test/gmake_$devprojectname.log`;
-	open OP, "< /data/ccmbm/final_script/kiran_test/gmake_$devprojectname.log";
+	#`/usr/bin/rsh $hostname 'cd $workarea/DSA_FUR_Dev; /usr/bin/gmake clean all 2>&1 1>/tmp/gmake_$platform.log'`;
+	`/usr/bin/gmake clean all 2>&1 1>/tmp/gmake_$devprojectname.log`;
+	open OP, "< /tmp/gmake_$devprojectname.log";
 	my @op=<OP>;
 	close OP;
 	print "Contents of gmake.log for development project is: @op \n";	
@@ -91,7 +92,7 @@ sub reconfigure_del_project()
 	$ccmworkarea=`$CCM wa -show -recurse $delprojectname`;
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	print "***************CCM WorkArea of Delivery Project is: $workarea ***************\n";	
-	`$CCM reconfigure -rs -r -p $delprojectname 2>&1 1>/data/ccmbm/final_script/kiran_test/reconfigure_$delprojectname.log`;
+	`$CCM reconfigure -rs -r -p $delprojectname 2>&1 1>/tmp/reconfigure_$delprojectname.log`;
 	if($delprojectname =~ /Java/)
 	{
 		chdir "$workarea/Provident_Java";
@@ -101,8 +102,8 @@ sub reconfigure_del_project()
 	    chdir "$workarea/Provident_Delivery";
 	}
 	# Execute gmake clean delivery
-	`/usr/bin/gmake clean deliver 2>&1 1>/data/ccmbm/final_script/kiran_test/gmake_$delprojectname.log`;
-	open OP, "< /data/ccmbm/final_script/kiran_test/gmake_$delprojectname.log";
+	`/usr/bin/gmake clean deliver 2>&1 1>/tmp/gmake_$delprojectname.log`;
+	open OP, "< /tmp/gmake_$delprojectname.log";
 	my @op=<OP>;
 	close OP;
 	print "Contents of gmake.log for delivery project is: @op \n";
@@ -131,7 +132,7 @@ sub delivery()
  `tar -xf /data/ccmbm/provident/Provident_Delivery-RHEL6_7.7.0/Provident_Delivery/build/adk.tar`;
  `mv tertio-adk-7.7.0/* ./`;
  `rm -rf tertio-adk-7.7.0`;
- send_email("Tertio 7.7 build","/data/ccmbm/final_script/kiran_test/gmake_$delprojectname.log");
+ send_email("Tertio 7.7 build","/tmp/gmake_$delprojectname.log");
 }
 
 sub start_ccm()
