@@ -14,10 +14,10 @@ $ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
 $CCM="$ENV{'CCM_HOME'}/bin/ccm";
 $database="/data/ccmdb/provident/";
 $dbbmloc="/data/ccmbm/provident/";
-$result=GetOptions("project=s"=>\$devprojectname,"project=s"=>\$delprojectname,"servername=s"=>\$servername);
+$result=GetOptions("project=s"=>\$devprojectname,"project=s"=>\$delprojectname);
 if(!$result)
 {
-	print "Please provide devprojectname, delprojectname & servername \n";
+	print "Please provide devprojectname, delprojectname \n";
 	exit;
 }
 if(!$devprojectname)
@@ -25,49 +25,47 @@ if(!$devprojectname)
 	print "Projectname is mandatory \n";
 	exit;
 }
-if(!$servername)
-{
-	print "Servername is mandatory \n";
-	exit;
-}
-	
-my @PatchFiles,@files;
-my $patch_number,$problem_number;
-my @CRS,@crs,@tasks,$CRlist;
-$PatchReleaseVersion;
-$projectName;
-$platformlist;
-$hostname;
-@platforms;
-$workarea;
-#$mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com Girish.Desai@evolving.com Pradeep.Kumar@evolving.com';
-$mailto='kiran.daadhi@evolving.com';
-%hash;
-$readmeIssue;
+my @PatchFiles;
+my @files;
+my $patch_number;
+my $problem_number;
+my @CRS;
+my @crs;
+my @tasks;
+my $CRlist;
+my $PatchReleaseVersion;
+my $projectName;
+my $platformlist;
+my $hostname;
+my @platforms;
+my $workarea;
+# # $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com Girish.Desai@evolving.com Pradeep.Kumar@evolving.com';
+my $mailto='kiran.daadhi@evolving.com';
+my %hash;
+my $readmeIssue;
 
-#/* Global Environment Variables ******* /
-main();
+# /* Global Environment Variables ******* /
 sub main()
 {
 	start_ccm();
 	reconfigure_dev_proj_and_compile(); 
 	reconfigure_del_project();
+	delivery();
 	send_email();
 	#create_childcrs();
 	#move_cr_status();
 	ccm_stop();
 	exit;
 }
-
 sub reconfigure_dev_proj_and_compile()
 {	
 	$ccmworkarea=`$CCM wa -show -recurse $devprojectname`;
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	$workarea=~ s/^\s+|\s+$//g;
-	print "***************CCM WorkArea is: $workarea and \$hostsname value is: $servername\n***************\n";
+	print "***************CCM WorkArea is: $workarea \n***************\n";
 	#`$CCM folder -modify -add_task @tasks 2>&1 1>/dev/null`;
 	#`$CCM reconfigure -rs -r -p $devprojectname`;
-	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>/data/ccmbm/final_script/kiran_test/reconfigure_devproject_$devprojectname_$servername.log`;
+	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>/data/ccmbm/final_script/kiran_test/reconfigure_devproject_$devprojectname.log`;
 	if($devprojectname =~ /Java/)
 	{
 		chdir "$workarea/Provident_Java";
@@ -78,8 +76,8 @@ sub reconfigure_dev_proj_and_compile()
 	}
 	#`/usr/bin/rsh $hostname 'cd $workarea/DSA_FUR_Dev; /usr/bin/gmake clean all'`;
 	#`/usr/bin/rsh $hostname 'cd $workarea/DSA_FUR_Dev; /usr/bin/gmake clean all 2>&1 1>/data/ccmbm/final_script/kiran_test/gmake_$platform.log'`;
-	`/usr/bin/gmake clean all 2>&1 1>/data/ccmbm/final_script/kiran_test/gmake_$devprojectname_$servername.log`;
-	open OP, "< /data/ccmbm/final_script/kiran_test/gmake_$devprojectname_$servername.log";
+	`/usr/bin/gmake clean all 2>&1 1>/data/ccmbm/final_script/kiran_test/gmake_$devprojectname.log`;
+	open OP, "< /data/ccmbm/final_script/kiran_test/gmake_$devprojectname.log";
 	my @op=<OP>;
 	close OP;
 	print "Contents of gmake.log for development project is: @op \n";	
@@ -89,8 +87,8 @@ sub reconfigure_del_project()
 	print "*************** Delivery devprojectname is: $delprojectname  ***************\n";
 	$ccmworkarea=`$CCM wa -show -recurse $delprojectname`;
 	($temp,$workarea)=split(/'/,$ccmworkarea);
-	print "***************CCM WorkArea of Delivery Project is: $workarea***************\n";	
-	`$CCM reconfigure -rs -r -p $delprojectname 2>&1 1>/data/ccmbm/final_script/kiran_test/reconfigure_delproject_$platform.log`;
+	print "***************CCM WorkArea of Delivery Project is: $workarea ***************\n";	
+	`$CCM reconfigure -rs -r -p $delprojectname 2>&1 1>/data/ccmbm/final_script/kiran_test/reconfigure_$delprojectname.log`;
 	if($delprojectname =~ /Java/)
 	{
 		chdir "$workarea/Provident_Java";
@@ -100,8 +98,8 @@ sub reconfigure_del_project()
 	    chdir "$workarea/Provident_Delivery";
 	}
 	# Execute gmake clean delivery
-	`/usr/bin/gmake clean deliver 2>&1 1>/data/ccmbm/final_script/kiran_test/gmake_$delprojectname_$servername.log`;
-	open OP, "< /data/ccmbm/final_script/kiran_test/gmake_$delprojectname_$servername.log";
+	`/usr/bin/gmake clean deliver 2>&1 1>/data/ccmbm/final_script/kiran_test/gmake_$delprojectname.log`;
+	open OP, "< /data/ccmbm/final_script/kiran_test/gmake_$delprojectname.log";
 	my @op=<OP>;
 	close OP;
 	print "Contents of gmake.log for delivery project is: @op \n";
@@ -130,7 +128,7 @@ sub delivery()
  `tar -xf /data/ccmbm/provident/Provident_Delivery-RHEL6_7.7.0/Provident_Delivery/build/adk.tar`;
  `mv tertio-adk-7.7.0/* ./`;
  `rm -rf tertio-adk-7.7.0`;
- send_email("Tertio 7.7 build","/data/ccmbm/final_script/kiran_test/gmake_$delprojectname_$servername.log");
+ send_email("Tertio 7.7 build","/data/ccmbm/final_script/kiran_test/gmake_$delprojectname.log");
 }
 
 sub start_ccm()
@@ -153,3 +151,4 @@ sub send_email()
 	print "\$attachment value is: $attachment \n";
 	system("/usr/bin/mutt -s '$subject' $mailto < $attachment ");
 }
+main();
