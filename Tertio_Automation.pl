@@ -65,6 +65,8 @@ sub reconfigure_dev_proj_and_compile()
 	print "***************CCM WorkArea is: $workarea***************\n";
 	#`$CCM folder -modify -add_task @tasks 2>&1 1>/dev/null`;
 	#`$CCM reconfigure -rs -r -p $devprojectname`;
+	$devprojectname=~ s/^\s+|\s+$//g;
+	print "Dev project name is :$devprojectname\n";
 	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>/data/ccmbm/final_script/kiran_test/reconfigure_devproject_$devprojectname.log`;
 	if($devprojectname =~ /Java/)
 	{
@@ -72,6 +74,7 @@ sub reconfigure_dev_proj_and_compile()
 	}
 	else
 	{
+		print "Perfect \n";
 	    chdir "$workarea/Provident_Dev";
 	}
 	#`/usr/bin/rsh $hostname 'cd $workarea/DSA_FUR_Dev; /usr/bin/gmake clean all'`;
