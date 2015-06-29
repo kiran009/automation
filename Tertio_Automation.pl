@@ -25,6 +25,7 @@ if(!$devprojectname)
 	print "Projectname is mandatory \n";
 	exit;
 }
+print "Test";
 my @PatchFiles;
 my @files;
 my $patch_number;
