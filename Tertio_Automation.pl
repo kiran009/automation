@@ -108,13 +108,13 @@ sub reconfigure_del_project()
 	    chdir "$workarea/Provident_Delivery";
 	}
 	# Execute gmake clean delivery
-	$ENV{'PATH'}="$workarea/Provident_Delivery/:./:$ENV{'PATH'}";
-	`/usr/bin/gmake clean deliver 2>&1 1>/tmp/gmake_$delprojectname.log`;
-	open OP, "< /tmp/gmake_$delprojectname.log";
-	@op=<OP>;
-	close OP;
-	print "Contents of gmake.log for delivery project is: @op \n";
-	`zip -r /tmp/logs.zip /tmp/gmake_$delprojectname.log /tmp/reconfigure_$delprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
+	#$ENV{'PATH'}="$workarea/Provident_Delivery/:./:$ENV{'PATH'}";
+	#`/usr/bin/gmake clean deliver 2>&1 1>/tmp/gmake_$delprojectname.log`;
+	#open OP, "< /tmp/gmake_$delprojectname.log";
+	#@op=<OP>;
+	#close OP;
+	#print "Contents of gmake.log for delivery project is: @op \n";
+	`zip -r /tmp/logs.zip /tmp/reconfigure_$delprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
 	send_email('Tertio 7.6 Build','/tmp/logs.zip');
 }
 
@@ -162,6 +162,6 @@ sub send_email()
 {
 	($subject,$attachment)=@_;
 	print "\$attachment value is: $attachment \n";
-	system("/usr/bin/mutt -s '$subject' $mailto < $attachment");
+	system("/usr/bin/mutt -s '$subject' $mailto -a $attachment < /dev/null");
 }
 main();
