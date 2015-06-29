@@ -1,0 +1,4 @@
+ccm task -show objects 10777
+1) Platform.mk-hpia_34:makefile:3   integrate prathish
+2) Platform.mk-linAS5_91:makefile:3 integrate prathish
+3) Platform.mk-sol10_94:makefile:3  integrate prathish

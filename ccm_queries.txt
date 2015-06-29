@@ -1,0 +1,42 @@
+Provident_Dev-patch_linAS5_7.6.0
+
+
+ccm rp -show all_tasks Provident_Dev-patch_linAS5_7.6.0:project:1
+
+
+ccm query "project match 'Provident_Dev-patch_linAS5_7.6.0'" -f "%objectname %release"
+
+
+Provident_Dev-patch_sol10_7.6.0
+
+
+ccm query "(is_member_of('Provident_Dev-patch_sol10_7.6.0'))" > /tmp/list_objects_solaris.txt
+
+
+
+ccm query "project match 'Provident_Dev-patch_linAS5_7.6.2'"  -f "%objectname %release"
+
+ccm query "(is_member_of('Provident_Dev-patch_linAS5_7.6.2'))"
+
+
+ccm query "(is_member_of('Provident_Dev))"
+
+
+ccm create -t project 'Provident_Dev-patch_linAS5_7.6.2' -c 'Project Provident_Dev-patch_linAS5_7.6.2' -release 'Tertio/7.6.2' -task 10839 -purpose 'Patch Generation'
+
+
+ccm query "(is_member_of('TMNI_NI~i4.0_int:project:dennt#1')"
+
+
+ccm query -type task "is_associated_task_of('4610:problem:probtrac')" 
+ 
+
+ 
+ ccm query "is_child_cr_of(cvtype='problem' and problem_number='126')"
+ 
+ ccm query "has_child_cr(cvtype='problem' and problem_number='126')"
+ 
+ ccm query "is_associated_task_of(cvtype='problem' and problem_number='4601')"  
+ 
+ 
+ ccm query "is_associated_object_of('10207:task:probtrac')"  
