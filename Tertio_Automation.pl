@@ -40,8 +40,8 @@ my $hostname;
 my @platforms;
 my $workarea;
 my @op;
-# # $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com Girish.Desai@evolving.com Pradeep.Kumar@evolving.com';
-my $mailto='kiran.daadhi@evolving.com';
+my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
+#my $mailto='kiran.daadhi@evolving.com';
 my %hash;
 my $readmeIssue;
 
