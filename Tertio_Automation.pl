@@ -49,14 +49,13 @@ my $readmeIssue;
 sub main()
 {
 	start_ccm();
-	#reconfigure_dev_proj_and_compile(); 
+	reconfigure_dev_proj_and_compile(); 
 	reconfigure_del_project();
-	delivery();
+	#delivery();
 	#send_email();
 	#create_childcrs();
 	#move_cr_status();
-	ccm_stop();
-	exit;
+	ccm_stop();	
 }
 sub reconfigure_dev_proj_and_compile()
 {	
@@ -82,8 +81,6 @@ sub reconfigure_dev_proj_and_compile()
 		print "Perfect \n";
 	    chdir "$workarea/Provident_Dev";
 	}
-	#`/usr/bin/rsh $hostname 'cd $workarea/DSA_FUR_Dev; /usr/bin/gmake clean all'`;
-	#`/usr/bin/rsh $hostname 'cd $workarea/DSA_FUR_Dev; /usr/bin/gmake clean all 2>&1 1>/tmp/gmake_$platform.log'`;
 	`/usr/bin/gmake clean all 2>&1 1>/tmp/gmake_$devprojectname.log`;
 	open OP, "< /tmp/gmake_$devprojectname.log";
 	@op=<OP>;
@@ -117,6 +114,8 @@ sub reconfigure_del_project()
 	@op=<OP>;
 	close OP;
 	print "Contents of gmake.log for delivery project is: @op \n";
+	`zip -r /tmp/logs.zip /tmp/gmake_$delprojectname.log /tmp/reconfigure_$delprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
+	send_email('Tertio 7.6 Build','/tmp/logs.zip');
 }
 
 sub delivery()
