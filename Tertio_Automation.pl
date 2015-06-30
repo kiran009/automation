@@ -12,6 +12,7 @@ use File::Copy;
 $ENV{'CCM_HOME'}="/opt/ccm71";
 $ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
 $CCM="$ENV{'CCM_HOME'}/bin/ccm";
+$ENV{'umask'}="002";
 $database="/data/ccmdb/provident/";
 $dbbmloc="/data/ccmbm/provident/";
 $result=GetOptions("devproject=s"=>\$devprojectname,"delproject=s"=>\$delprojectname);
