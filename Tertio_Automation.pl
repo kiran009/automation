@@ -52,7 +52,7 @@ sub main()
 {
 	start_ccm();
 	reconfigure_dev_proj_and_compile(); 
-	reconfigure_del_project();
+	#reconfigure_del_project();
 	#delivery();
 	#send_email();
 	#create_childcrs();
@@ -75,7 +75,7 @@ sub reconfigure_dev_proj_and_compile()
 	open OP, "< /tmp/reconfigure_devproject_$devprojectname.log";
 	@op=<OP>;
 	close OP;
-	print "Contents of gmake.log for development project is: @op \n";	
+	#print "Contents of gmake.log for development project is: @op \n";	
 	if($devprojectname =~ /Java/)
 	{
 		chdir "$workarea/Provident_Java";
@@ -89,7 +89,7 @@ sub reconfigure_dev_proj_and_compile()
 	open OP, "< /tmp/gmake_$devprojectname.log";
 	@op=<OP>;
 	close OP;
-	print "Contents of gmake.log for development project is: @op \n";	
+	#print "Contents of gmake.log for development project is: @op \n";	
 }
 sub reconfigure_del_project()
 {
