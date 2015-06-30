@@ -12,7 +12,7 @@ use File::Copy;
 $ENV{'CCM_HOME'}="/opt/ccm71";
 $ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
 $CCM="$ENV{'CCM_HOME'}/bin/ccm";
-$ENV{'umask'}="002";
+#$ENV{'umask'}=002;
 $database="/data/ccmdb/provident/";
 $dbbmloc="/data/ccmbm/provident/";
 $result=GetOptions("devproject=s"=>\$devprojectname,"delproject=s"=>\$delprojectname);
@@ -42,8 +42,8 @@ my $hostname;
 my @platforms;
 my $workarea;
 my @op;
-my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
-#my $mailto='kiran.daadhi@evolving.com';
+#my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
+my $mailto='kiran.daadhi@evolving.com';
 my %hash;
 my $readmeIssue;
 
@@ -67,6 +67,8 @@ sub reconfigure_dev_proj_and_compile()
 	print "***************CCM WorkArea is: $workarea***************\n";
 	#`$CCM folder -modify -add_task @tasks 2>&1 1>/dev/null`;
 	#`$CCM reconfigure -rs -r -p $devprojectname`;
+	umask 002;
+	print("The current umask is: ", umask(), "\n");
 	$devprojectname=~ s/^\s+|\s+$//g;
 	print "Dev project name is :$devprojectname\n";
 	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>/tmp/reconfigure_devproject_$devprojectname.log`;
