@@ -42,8 +42,8 @@ my $hostname;
 my @platforms;
 my $workarea;
 my @op;
-#my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
-my $mailto='kiran.daadhi@evolving.com';
+my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
+#my $mailto='kiran.daadhi@evolving.com';
 my %hash;
 my $readmeIssue;
 
@@ -51,7 +51,9 @@ my $readmeIssue;
 sub main()
 {
 	start_ccm();
-	reconfigure_dev_proj_and_compile(); 
+	reconfigure_dev_proj_and_compile();
+	`zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
+	send_email('Tertio 7.6 Build','/tmp/logs.zip');
 	#reconfigure_del_project();
 	#delivery();
 	#send_email();
