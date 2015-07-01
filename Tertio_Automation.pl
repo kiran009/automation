@@ -54,8 +54,8 @@ my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhask
 my %hash;
 my $readmeIssue;
 
-@crs=split(/\s+/,$crs);
-print "The following list of CRs to the included in the patch";
+@crs=split(/,/,$crs);
+print "The following list of CRs to the included in the patch:@crs\n";
 # /* Global Environment Variables ******* /
 sub main()
 {
