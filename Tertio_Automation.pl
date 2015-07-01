@@ -72,6 +72,21 @@ sub main()
 	#move_cr_status();
 	ccm_stop();	
 }
+sub fetch_readme()
+{
+		foreach my $cr(@crs)
+		{
+        	`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
+        	$patch_number=`$CCM query -u -f %patch_number`;
+        	$patch_readme=`$CCM query -u -f %patch_readme`;
+        	$patch_number=~ s/^\s+|\s+$//g;
+        	open OP,"+> $patch_number\_README.txt";
+        	print OP $patch_readme;
+        	close OP;
+        	`dos2unix $patch_number\_README.txt 2>&1 1>/dev/null`;
+		}
+}
+
 sub fetch_tasks()
 {
 	foreach my $cr(@crs)
