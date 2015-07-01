@@ -62,6 +62,7 @@ sub main()
 {
 	start_ccm();
 	fetch_tasks();
+	fetch_readme();
 	#reconfigure_dev_proj_and_compile();
 	#`zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
 	#send_email('Tertio 7.6 Build','/tmp/logs.zip');
@@ -72,19 +73,17 @@ sub main()
 	#move_cr_status();
 	ccm_stop();	
 }
-sub fetch_readme()
+sub fetch_readme($)
 {
-		foreach my $cr(@crs)
-		{
-        	`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
-        	$patch_number=`$CCM query -u -f %patch_number`;
-        	$patch_readme=`$CCM query -u -f %patch_readme`;
-        	$patch_number=~ s/^\s+|\s+$//g;
-        	open OP,"+> $patch_number\_README.txt";
-        	print OP $patch_readme;
-        	close OP;
-        	`dos2unix $patch_number\_README.txt 2>&1 1>/dev/null`;
-		}
+	my $crnumber=@_;
+	`$CCM query "cvtype=\'problem\' and problem_number=\'$crnumber\'"`;
+    $patch_number=`$CCM query -u -f %patch_number`;
+    $patch_readme=`$CCM query -u -f %patch_readme`;
+    $patch_number=~ s/^\s+|\s+$//g;
+    open OP,"+> $patch_number\_README.txt";
+    print OP $patch_readme;
+    close OP;
+    `dos2unix $patch_number\_README.txt 2>&1 1>/dev/null`;		
 }
 
 sub fetch_tasks()
@@ -95,7 +94,8 @@ sub fetch_tasks()
 		$task_number=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		$task_number=~ s/^\s+|\s+$//g;
 		push(@tasks,$task_number);
-		$tasklist=join(",",@tasks);					
+		$tasklist=join(",",@tasks);
+		fetch_readme($cr);
 	}
 	print "List of tasks to be included are: $tasklist\n";
 }
