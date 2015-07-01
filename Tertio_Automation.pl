@@ -40,7 +40,8 @@ my $patch_number;
 my $problem_number;
 #my @CRS;
 my @crs;
-my $tasks;
+my @tasks;
+my $tasklist;
 my $CRlist;
 my $PatchReleaseVersion;
 my $projectName;
@@ -78,10 +79,10 @@ sub fetch_tasks()
 		$cr=~ s/^\s+|\s+$//g;
 		$task_number=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		$task_number=~ s/^\s+|\s+$//g;
-		$tasks=$tasks.",".$task_number;
-		#push(@tasks,$task_number);			
+		push(@tasks,$task_number);
+		$tasklist=join(",",@tasks);					
 	}
-	print "List of tasks to be included are: $tasks";
+	print "List of tasks to be included are: $tasklist\n";
 }
 sub reconfigure_dev_proj_and_compile()
 {	
