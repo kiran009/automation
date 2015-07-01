@@ -15,7 +15,7 @@ $CCM="$ENV{'CCM_HOME'}/bin/ccm";
 #$ENV{'umask'}=002;
 $database="/data/ccmdb/provident/";
 $dbbmloc="/data/ccmbm/provident/";
-$result=GetOptions("devproject=s"=>\$devprojectname,"delproject=s"=>\$delprojectname);
+$result=GetOptions("devproject=s"=>\$devprojectname,"delproject=s"=>\$delprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs);
 if(!$result)
 {
 	print "Please provide devprojectname, delprojectname \n";
@@ -26,12 +26,19 @@ if(!$devprojectname)
 	print "Projectname is mandatory \n";
 	exit;
 }
-print "Test";
+if(!$folder)
+{
+	print "No folder is mentioned to add the TASKS corresponding to the above CRs, proceeding with existing one's\n";
+}
+if(!$crs)
+{
+	print "No extra CRs are provided for this build, proceeding with already added one's \n";	
+}
 my @PatchFiles;
 my @files;
 my $patch_number;
 my $problem_number;
-my @CRS;
+#my @CRS;
 my @crs;
 my @tasks;
 my $CRlist;
@@ -47,19 +54,33 @@ my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhask
 my %hash;
 my $readmeIssue;
 
+@crs=split(/\s+/,$crs);
+print "The following list of CRs to the included in the patch";
 # /* Global Environment Variables ******* /
 sub main()
 {
 	start_ccm();
-	reconfigure_dev_proj_and_compile();
-	`zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
-	send_email('Tertio 7.6 Build','/tmp/logs.zip');
+	fetch_tasks();
+	#reconfigure_dev_proj_and_compile();
+	#`zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
+	#send_email('Tertio 7.6 Build','/tmp/logs.zip');
 	#reconfigure_del_project();
 	#delivery();
 	#send_email();
 	#create_childcrs();
 	#move_cr_status();
 	ccm_stop();	
+}
+sub fetch_tasks()
+{
+	foreach my $cr(@crs)
+	{
+		$cr=~ s/^\s+|\s+$//g;
+		$task_number=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
+		$task_number=~ s/^\s+|\s+$//g;
+		push(@tasks,$task_number);			
+	}
+	print "List of tasks to be included are: @tasks";
 }
 sub reconfigure_dev_proj_and_compile()
 {	
