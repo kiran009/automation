@@ -183,13 +183,17 @@ sub delivery()
   }
   else
   {
-  	$delroot="$dbbmloc/$delprojectname/Provident_Delivery/build";
+  	$delroot="$dbbmloc/$delprojectname/Provident_Delivery/";
   }
   $destdir="/u/kkdaadhi/Tertio_Deliverable";
+  mkdir("$destdir",0755);
   foreach $file(@file_list)
   {
   	$file=~ s/^\s+|\s+$//g;
   	copy("$delroot/$file","$destdir") or die("Couldn't able to copy $file \n");
+  }
+  chdir($destdir);
+  `tar cvf test.tar *`;
   #copy("$delroot/Version.txt","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy tertio.txt \n");
   #copy("$delroot/CoreZSLPackage_1-0-0.Z","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy CoreZSLPackage_1-0-0.Z \n");
   #copy("$delroot/gpsretrieve","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy gpsretrieve \n");
@@ -202,7 +206,7 @@ sub delivery()
  #`mv tertio-adk-7.7.0/* ../`;
  #`rm -rf tertio-adk-7.7.0`;
  #send_email("Tertio 7.7 build","/tmp/gmake_$delprojectname.log");
-}
+#}
 }
 
 sub start_ccm()
