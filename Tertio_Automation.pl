@@ -191,7 +191,7 @@ sub delivery()
   	copy("$delroot/$file","$destdir") or die("Couldn't able to copy $file \n");
   }
   chdir($destdir);
-  `tar czvf $mrnumber\.tar\.gz *`;
+  `tar czvf $mr_number\.tar\.gz *`;
   `zip -r /tmp/logs.zip /tmp/reconfigure_$delprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
 }
 
