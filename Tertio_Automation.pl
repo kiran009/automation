@@ -65,10 +65,11 @@ sub main()
 	start_ccm();
 	fetch_tasks();
 	#fetch_readme();
-	delivery();
 	#`zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
 	#send_email('Tertio 7.7.0.1 Build','/tmp/logs.zip');
-	#reconfigure_del_project();
+	reconfigure_dev_proj_and_compile();
+	reconfigure_del_project();
+	delivery();
 	#send_email();
 	#create_childcrs();
 	#move_cr_status();
@@ -167,7 +168,7 @@ sub reconfigure_del_project()
 	close OP;
 	print "Contents of gmake.log for delivery project is: @op \n";
 	`zip -r /tmp/logs.zip /tmp/reconfigure_$delprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
-	send_email("Tertio 7.6 Build","/tmp/logs.zip");
+	send_email("Tertio 7.7.0.1 Build","/tmp/logs.zip");
 }
 
 sub delivery()
