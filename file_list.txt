@@ -1,0 +1,3 @@
+lib/libdesigner.so
+lib/libdesigner.so.1
+bin/stp
