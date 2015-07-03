@@ -73,6 +73,7 @@ sub main()
 	open OP, "< $binarylist";
 	my @file_list=<OP>;
 	print "Filelist is: @file_list \n";
+	print "Task list is: $tasklist \n";
 	#delivery();
 	#`zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
 	#send_email('Tertio 7.7.0.1 Build','/tmp/logs.zip');
@@ -81,6 +82,13 @@ sub main()
 	#create_childcrs();
 	#move_cr_status();
 	ccm_stop();	
+}
+sub fetch_mrnumber($)
+{
+	my $crnumber=@_;
+	$mr_number=`$CCM query "problem_number='$crnumber'" -u -f "%MRnumber"`;
+	$mr_number=~ s/^\s+|\s+$//g;		
+	print "MRnumber for the patch is: $mr_number";
 }
 sub fetch_readme($)
 {
@@ -104,7 +112,8 @@ sub fetch_tasks()
 		$task_number=~ s/^\s+|\s+$//g;
 		push(@tasks,$task_number);
 		$tasklist=join(",",@tasks);
-		fetch_readme($cr);
+		fetch_mrnumber($cr);
+		#fetch_readme($cr);
 	}
 	print "List of tasks to be included are: $tasklist\n";
 }
