@@ -70,8 +70,6 @@ sub main()
 	reconfigure_del_project();
 	delivery();
 	send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
-	#send_email();
-	#create_childcrs();
 	#move_cr_status();
 	ccm_stop();	
 }
@@ -105,11 +103,14 @@ sub fetch_tasks()
 		$task_number=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		$task_number=~ s/^\s+|\s+$//g;
 		push(@tasks,$task_number);
+		print "List of Tasks associated with CR $cr => $task_number \n";
+		@objectlist=`$CCM query "is_associated_object_of('$cr:task:probtrac')"`;
+		print "List of objects associated with CR $cr are: @objectlist \n";
 		$tasklist=join(",",@tasks);
 		fetch_mrnumber($cr);
 		#fetch_readme($cr);
 	}
-	print "List of tasks to be included are: $tasklist\n";
+	print "Consolidated tasklist for the patch is: $tasklist\n";
 }
 sub reconfigure_dev_proj_and_compile()
 {	
@@ -118,7 +119,7 @@ sub reconfigure_dev_proj_and_compile()
 	$workarea=~ s/^\s+|\s+$//g;
 	$folder=~ s/^\s+|\s+$//g;
 	print "***************CCM WorkArea is: $workarea***************\n";
-	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>/dev/null`;	
+	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>/tmp/task_addition_$devprojectname.log`;	
 	umask 002;
 	$devprojectname=~ s/^\s+|\s+$//g;
 	print "Dev project name is :$devprojectname\n";
