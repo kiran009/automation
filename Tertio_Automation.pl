@@ -87,7 +87,8 @@ sub fetch_mrnumber($)
 {
 	my $crnumber=@_;
 	$crnumber=~ s/^\s+|\s+$//g;
-	$mr_number=`$CCM query "cvtype='problem' and problem_number='$crnumber'" -u -f "%MRnumber"`;
+	print "CRnumber is: $crnumber \n";
+	($mr_number)=`$CCM query "cvtype='problem' and problem_number='$crnumber'" -u -f "%MRnumber"`;
 	$mr_number=~ s/^\s+|\s+$//g;		
 	print "MRnumber for the patch is: $mr_number";
 }
