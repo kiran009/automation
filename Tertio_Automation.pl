@@ -52,6 +52,7 @@ my @platforms;
 my $workarea;
 my @op;
 my @file_list;
+my $mr_number;
 #my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
 my $mailto='kiran.daadhi@evolving.com';
 my %hash;
@@ -64,12 +65,11 @@ sub main()
 {
 	start_ccm();
 	fetch_tasks();
-	#fetch_readme();
-	#`zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
-	#send_email('Tertio 7.7.0.1 Build','/tmp/logs.zip');
+	#fetch_readme();	
 	reconfigure_dev_proj_and_compile();
 	reconfigure_del_project();
 	delivery();
+	send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
 	#send_email();
 	#create_childcrs();
 	#move_cr_status();
@@ -166,9 +166,7 @@ sub reconfigure_del_project()
 	open OP, "< /tmp/gmake_$delprojectname.log";
 	@op=<OP>;
 	close OP;
-	print "Contents of gmake.log for delivery project is: @op \n";
-	`zip -r /tmp/logs.zip /tmp/reconfigure_$delprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
-	send_email("Tertio 7.7.0.1 Build","/tmp/logs.zip");
+	
 }
 
 sub delivery()
@@ -193,20 +191,8 @@ sub delivery()
   	copy("$delroot/$file","$destdir") or die("Couldn't able to copy $file \n");
   }
   chdir($destdir);
-  `tar cvf test.tar *`;
-  #copy("$delroot/Version.txt","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy tertio.txt \n");
-  #copy("$delroot/CoreZSLPackage_1-0-0.Z","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy CoreZSLPackage_1-0-0.Z \n");
-  #copy("$delroot/gpsretrieve","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy gpsretrieve \n");
-  #copy("$delroot/adk.tar","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy adk.tar \n");
-  #copy("$delroot/testbench.tar","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy testbench.tar \n");
-  #$adkdir="/u/kkdaadhi/tertio_adk/";
-  #mkdir("$adkdir/7.7.0_build11",0755);
-  #chdir("$adkdir/7.7.0_build11");
- #`tar -xf /data/ccmbm/provident/Provident_Delivery-RHEL6_7.7.0/Provident_Delivery/build/adk.tar`;
- #`mv tertio-adk-7.7.0/* ../`;
- #`rm -rf tertio-adk-7.7.0`;
- #send_email("Tertio 7.7 build","/tmp/gmake_$delprojectname.log");
-#}
+  `tar czvf $mrnumber\.tar\.gz *`;
+  `zip -r /tmp/logs.zip /tmp/reconfigure_$delprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
 }
 
 sub start_ccm()
