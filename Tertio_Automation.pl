@@ -7,14 +7,16 @@ use File::Basename;
 use Switch;
 use Getopt::Long;
 use File::Copy;
+use FindBin qw($Bin);
+use lib "$Bin/../lib";
 
 #/************ Setting Environment Variables *******************/
 $ENV{'CCM_HOME'}="/opt/ccm71";
 $ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
 $CCM="$ENV{'CCM_HOME'}/bin/ccm";
-#$ENV{'umask'}=002;
-$database="/data/ccmdb/provident/";
-$dbbmloc="/data/ccmbm/provident/";
+my $database="/data/ccmdb/provident/";
+my $dbbmloc="/data/ccmbm/provident/";
+my $binarylist="$Bin/file_list.txt";
 $result=GetOptions("devproject=s"=>\$devprojectname,"delproject=s"=>\$delprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs);
 if(!$result)
 {
@@ -38,7 +40,6 @@ my @PatchFiles;
 my @files;
 my $patch_number;
 my $problem_number;
-#my @CRS;
 my @crs;
 my @tasks;
 my $tasklist;
@@ -62,12 +63,20 @@ sub main()
 {
 	start_ccm();
 	fetch_tasks();
-	fetch_readme();
+	#fetch_readme();
+	$ccmworkarea=`$CCM wa -show -recurse $devprojectname`;
+	($temp,$workarea)=split(/'/,$ccmworkarea);
+	$workarea=~ s/^\s+|\s+$//g;
+	$folder=~ s/^\s+|\s+$//g;
+	print "***************CCM WorkArea is: $workarea***************\n";
 	#reconfigure_dev_proj_and_compile();
-	#`zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
-	#send_email('Tertio 7.6 Build','/tmp/logs.zip');
-	#reconfigure_del_project();
+	open OP, "< $binarylist";
+	my @file_list=<OP>;
+	print "Filelist is: @file_list \n";
 	#delivery();
+	#`zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
+	#send_email('Tertio 7.7.0.1 Build','/tmp/logs.zip');
+	#reconfigure_del_project();
 	#send_email();
 	#create_childcrs();
 	#move_cr_status();
@@ -104,8 +113,9 @@ sub reconfigure_dev_proj_and_compile()
 	$ccmworkarea=`$CCM wa -show -recurse $devprojectname`;
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	$workarea=~ s/^\s+|\s+$//g;
+	$folder=~ s/^\s+|\s+$//g;
 	print "***************CCM WorkArea is: $workarea***************\n";
-	#`$CCM folder -modify -add_task @tasks 2>&1 1>/dev/null`;
+	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>/dev/null`;
 	#`$CCM reconfigure -rs -r -p $devprojectname`;
 	umask 002;
 	print("The current umask is: ", umask(), "\n");
@@ -122,8 +132,7 @@ sub reconfigure_dev_proj_and_compile()
 	}
 	else
 	{
-		print "Perfect \n";
-	    chdir "$workarea/Provident_Dev";
+		chdir "$workarea/Provident_Dev";
 	}
 	`/usr/bin/gmake clean all 2>&1 1>/tmp/gmake_$devprojectname.log`;
 	open OP, "< /tmp/gmake_$devprojectname.log";
@@ -131,47 +140,17 @@ sub reconfigure_dev_proj_and_compile()
 	close OP;
 	#print "Contents of gmake.log for development project is: @op \n";	
 }
-sub reconfigure_del_project()
-{
-	print "*************** Delivery devprojectname is: $delprojectname  ***************\n";
-	$ccmworkarea=`$CCM wa -show -recurse $delprojectname`;
-	($temp,$workarea)=split(/'/,$ccmworkarea);
-	print "***************CCM WorkArea of Delivery Project is: $workarea ***************\n";	
-	`$CCM reconfigure -rs -r -p $delprojectname 2>&1 1>/tmp/reconfigure_$delprojectname.log`;
-	open OP, "< /tmp/reconfigure_$delprojectname.log";
-	@op=<OP>;
-	close OP;
-	print "Contents of gmake.log for delivery project is: @op \n";
-	$delprojectname=~ s/^\s+|\s+$//g;
-	if($delprojectname =~ /Java/)
-	{
-		chdir "$workarea/Provident_Java";
-	}
-	else
-	{
-	    chdir "$workarea/Provident_Delivery";
-	}
-	# Execute gmake clean delivery
-	#$ENV{'PATH'}="$workarea/Provident_Delivery/:./:$ENV{'PATH'}";
-	#`/usr/bin/gmake clean deliver 2>&1 1>/tmp/gmake_$delprojectname.log`;
-	#open OP, "< /tmp/gmake_$delprojectname.log";
-	#@op=<OP>;
-	#close OP;
-	#print "Contents of gmake.log for delivery project is: @op \n";
-	`zip -r /tmp/logs.zip /tmp/reconfigure_$delprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
-	send_email('Tertio 7.6 Build','/tmp/logs.zip');
-}
 
 sub delivery()
 {
-  print "Delivering binaries for the platform";
-  if($delprojectname =~ /Java/)
+  print "Create tar bundle for the platform";
+  if($devprojectname =~ /Java/)
   {
-	$delroot="$dbbmloc/$delprojectname/Provident_Delivery";
+	$delroot="$dbbmloc/$devprojectname/Provident_Delivery";
   }
   else
   {
-  	$delroot="$dbbmloc/$delprojectname/Provident_Delivery/build";
+  	$delroot="$dbbmloc/$devprojectname/Provident_Delivery/build";
   }
   copy("$delroot/tertio.tar","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy tertio.tar \n");
   copy("$delroot/Version.txt","/u/kkdaadhi/Tertio_Deliverable") or die("Couldn't able to copy tertio.txt \n");
@@ -208,4 +187,36 @@ sub send_email()
 	print "\$attachment value is: $attachment \n";
 	system("/usr/bin/mutt -s '$subject' $mailto -a $attachment < /dev/null");
 }
+#sub reconfigure_del_project()
+#{
+#	print "*************** Delivery devprojectname is: $delprojectname  ***************\n";
+##	$ccmworkarea=`$CCM wa -show -recurse $delprojectname`;
+	#($temp,$workarea)=split(/'/,$ccmworkarea);
+	#print "***************CCM WorkArea of Delivery Project is: $workarea ***************\n";	
+	#`$CCM reconfigure -rs -r -p $delprojectname 2>&1 1>/tmp/reconfigure_$delprojectname.log`;
+	#open OP, "< /tmp/reconfigure_$delprojectname.log";
+	#@op=<OP>;
+	#close OP;
+	#print "Contents of gmake.log for delivery project is: @op \n";
+	#$delprojectname=~ s/^\s+|\s+$//g;
+	#if($delprojectname =~ /Java/)
+	#{
+#		chdir "$workarea/Provident_Java";
+#	}
+#	else
+#	{
+#	    chdir "$workarea/Provident_Delivery";
+#	}
+	# Execute gmake clean delivery
+	#$ENV{'PATH'}="$workarea/Provident_Delivery/:./:$ENV{'PATH'}";
+	#`/usr/bin/gmake clean deliver 2>&1 1>/tmp/gmake_$delprojectname.log`;
+	#open OP, "< /tmp/gmake_$delprojectname.log";
+	#@op=<OP>;
+	#close OP;
+	#print "Contents of gmake.log for delivery project is: @op \n";
+#	`zip -r /tmp/logs.zip /tmp/reconfigure_$delprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`;
+#	send_email("Tertio 7.6 Build","/tmp/logs.zip");
+#}
+
+
 main();
