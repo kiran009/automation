@@ -85,7 +85,7 @@ sub main()
 }
 sub fetch_mrnumber($)
 {
-	my $crnumber=@_;
+	my ($crnumber)=@_;
 	$crnumber=~ s/^\s+|\s+$//g;
 	print "CRnumber is: $crnumber \n";
 	($mr_number)=`$CCM query "cvtype='problem' and problem_number='$crnumber'" -u -f "%MRnumber"`;
@@ -94,7 +94,7 @@ sub fetch_mrnumber($)
 }
 sub fetch_readme($)
 {
-	my $crnumber=@_;
+	my ($crnumber)=@_;
 	`$CCM query "cvtype=\'problem\' and problem_number=\'$crnumber\'"`;
     $patch_number=`$CCM query -u -f %patch_number`;
     $patch_readme=`$CCM query -u -f %patch_readme`;
