@@ -155,10 +155,10 @@ sub reconfigure_dev_proj_and_compile()
 	{
 		chdir "$workarea/Provident_Dev";
 	}
-	#`/usr/bin/gmake clean all 2>&1 1>/tmp/gmake_$devprojectname.log`;
-	#open OP, "< /tmp/gmake_$devprojectname.log";
-	#@op=<OP>;
-	#close OP;		
+	`/usr/bin/gmake clean all 2>&1 1>/tmp/gmake_$devprojectname.log`;
+	open OP, "< /tmp/gmake_$devprojectname.log";
+	@op=<OP>;
+	close OP;		
 }
 
 sub reconfigure_del_project()
