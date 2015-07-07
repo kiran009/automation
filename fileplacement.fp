@@ -1,8 +1,8 @@
 # Fileplacement file
 SRC iagent/BandWidthScheduling DEST bin/BandWidthScheduling
-SRC bin/erp DEST bin/erp 
+SRC bin/erp DEST . 
 SRC jip/eventlog DEST bin/eventlog
-SRC bin/jip DEST bin/jip
+SRC bin/jip DEST .
 SRC psdk/JPSDKAgent DEST bin/JPSDKAgent
 SRC sasdk/javasrc/JSASDKAgent DEST bin/JSASDKAgent
 SRC iagent/LayeredSLAgent DEST bin/LayeredSLAgent 
@@ -13,9 +13,9 @@ SRC bin/mwerrhandler(doesn't exist) DEST bin/mwerrhandler
 SRC installer/bin/package DEST bin/package
 SRC cli/ProvCLI DEST bin/ProvCLI
 SRC admin/readconfig DEST bin/readconfig
-SRC bin/stg DEST bin/stg
-SRC bin/sto DEST bin/sto
-SRC bin/stp DEST bin/stp
+SRC bin/stg DEST .
+SRC bin/sto DEST .
+SRC bin/stp DEST .
 SRC psdk/TclProvisioningAgent DEST bin/TclProvisioningAgent
 SRC iagent/TimeBasedScheduling DEST bin/TimeBasedScheduling
 SRC conf/descriptors/admin.properties DEST .
@@ -23,10 +23,10 @@ SRC conf/descriptors/composer.properties DEST .
 SRC conf/descriptors/designer.properties DEST .
 SRC conf/descriptors/essim.properties DEST .
 SRC conf/descriptors/nesim.properties DEST .
-SRC conf/err/provident.err DEST conf/err/provident.err
-SRC conf/err/psdk.err DEST conf/err/psdk.err
+SRC conf/err/provident.err DEST .
+SRC conf/err/psdk.err DEST .
 SRC etc/Cluster DEST etc/Cluster
-SRC etc/download/deployJava.js DEST etc/download/deployJava.js
+SRC etc/download/deployJava.js DEST .
 SRC etc/download/index.html_template DEST .
 SRC etc/download/tertio.jnlp_template DEST .
 SRC etc/symlinks.list DEST .
