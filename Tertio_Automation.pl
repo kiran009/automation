@@ -57,6 +57,7 @@ my $mr_number;
 #my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
 my $mailto='kiran.daadhi@evolving.com';
 my %hash;
+$destdir="/u/kkdaadhi/Tertio_Deliverable";
 my $readmeIssue;
 
 @crs=split(/,/,$crs);
@@ -214,7 +215,7 @@ sub delivery()
   @file_list=<OP>;
   close OP;
   $delroot="$dbbmloc/$javaprojectname/Provident_Java/";
-  foreach $file(@filelist)
+  foreach $file(@file_list)
   {
   	my @del=split(/\s+/,$file);
   	if($del[3] eq ".")
@@ -229,8 +230,11 @@ sub delivery()
   # Read the complete hash and display values
   foreach $key(keys %deliveryhash)
   {
-  	print "Key is: $key and value is: $deliveryhash{$key} \n";  	
-  	
+  	#print "Key is: $key and value is: $deliveryhash{$key} \n";
+  	$dirname=dirname($deliveryhash{$key});
+  	print "Dirname is: $dirname \n"; 
+  	mkdir("$destdir/$dirname",0755);
+  	copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   }
   exit;	
   print "Create tar bundle for the platform \n";
@@ -243,7 +247,7 @@ sub delivery()
   	$delroot="$dbbmloc/$devprojectname/Provident_Dev/";
   	print "Delivery root is: $delroot \n";
   }
-  $destdir="/u/kkdaadhi/Tertio_Deliverable";
+  
   mkdir("$destdir",0755);
   foreach $file(@file_list)
   {
