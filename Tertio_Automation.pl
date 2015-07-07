@@ -246,7 +246,7 @@ sub delivery()
   	print "Key is: $key and value is: $deliveryhash{$key} \n";
   	$dirname=dirname($deliveryhash{$key});
   	print "Dirname is: $dirname, creating directory $destdir/$dirname \n"; 
-  	mkpath("$destdir/$dirname",0755);
+  	make_path("$destdir/$dirname");
   	copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   }
   exit;
