@@ -205,7 +205,7 @@ sub delivery()
   }
   
   mkdir("$destdir",0755);
-  open OP ,"< "
+  #open OP ,"< "
   foreach $file(@file_list)
   {
   	$file=~ s/\$PROVHOME//g;
