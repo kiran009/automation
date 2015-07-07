@@ -195,39 +195,42 @@ sub delivery()
   @file_list=<OP>;
   close OP;
   my %deliveryhash;
-  print "Filelist is: @file_list \n";
+  #print "Filelist is: @file_list \n";
+  $delroot="$dbbmloc/$devprojectname/Provident_Dev/";
   foreach $file(@file_list)
   {
   	#SRC iagent/BandWidthScheduling DEST bin/BandWidthScheduling
   	my @del=split(/\s+/,$file);
   	if($del[3] eq ".")
   	{
-  		$deliveryhash{$del[1]}=$del[1];
+  		$deliveryhash{"$delroot/$del[1]"}=$del[1];
   	}
   	else
   	{
-  		$deliveryhash{$del[1]}=$del[3];
+  		$deliveryhash{"$delroot/$del[1]"}=$del[3];
   	}  	
   }
   open OP, "< $javabinarylist";
   @file_list=<OP>;
   close OP;
+  $delroot="$dbbmloc/$javaprojectname/Provident_Java/";
   foreach $file(@filelist)
   {
   	my @del=split(/\s+/,$file);
   	if($del[3] eq ".")
   	{
-  		$deliveryhash{$del[1]}=$del[1];
+  		$deliveryhash{"$delroot/$del[1]"}=$del[1];
   	}
   	else
   	{
-  		$deliveryhash{$del[1]}=$del[3];
+  		$deliveryhash{"$delroot/$del[1]"}=$del[3];
   	}
   }
   # Read the complete hash and display values
   foreach $key(keys %deliveryhash)
   {
-  	print "Key is: $key and value is: $deliveryhash{$key} \n";
+  	print "Key is: $key and value is: $deliveryhash{$key} \n";  	
+  	
   }
   exit;	
   print "Create tar bundle for the platform \n";
