@@ -208,7 +208,7 @@ sub delivery()
   #open OP ,"< "
   foreach $file(@file_list)
   {
-  	$file=~ s/\$PROVHOME//g;
+  	$file=~ s/\$PROVHOME///g;
   	$file=~ s/^\s+|\s+$//g;
   	@list=split(/\s+/,$file);
   	$src=@list[1];
@@ -217,8 +217,7 @@ sub delivery()
   	print "Source is: $src and Destination is: $dest \n";
   	mkdir("$destdir/$dirname",0755);
   	copy("$delroot/$src","$destdir/$dest") or die("Couldn't able to copy $file \n");
-  	chdir($destdir);  
-  	$dest=~ s/\///g;	
+  	chdir($destdir);
   	`tar czvf $mr_number\.tar\.gz $dest`;
   }
   `zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
