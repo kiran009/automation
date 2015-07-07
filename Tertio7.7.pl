@@ -112,7 +112,7 @@ sub fetch_readme($)
 
 sub fetch_tasks()
 {
-	open OP,">> $binarylist";
+	#open OP,">> $binarylist";
 	foreach my $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
@@ -126,11 +126,11 @@ sub fetch_tasks()
 		fetch_mrnumber($cr);		
 		fetch_readme($cr);
 	}
-	close OP;
-	print "Consolidated tasklist for the patch is: $tasklist\n";
+	#close OP;
+	#print "Consolidated tasklist for the patch is: $tasklist\n";
 	open OP, "<$binarylist";
-	@deliverablelist=<OP>;
-	print "Consolidate deliverable list for the patch is: @deliverablelist \n";
+	@file_list=<OP>;
+	print "Consolidate deliverable list for the patch is: @file_list \n";
 	close OP;
 }
 sub reconfigure_dev_proj_and_compile()
@@ -205,6 +205,7 @@ sub delivery()
   }
   
   mkdir("$destdir",0755);
+  open OP ,"< "
   foreach $file(@file_list)
   {
   	$file=~ s/\$PROVHOME//g;
