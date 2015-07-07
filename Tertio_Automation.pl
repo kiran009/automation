@@ -67,7 +67,7 @@ sub main()
 	fetch_tasks();
 	#fetch_readme();	
 	reconfigure_dev_proj_and_compile();
-	reconfigure_del_project();
+	#reconfigure_del_project();
 	delivery();
 	send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
 	#move_cr_status();
@@ -89,14 +89,27 @@ sub fetch_readme($)
     $patch_number=`$CCM query -u -f %patch_number`;
     $patch_readme=`$CCM query -u -f %patch_readme`;
     $patch_number=~ s/^\s+|\s+$//g;
-    open OP,"+> $patch_number\_README.txt";
-    print OP $patch_readme;
-    close OP;
-    `dos2unix $patch_number\_README.txt 2>&1 1>/dev/null`;		
+    
+    if($patch_readme =~ /N\/A/)
+    {
+    	print "The following CR doesn't have a README \n";
+    }
+    else
+    {
+    	open OP,"+> $patch_number\_README.txt";
+    	print OP $patch_readme;
+    	close OP;
+    	`dos2unix $patch_number\_README.txt 2>&1 1>/dev/null`;
+    	@PatchFiles=`sed -n '/AFFECTS/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTS' | sed '/^\$/d'`;
+    	print "Binary file list is: @PatchFiles \n";
+        chomp(@PatchFiles);
+        print OP "@PatchFiles \n";            	
+    }		
 }
 
 sub fetch_tasks()
 {
+	open OP,">> $binarylist";
 	foreach my $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
@@ -107,10 +120,15 @@ sub fetch_tasks()
 		@objectlist=`$CCM query "is_associated_object_of('$cr:task:probtrac')"`;
 		print "List of objects associated with CR $cr are: @objectlist \n";
 		$tasklist=join(",",@tasks);
-		fetch_mrnumber($cr);
-		#fetch_readme($cr);
+		fetch_mrnumber($cr);		
+		fetch_readme($cr);
 	}
+	close OP;
 	print "Consolidated tasklist for the patch is: $tasklist\n";
+	open OP, "<$binarylist";
+	@deliverablelist=<OP>;
+	print "Consolidate deliverable list for the patch is: @deliverablelist \n";
+	close OP;
 }
 sub reconfigure_dev_proj_and_compile()
 {	
@@ -176,6 +194,7 @@ sub delivery()
   @file_list=<OP>;
   print "Filelist is: @file_list \n";	
   print "Create tar bundle for the platform";
+  $delprojectname=$devprojectname;
   if($delprojectname =~ /Java/)
   {
 	$delroot="$dbbmloc/$delprojectname/Provident_Delivery";
