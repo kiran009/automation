@@ -199,7 +199,7 @@ sub delivery()
   {
   	#SRC iagent/BandWidthScheduling DEST bin/BandWidthScheduling
   	my @del=split(/\s+/,$file);
-  	print "source is $del[2] and dest is: $del[4] \n";
+  	print "source is $del[1] and dest is: $del[3] \n";
   }
   open OP, "< $javabinarylist";
   @file_list=<OP>;
@@ -207,7 +207,7 @@ sub delivery()
   foreach $file(@filelist)
   {
   	my @del=split(/\s+/,$file);
-  	print "source is $del[2] and dest is: $del[4] \n";
+  	print "source is $del[1] and dest is: $del[3] \n";
   }
   exit;	
   print "Create tar bundle for the platform \n";
