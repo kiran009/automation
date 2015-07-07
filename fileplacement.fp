@@ -29,7 +29,7 @@ SRC etc/download/index.html_template DEST .
 SRC etc/download/tertio.jnlp_template DEST .
 SRC etc/symlinks.list DEST .
 SRC etc/ProvError DEST .
-SRC lib/libaggnet.so DEST . 
+SRC lib/libaggnet.so.old DEST . 
 SRC designer/libsrc/libdesigner.so DEST lib/libdesigner.so
 SRC designer/libsrc/libdesigner.so.1 DEST lib/libdesigner.so.1
 SRC lib/libgpsutils.so DEST .
