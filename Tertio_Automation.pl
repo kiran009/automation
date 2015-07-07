@@ -201,7 +201,8 @@ sub delivery()
   }
   else
   {
-  	$delroot="$dbbmloc/$delprojectname/Provident_Delivery/";
+  	#$delroot="$dbbmloc/$delprojectname/Provident_Delivery/";
+  	$delroot="$dbbmloc/$delprojectname/Provident_Dev/";
   }
   $destdir="/u/kkdaadhi/Tertio_Deliverable";
   mkdir("$destdir",0755);
@@ -209,6 +210,11 @@ sub delivery()
   {
   	$file=~ s/\$PROVHOME//g;
   	$file=~ s/^\s+|\s+$//g;
+  	if($file =~ /mr_/)
+  	{
+  		($destfile=$file) =~ s/mr_/$mr_number/g;
+  		copy("$delroot/$file","$destdir/$destfile") or die("Couldn't able to copy $file \n");
+  	}
   	copy("$delroot/$file","$destdir") or die("Couldn't able to copy $file \n");
   }
   chdir($destdir);
