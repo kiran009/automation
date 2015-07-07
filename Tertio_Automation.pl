@@ -63,10 +63,10 @@ print "The following list of CRs to the included in the patch:@crs\n";
 # /* Global Environment Variables ******* /
 sub main()
 {
-	#start_ccm();
-	#fetch_tasks();
+	start_ccm();
+	fetch_tasks();
 	#fetch_readme();	
-	#reconfigure_dev_proj_and_compile();
+	reconfigure_dev_proj_and_compile();
 	#reconfigure_del_project();
 	delivery();
 	send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
@@ -153,10 +153,10 @@ sub reconfigure_dev_proj_and_compile()
 	{
 		chdir "$workarea/Provident_Dev";
 	}
-	`/usr/bin/gmake clean all 2>&1 1>/tmp/gmake_$devprojectname.log`;
-	open OP, "< /tmp/gmake_$devprojectname.log";
-	@op=<OP>;
-	close OP;		
+	#`/usr/bin/gmake clean all 2>&1 1>/tmp/gmake_$devprojectname.log`;
+	#open OP, "< /tmp/gmake_$devprojectname.log";
+	#@op=<OP>;
+	#close OP;		
 }
 
 sub reconfigure_del_project()
@@ -193,7 +193,7 @@ sub delivery()
   open OP, "< $binarylist";
   @file_list=<OP>;
   print "Filelist is: @file_list \n";	
-  print "Create tar bundle for the platform";
+  print "Create tar bundle for the platform \n";
   $delprojectname=$devprojectname;
   if($delprojectname =~ /Java/)
   {
@@ -203,6 +203,7 @@ sub delivery()
   {
   	#$delroot="$dbbmloc/$delprojectname/Provident_Delivery/";
   	$delroot="$dbbmloc/$delprojectname/Provident_Dev/";
+  	print "Delivery root is: $delroot \n";
   }
   $destdir="/u/kkdaadhi/Tertio_Deliverable";
   mkdir("$destdir",0755);
