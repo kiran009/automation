@@ -98,20 +98,22 @@ sub fetch_readme($)
     }
     else
     {
-    	open OP,"+> $patch_number\_README.txt";
-    	print OP $patch_readme;
-    	close OP;
+    	#open OP,">> $binarylist";
+    	open OP1,"+> $patch_number\_README.txt";
+    	print OP1 $patch_readme;
+    	close OP1;
     	`dos2unix $patch_number\_README.txt 2>&1 1>/dev/null`;
     	@PatchFiles=`sed -n '/AFFECTS/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTS' | sed '/^\$/d'`;
     	print "Binary file list is: @PatchFiles \n";
         chomp(@PatchFiles);
-        print OP "@PatchFiles \n";            	
+        #print OP "@PatchFiles \n";
+        #close OP;            	
     }		
 }
 
 sub fetch_tasks()
 {
-	open OP,">> $binarylist";
+	
 	foreach my $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
@@ -124,8 +126,7 @@ sub fetch_tasks()
 		$tasklist=join(",",@tasks);
 		fetch_mrnumber($cr);		
 		fetch_readme($cr);
-	}
-	close OP;
+	}	
 	print "Consolidated tasklist for the patch is: $tasklist\n";
 	open OP, "<$binarylist";
 	@deliverablelist=<OP>;
@@ -192,7 +193,8 @@ sub reconfigure_del_project()
 
 sub delivery()
 {
-  open OP, "< $binarylist";
+	rmtree($destdir);
+	open OP, "< $binarylist";
   @file_list=<OP>;
   close OP;
   my %deliveryhash;
@@ -251,35 +253,35 @@ sub delivery()
   	mkpath("$destdir/$dirname");
   	copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   }
-  exit;
-  print "Create tar bundle for the platform \n";
-  if($devprojectname =~ /Java/)
-  {
-	$delroot="$dbbmloc/$devprojectname/Provident_Delivery";
-  }
-  else
-  {  	
-  	$delroot="$dbbmloc/$devprojectname/Provident_Dev/";
-  	print "Delivery root is: $delroot \n";
-  }
+#  exit;
+ # print "Create tar bundle for the platform \n";
+  #if($devprojectname =~ /Java/)
+  #{
+#	$delroot="$dbbmloc/$devprojectname/Provident_Delivery";
+#  }
+ # else
+  #{  	
+  #	$delroot="$dbbmloc/$devprojectname/Provident_Dev/";
+  #	print "Delivery root is: $delroot \n";
+  #}
   
-  mkdir("$destdir",0755);
-  foreach $file(@file_list)
-  {
-  	$file=~ s/\$PROVHOME//g;
-  	$file=~ s/^\s+|\s+$//g;
-  	if($file =~ /jar/)
-  	{
-  		
-  	}
-  	if($file =~ /mr_/)
-  	{
-  		($destfile=$file) =~ s/mr_/$mr_number/g;
-  		$destfile=~ s/^\s+|\s+$//g;
-  		copy("$delroot/$file","$destdir/$destfile") or die("Couldn't able to copy $file \n");
-  	}
-  	copy("$delroot/$file","$destdir") or die("Couldn't able to copy $file \n");
-  }
+ # mkdir("$destdir",0755);
+ # foreach $file(@file_list)
+ # {
+ # 	$file=~ s/\$PROVHOME//g;
+ # 	$file=~ s/^\s+|\s+$//g;
+ # 	if($file =~ /jar/)
+ # 	{
+ # 		
+ # 	}
+ # 	if($file =~ /mr_/)
+ # 	{
+ # 		($destfile=$file) =~ s/mr_/$mr_number/g;
+ # 		$destfile=~ s/^\s+|\s+$//g;
+ # 		copy("$delroot/$file","$destdir/$destfile") or die("Couldn't able to copy $file \n");
+ # 	}
+ # 	copy("$delroot/$file","$destdir") or die("Couldn't able to copy $file \n");
+ # }
   chdir($destdir);
   `tar czvf $mr_number\.tar\.gz *`;
   `zip -r /tmp/logs.zip /tmp/reconfigure_$javaprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
