@@ -199,7 +199,7 @@ sub delivery()
   }
   else
   {  	
-  	$delroot="$dbbmloc/$devprojectname/Provident_Dev/";
+  	$delroot="$dbbmloc/$delprojectname/Provident_Delivery/";
   	print "Delivery root is: $delroot \n";
   }
   
@@ -210,7 +210,7 @@ sub delivery()
   	$file=~ s/^\s+|\s+$//g;
   	$dirname=dirname($file);
   	mkdir("$destdir/$dirname",0755);
-  	copy("$delroot/$file","$destdir/$dirname") or die("Couldn't able to copy $file \n");
+  	copy("$delroot/$file","$destdir/$file") or die("Couldn't able to copy $file \n");
   }
   chdir($destdir);
   `tar czvf $mr_number\.tar\.gz *`;
