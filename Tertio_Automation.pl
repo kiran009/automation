@@ -207,6 +207,7 @@ sub delivery()
   mkdir("$destdir",0755);
   foreach $file(@file_list)
   {
+  	$file=~ s/\$PROVHOME//g;
   	$file=~ s/^\s+|\s+$//g;
   	copy("$delroot/$file","$destdir") or die("Couldn't able to copy $file \n");
   }
