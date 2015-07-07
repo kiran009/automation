@@ -208,11 +208,14 @@ sub delivery()
   {
   	$file=~ s/\$PROVHOME//g;
   	$file=~ s/^\s+|\s+$//g;
-  	$dirname=dirname($file);
+  	@list=split(/\s+/,$file);
+  	$src=@list[1];
+  	$dest=@list[3];  	
+  	$dirname=dirname($dest);
   	mkdir("$destdir/$dirname",0755);
-  	copy("$delroot/$file","$destdir/$file") or die("Couldn't able to copy $file \n");
+  	copy("$delroot/$src","$destdir/$dest") or die("Couldn't able to copy $file \n");
   	chdir($destdir);
-  	`tar uzvf $mr_number\.tar\.gz $destdir/$file`;
+  	`tar uzvf $mr_number\.tar\.gz $destdir/$dest`;
   }
   `zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
   copy("$mr_number\.tar\.gz", "/data/releases/tertio/7.7.0/patches/RHEL6/NotTested/") or die("Couldn't copy the tar file");
