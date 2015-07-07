@@ -71,7 +71,7 @@ sub main()
 	delivery();
 	send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
 	#move_cr_status();
-	#ccm_stop();	
+	ccm_stop();	
 }
 sub fetch_mrnumber($)
 {
@@ -214,6 +214,7 @@ sub delivery()
   	if($file =~ /mr_/)
   	{
   		($destfile=$file) =~ s/mr_/$mr_number/g;
+  		$destfile=~ s/^\s+|\s+$//g;
   		copy("$delroot/$file","$destdir/$destfile") or die("Couldn't able to copy $file \n");
   	}
   	copy("$delroot/$file","$destdir") or die("Couldn't able to copy $file \n");

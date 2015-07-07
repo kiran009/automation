@@ -1,4 +1,4 @@
-$PROVHOME/bin/BandWidthScheduling
+$PROVHOME/iagent/BandWidthScheduling
 $PROVHOME/bin/erp
 $PROVHOME/bin/eventlog
 $PROVHOME/bin/jip
