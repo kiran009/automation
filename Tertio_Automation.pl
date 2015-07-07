@@ -214,14 +214,17 @@ sub delivery()
   			$deliveryhash{$del[1]}=$del[3];
   		}	
   	}
-  	my @del=split(/\s+/,$file);
-  	if($del[3] eq ".")
-  	{
-  		$deliveryhash{"$delroot/$del[1]"}=$del[1];
-  	}
   	else
   	{
-  		$deliveryhash{"$delroot/$del[1]"}=$del[3];
+  		my @del=split(/\s+/,$file);
+  		if($del[3] eq ".")
+  		{
+  			$deliveryhash{"$delroot/$del[1]"}=$del[1];
+  		}
+  		else
+  		{
+  			$deliveryhash{"$delroot/$del[1]"}=$del[3];
+  		}
   	}  	
   }
   open OP, "< $javabinarylist";
