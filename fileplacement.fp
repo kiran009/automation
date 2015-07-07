@@ -1,4 +1,3 @@
-# Fileplacement file
 SRC iagent/BandWidthScheduling DEST bin/BandWidthScheduling
 SRC bin/erp DEST . 
 SRC jip/eventlog DEST bin/eventlog
@@ -9,7 +8,6 @@ SRC iagent/LayeredSLAgent DEST bin/LayeredSLAgent
 SRC sasdk/legacysrc/LegacySourceAgent DEST bin/LegacySourceAgent
 SRC iagent/ManualAgent DEST bin/ManualAgent
 SRC jip/MonMon DEST bin/MonMon
-SRC bin/mwerrhandler(doesn't exist) DEST bin/mwerrhandler
 SRC installer/bin/package DEST bin/package
 SRC cli/ProvCLI DEST bin/ProvCLI
 SRC admin/readconfig DEST bin/readconfig
@@ -45,14 +43,15 @@ SRC lib/libpsdk.so DEST .
 SRC lib/libpsdk.so.1 DEST .
 SRC lib/libsasdk.so DEST .
 SRC lib/libsasdk.so.1 DEST .
-SRC lib/libtome.so DEST .
-SRC lib/libtome_as.so DEST .
-SRC lib/libtomecppas.so DEST .
-SRC lib/libtome_tcl.so DEST .
-SRC lib/libjtome.so DEST .
-SRC lib/libtomecpp.so DEST .
-SRC lib/libtome_ev.so DEST .
-SRC lib/libtome_mon.so DEST .
+TOMESRC /opt/tome/3.0.0_build19/bin/mwerrhandler DEST bin/mwerrhandler
+TOMESRC /opt/tome/3.0.0_build19/lib/libtome.so DEST lib/libtome.so
+TOMESRC /opt/tome/3.0.0_build19/lib/libtome_as.so DEST lib/libtome_as.so 
+TOMESRC /opt/tome/3.0.0_build19/lib/libtomecppas.so DEST lib/libtomecppas.so
+TOMESRC /opt/tome/3.0.0_build19/lib/libtome_tcl.so DEST lib/libtome_tcl.so
+TOMESRC /opt/tome/3.0.0_build19/lib/libjtome.so DEST lib/libjtome.so
+TOMESRC /opt/tome/3.0.0_build19/lib/libtomecpp.so DEST lib/libtomecpp.so
+TOMESRC /opt/tome/3.0.0_build19/lib/libtome_ev.so DEST lib/libtome_ev.so
+TOMESRC /opt/tome/3.0.0_build19/lib/libtome_mon.so DEST lib/libtome_mon.so
 SRC lib/provpkg1.0/package.tbc DEST .
 SRC lib/provpkg1.0/packageutils.tbc DEST .
 SRC designer/systemTasks/ManualIntervention.xml DEST scripts/service_logic/System/ManualIntervention.xml

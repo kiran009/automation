@@ -65,15 +65,15 @@ print "The following list of CRs to the included in the patch:@crs\n";
 # /* Global Environment Variables ******* /
 sub main()
 {
-	#start_ccm();
-	#fetch_tasks();
+	start_ccm();
+	fetch_tasks();
 	#fetch_readme();	
-	#reconfigure_dev_proj_and_compile();
+	reconfigure_dev_proj_and_compile();
 	#reconfigure_del_project();
 	delivery();
-	#send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
+	send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
 	#move_cr_status();
-	#ccm_stop();	
+	ccm_stop();	
 }
 sub fetch_mrnumber($)
 {
@@ -201,6 +201,18 @@ sub delivery()
   foreach $file(@file_list)
   {
   	#SRC iagent/BandWidthScheduling DEST bin/BandWidthScheduling
+  	if($file =~ /TOMESRC/)
+  	{
+  		my @del=split(/\s+/,$file);
+  		if($del[3] eq ".")
+  		{
+  			$deliveryhash{$del[1]}=$del[1];
+  		}
+  		else
+  		{
+  			$deliveryhash{$del[1]}=$del[3];
+  		}	
+  	}
   	my @del=split(/\s+/,$file);
   	if($del[3] eq ".")
   	{
@@ -236,7 +248,7 @@ sub delivery()
   	mkdir("$destdir/$dirname",0755);
   	copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   }
-  exit;	
+  exit;
   print "Create tar bundle for the platform \n";
   if($devprojectname =~ /Java/)
   {
