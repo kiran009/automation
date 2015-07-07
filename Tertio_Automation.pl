@@ -9,6 +9,7 @@ use Getopt::Long;
 use File::Copy;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
+use File::Path qw(make_path remove_tree);
 
 #/************ Setting Environment Variables *******************/
 $ENV{'CCM_HOME'}="/opt/ccm71";
@@ -245,7 +246,7 @@ sub delivery()
   	print "Key is: $key and value is: $deliveryhash{$key} \n";
   	$dirname=dirname($deliveryhash{$key});
   	print "Dirname is: $dirname, creating directory $destdir/$dirname \n"; 
-  	mkdir("$destdir/$dirname",0755);
+  	mkpath("$destdir/$dirname",0755);
   	copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   }
   exit;
