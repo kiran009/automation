@@ -283,7 +283,7 @@ sub delivery()
  # 	copy("$delroot/$file","$destdir") or die("Couldn't able to copy $file \n");
  # }
   chdir($destdir);
-  `tar cvf tertio-$mr_number\.tar *`;
+  `find ./ -type f | xargs tar uvf tertio-$mr_number\.tar`;
   `zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
 }
 
