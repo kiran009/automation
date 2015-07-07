@@ -55,7 +55,7 @@ my @op;
 my @file_list;
 my $mr_number;
 #my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
-my $mailto='kiran.daadhi@evolving.com';
+my $mailto='kiran.daadhi@evolving.com Srikanth.Bhaskar@evolving.com';
 my %hash;
 $destdir="/u/kkdaadhi/Tertio_Deliverable";
 my $readmeIssue;
@@ -69,9 +69,9 @@ sub main()
 	fetch_tasks();
 	#fetch_readme();	
 	reconfigure_dev_proj_and_compile();
-	reconfigure_del_project();
+	#reconfigure_del_project();
 	delivery();
-	#send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
+	send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
 	#move_cr_status();
 	#ccm_stop();	
 }
@@ -199,7 +199,7 @@ sub delivery()
   }
   else
   {  	
-  	$delroot="$dbbmloc/$delprojectname/Provident_Delivery/";
+  	$delroot="$dbbmloc/$devprojectname/Provident_Dev/";
   	print "Delivery root is: $delroot \n";
   }
   
@@ -214,7 +214,8 @@ sub delivery()
   }
   chdir($destdir);
   `tar czvf $mr_number\.tar\.gz *`;
-  `zip -r /tmp/logs.zip /tmp/reconfigure_$delprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
+  `zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
+  copy("$mr_number\.tar\.gz", "/data/releases/tertio/7.7.0/patches/RHEL6/NotTested/") or die("Couldn't copy the tar file");
 }
 
 sub start_ccm()
