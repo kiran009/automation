@@ -230,9 +230,9 @@ sub delivery()
   # Read the complete hash and display values
   foreach $key(keys %deliveryhash)
   {
-  	#print "Key is: $key and value is: $deliveryhash{$key} \n";
+  	print "Key is: $key and value is: $deliveryhash{$key} \n";
   	$dirname=dirname($deliveryhash{$key});
-  	print "Dirname is: $dirname \n"; 
+  	print "Dirname is: $dirname, creating directory $destdir/$dirname \n"; 
   	mkdir("$destdir/$dirname",0755);
   	copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   }
