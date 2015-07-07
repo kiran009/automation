@@ -91,6 +91,7 @@ sub fetch_readme($)
     $patch_number=`$CCM query -u -f %patch_number`;
     $patch_readme=`$CCM query -u -f %patch_readme`;
     $patch_number=~ s/^\s+|\s+$//g;
+    print "Patch Number is: $patch_number \n";
     
     if($patch_readme =~ /N\/A/)
     {
@@ -119,8 +120,8 @@ sub fetch_tasks()
 		$task_number=~ s/^\s+|\s+$//g;
 		push(@tasks,$task_number);
 		print "List of Tasks associated with CR $cr => $task_number \n";
-		@objectlist=`$CCM query "is_associated_object_of('$cr:task:probtrac')"`;
-		print "List of objects associated with CR $cr are: @objectlist \n";
+		#@objectlist=`$CCM query "is_associated_object_of('$cr:task:probtrac')"`;
+		#print "List of objects associated with CR $cr are: @objectlist \n";
 		$tasklist=join(",",@tasks);
 		fetch_mrnumber($cr);		
 		fetch_readme($cr);
@@ -212,13 +213,14 @@ sub delivery()
   	$src=@list[1];
   	$dest=@list[3];  	
   	$dirname=dirname($dest);
+  	print "Source is: $src and Destination is: $dest \n";
   	mkdir("$destdir/$dirname",0755);
   	copy("$delroot/$src","$destdir/$dest") or die("Couldn't able to copy $file \n");
   	chdir($destdir);
   	`tar uzvf $mr_number\.tar\.gz $destdir/$dest`;
   }
   `zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
-  copy("$mr_number\.tar\.gz", "/data/releases/tertio/7.7.0/patches/RHEL6/NotTested/") or die("Couldn't copy the tar file");
+  #copy("$mr_number\.tar\.gz", "/data/releases/tertio/7.7.0/patches/RHEL6/NotTested/") or die("Couldn't copy the tar file");
 }
 
 sub start_ccm()
