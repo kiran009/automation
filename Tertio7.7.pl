@@ -213,7 +213,7 @@ sub delivery()
   	copy("$delroot/$file","$destdir/$file") or die("Couldn't able to copy $file \n");
   }
   chdir($destdir);
-  `tar czvf $mr_number\.tar\.gz *`;
+  `tar czvf $mr_number\.tar\.gz $destdir/$file`;
   `zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
   copy("$mr_number\.tar\.gz", "/data/releases/tertio/7.7.0/patches/RHEL6/NotTested/") or die("Couldn't copy the tar file");
 }
