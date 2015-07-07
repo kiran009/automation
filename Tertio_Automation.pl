@@ -284,7 +284,7 @@ sub delivery()
  # }
   chdir($destdir);
   `tar czvf $mr_number\.tar\.gz *`;
-  `zip -r /tmp/logs.zip /tmp/reconfigure_$javaprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
+  `zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
 }
 
 sub start_ccm()
