@@ -16,11 +16,12 @@ $ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
 $CCM="$ENV{'CCM_HOME'}/bin/ccm";
 my $database="/data/ccmdb/provident/";
 my $dbbmloc="/data/ccmbm/provident/";
-my $binarylist="$Bin/file_list.txt";
-$result=GetOptions("devproject=s"=>\$devprojectname,"delproject=s"=>\$delprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs);
+my $binarylist="$Bin/fileplacement.fp";
+my $javabinarylist="$Bin/javabinaries.fp";
+$result=GetOptions("devproject=s"=>\$devprojectname,"javaproject=s"=>\$javaprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs);
 if(!$result)
 {
-	print "Please provide devprojectname, delprojectname \n";
+	print "Please provide devprojectname, javaprojectname \n";
 	exit;
 }
 if(!$devprojectname)
@@ -63,15 +64,15 @@ print "The following list of CRs to the included in the patch:@crs\n";
 # /* Global Environment Variables ******* /
 sub main()
 {
-	start_ccm();
-	fetch_tasks();
+	#start_ccm();
+	#fetch_tasks();
 	#fetch_readme();	
-	reconfigure_dev_proj_and_compile();
+	#reconfigure_dev_proj_and_compile();
 	#reconfigure_del_project();
 	delivery();
-	send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
+	#send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
 	#move_cr_status();
-	ccm_stop();	
+	#ccm_stop();	
 }
 sub fetch_mrnumber($)
 {
@@ -161,17 +162,17 @@ sub reconfigure_dev_proj_and_compile()
 
 sub reconfigure_del_project()
 {
-	print "*************** Delivery devprojectname is: $delprojectname  ***************\n";
-	$ccmworkarea=`$CCM wa -show -recurse $delprojectname`;
+	print "*************** Delivery devprojectname is: $javaprojectname  ***************\n";
+	$ccmworkarea=`$CCM wa -show -recurse $javaprojectname`;
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	print "***************CCM WorkArea of Delivery Project is: $workarea ***************\n";	
-	`$CCM reconfigure -rs -r -p $delprojectname 2>&1 1>/tmp/reconfigure_$delprojectname.log`;
-	open OP, "< /tmp/reconfigure_$delprojectname.log";
+	`$CCM reconfigure -rs -r -p $javaprojectname 2>&1 1>/tmp/reconfigure_$javaprojectname.log`;
+	open OP, "< /tmp/reconfigure_$javaprojectname.log";
 	@op=<OP>;
 	close OP;
 	print "Contents of gmake.log for delivery project is: @op \n";
-	$delprojectname=~ s/^\s+|\s+$//g;
-	if($delprojectname =~ /Java/)
+	$javaprojectname=~ s/^\s+|\s+$//g;
+	if($javaprojectname =~ /Java/)
 	{
 		chdir "$workarea/Provident_Java";
 	}
@@ -181,8 +182,8 @@ sub reconfigure_del_project()
 	}
 	# Execute gmake clean delivery
 	$ENV{'PATH'}="$workarea/Provident_Delivery/:./:$ENV{'PATH'}";
-	`/usr/bin/gmake clean deliver 2>&1 1>/tmp/gmake_$delprojectname.log`;
-	open OP, "< /tmp/gmake_$delprojectname.log";
+	`/usr/bin/gmake clean deliver 2>&1 1>/tmp/gmake_$javaprojectname.log`;
+	open OP, "< /tmp/gmake_$javaprojectname.log";
 	@op=<OP>;
 	close OP;
 	
@@ -192,17 +193,31 @@ sub delivery()
 {
   open OP, "< $binarylist";
   @file_list=<OP>;
-  print "Filelist is: @file_list \n";	
-  print "Create tar bundle for the platform \n";
-  $delprojectname=$devprojectname;
-  if($delprojectname =~ /Java/)
+  close OP;
+  print "Filelist is: @file_list \n";
+  foreach $file(@file_list)
   {
-	$delroot="$dbbmloc/$delprojectname/Provident_Delivery";
+  	#SRC iagent/BandWidthScheduling DEST bin/BandWidthScheduling
+  	my @del=split(/\s+/,$file);
+  	print "source is $del[2] and dest is: $del[4] \n";
+  }
+  open OP, "< $javabinarylist";
+  @file_list=<OP>;
+  close OP;
+  foreach $file(@filelist)
+  {
+  	my @del=split(/\s+/,$file);
+  	print "source is $del[2] and dest is: $del[4] \n";
+  }
+  exit;	
+  print "Create tar bundle for the platform \n";
+  if($devprojectname =~ /Java/)
+  {
+	$delroot="$dbbmloc/$devprojectname/Provident_Delivery";
   }
   else
-  {
-  	#$delroot="$dbbmloc/$delprojectname/Provident_Delivery/";
-  	$delroot="$dbbmloc/$delprojectname/Provident_Dev/";
+  {  	
+  	$delroot="$dbbmloc/$devprojectname/Provident_Dev/";
   	print "Delivery root is: $delroot \n";
   }
   $destdir="/u/kkdaadhi/Tertio_Deliverable";
@@ -211,6 +226,10 @@ sub delivery()
   {
   	$file=~ s/\$PROVHOME//g;
   	$file=~ s/^\s+|\s+$//g;
+  	if($file =~ /jar/)
+  	{
+  		
+  	}
   	if($file =~ /mr_/)
   	{
   		($destfile=$file) =~ s/mr_/$mr_number/g;
@@ -221,7 +240,7 @@ sub delivery()
   }
   chdir($destdir);
   `tar czvf $mr_number\.tar\.gz *`;
-  `zip -r /tmp/logs.zip /tmp/reconfigure_$delprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
+  `zip -r /tmp/logs.zip /tmp/reconfigure_$javaprojectname.log /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
 }
 
 sub start_ccm()

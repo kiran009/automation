@@ -36,7 +36,10 @@ ccm query -type task "is_associated_task_of('4610:problem:probtrac')"
  
  ccm query "has_child_cr(cvtype='problem' and problem_number='126')"
  
- ccm query "is_associated_task_of(cvtype='problem' and problem_number='4601')"  
+ ccm query "is_associated_task_of(cvtype='problem' and problem_number='4601')"
+ 
+ 
+ ccm query "is_associated_object_of(cvtype='problem' and problem_number='3975')"    
  
  
  ccm query "is_associated_object_of('10207:task:probtrac')"  
