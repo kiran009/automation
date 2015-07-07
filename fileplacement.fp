@@ -52,8 +52,8 @@ TOMESRC /opt/tome/3.0.0_build19/lib/libjtome.so DEST lib/libjtome.so
 TOMESRC /opt/tome/3.0.0_build19/lib/libtomecpp.so DEST lib/libtomecpp.so
 TOMESRC /opt/tome/3.0.0_build19/lib/libtome_ev.so DEST lib/libtome_ev.so
 TOMESRC /opt/tome/3.0.0_build19/lib/libtome_mon.so DEST lib/libtome_mon.so
-SRC lib/provpkg1.0/package.tbc DEST .
-SRC lib/provpkg1.0/packageutils.tbc DEST .
+SRC installer/lib/package.tbc DEST lib/provpkg1.0/package.tbc
+SRC installer/lib/packageutils.tbc DEST lib/provpkg1.0/packageutils.tbc
 SRC designer/systemTasks/ManualIntervention.xml DEST scripts/service_logic/System/ManualIntervention.xml
 SRC composer/ServiceComposer/Engine/PrismInterface.tcl DEST scripts/service_logic/System/ServiceComposer/Engine/PrismInterface.tcl
 SRC composer/ServiceComposer/Engine/XmlParser.tcl DEST scripts/service_logic/System/ServiceComposer/Engine/XmlParser.tcl
