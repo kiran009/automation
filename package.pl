@@ -224,7 +224,7 @@ sub pkg()
   		}
   		elsif($prj =~ /hpiav3/)
   		{
-  			$hostplatform="linas5";
+  			$hostplatform="hpiav3";
   		}
   		elsif($prj =~ /sol10/)
   		{
