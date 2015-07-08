@@ -84,16 +84,23 @@ print "The following list of CRs to the included in the patch:@crs\n";
 # /* Global Environment Variables ******* /
 sub main()
 {
-	start_ccm();
-	fetch_tasks();
-	#fetch_readme();	
-	reconfigure_dev_proj_and_compile();
+	if($hostname !~ /pesthp2/)
+	{
+		start_ccm();
+		fetch_tasks();
+		reconfigure_devproj();
+	}
+	#fetch_readme();
+	#compile();
 	#reconfigure_del_project();
 	delivery();
-	send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
+	#send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
 	createhtml();
 	#move_cr_status();
-	ccm_stop();	
+	if($hostname !~ /pesthp2/)
+	{
+		ccm_stop();
+	}	
 }
 sub fetch_mrnumber($)
 {
@@ -153,7 +160,7 @@ sub fetch_tasks()
 	print "Consolidate deliverable list for the patch is: @deliverablelist \n";
 	close OP;
 }
-sub reconfigure_dev_proj_and_compile()
+sub reconfigure_devproject()
 {	
 	$ccmworkarea=`$CCM wa -show -recurse $devprojectname`;
 	($temp,$workarea)=split(/'/,$ccmworkarea);
@@ -168,6 +175,9 @@ sub reconfigure_dev_proj_and_compile()
 	open OP, "< /tmp/reconfigure_devproject_$devprojectname.log";
 	@op=<OP>;
 	close OP;
+}
+sub compile()
+{
 	if($devprojectname =~ /Java/)
 	{
 		chdir "$workarea/Provident_Java";
@@ -176,16 +186,16 @@ sub reconfigure_dev_proj_and_compile()
 	{
 		chdir "$workarea/Provident_Dev";
 	}
-	#`/usr/bin/gmake clean all 2>&1 1>/tmp/gmake_$devprojectname.log`;
-	#open OP, "< /tmp/gmake_$devprojectname.log";
-	#@op=<OP>;
-	#close OP;		
+	`/usr/bin/gmake clean all 2>&1 1>/tmp/gmake_$devprojectname.log`;
+	open OP, "< /tmp/gmake_$devprojectname.log";
+	@op=<OP>;
+	close OP;		
 }
 
 sub createhtml()
 {
 	open (my $FILE, "+> releasenotes.html");
-	print $FILE "<HTML><body>";
+	print $FILE "<html><body>";
 	print $FILE "<table width=\"100%\" border=\"1\"><br/>"; 
 	print $FILE "<tr><b><td>Product</td></b><td>Tertio</td></tr><br/>"; 
 	print $FILE "<tr><b><td>Release</td></b><td>$mr_number</td></tr><br/>";
