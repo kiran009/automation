@@ -79,8 +79,8 @@ sub main()
 
 sub createMailnReadme()
 {
-	createMail();
 	createReadme();
+	createMail();
 }
 
 sub createReadme()
@@ -98,14 +98,16 @@ sub createReadme()
 	my @summary=<OP>;
 	close OP;
 	
-	open (my $FILE, "+> $Bin/$mrnumber_README.txt");
-	print $FILE "Maintenance Release : Tertio $mrnumber\n\n";
-	print $FILE "Created: $dt\n\n";
-	print $FILE "TASKS:$formattsks\n";
-	print $FILE "FIXES:@synopsis";
-	print $FILE "AFFECTS:";
-	print $FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summaryISSUES: None\n";
-	close $FILE;
+	$mrnumber=~ s/^\s+|\s+$//g;
+	
+	open  FILE, "+> $Bin/tertio-$mrnumber_README.txt";
+	print FILE "Maintenance Release : Tertio $mrnumber\n\n";
+	print FILE "Created: $dt\n\n";
+	print FILE "TASKS:$formattsks\n";
+	print FILE "FIXES:@synopsis";
+	print FILE "AFFECTS:";
+	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summaryISSUES: None\n";
+	close FILE;
 	
 }
 sub createMail()
