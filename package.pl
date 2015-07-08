@@ -26,14 +26,7 @@ if($hostname !~ /pesthp2/)
 	$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
 	$CCM="$ENV{'CCM_HOME'}/bin/ccm";
 }
-if($hostname =~ /pedlinux5/)
-{	$hostplatform="linas5"; $gmake='/usr/bin/gmake';}
-elsif($hostname =~ /pedlinux6/)
-{	$hostplatform="rhel6";$gmake='/usr/bin/gmake';}
-elsif($hostname =~ /pedsun2/)
-{	$hostplatform="sol10";$gmake='/usr/bin/gmake';}
-elsif($hostname =~ /pesthp2/)
-{	$hostplatform="hpiav3";$gmake='/usr/local/bin/gmake';}
+
 
 #$result=GetOptions("devproject=s"=>\$devprojectname);
 $result=GetOptions("hpuxproject=s"=>\$hpuxproject,"linuxproject=s"=>\$linuxproject,"solproject=s"=>\$solproject,"javaproject=s"=>\$javaprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs);
@@ -225,10 +218,22 @@ sub pkg()
   			mkpath("$destdir/$dirname");
   			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   		}
+  		if($prj =~ /linAS5/)
+  		{
+  			$hostplatform="linas5";
+  		}
+  		elsif($prj =~ /hpiav3/)
+  		{
+  			$hostplatform="linas5";
+  		}
+  		elsif($prj =~ /sol10/)
+  		{
+  			$hostplatform="sol10";
+  		}
   		chdir($destdir);
   		`find ./ -type f | xargs tar cvf tertio-$mr_number-$hostplatform\.tar; gzip tertio-$mr_number-$hostplatform\.tar;`;
   		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log $Bin/gmake_*.log`;
-  		copy("*.tar.gz","/u/kkdaadhi");
+  		copy("tertio-$mr_number-$hostplatform\.tar\.gz","/u/kkdaadhi/") or die("Couldn't copy to destination $!");
 	} 
 }
 sub start_ccm()
