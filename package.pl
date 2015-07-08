@@ -68,7 +68,7 @@ my $mr_number;
 #my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
 #my $mailto='kiran.daadhi@evolving.com';
 my %hash;
-#$destdir="/u/kkdaadhi/Tertio_Deliverable";
+$destdir="/u/kkdaadhi/Tertio_Deliverable";
 my $readmeIssue;
 @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 @days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
@@ -228,6 +228,7 @@ sub package()
   		chdir($destdir);
   		`find ./ -type f | xargs tar cvf tertio-$mr_number-$hostplatform\.tar; gzip tertio-$mr_number-$hostplatform\.tar;`;
   		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log $Bin/gmake_*.log`;
+  		copy("*.tar.gz","/u/kkdaadhi");
 	} 
 }
 sub start_ccm()
