@@ -28,7 +28,8 @@ SRC etc/download/deployJava.js DEST .
 SRC etc/download/index.html_template DEST .
 SRC etc/download/tertio.jnlp_template DEST .
 SRC etc/symlinks.list DEST .
-SRC etc/ProvError DEST . 
+SRC etc/ProvError DEST .
+DASHBOARDSRC /opt/dashboard_sdk/2.4.0/lib/libaggnet.so DEST lib/libaggnet.so 
 SRC designer/libsrc/libdesigner.so DEST lib/libdesigner.so
 SRC designer/libsrc/libdesigner.so.1 DEST lib/libdesigner.so.1
 SRC lib/libgpsutils.so DEST .

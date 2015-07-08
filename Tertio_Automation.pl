@@ -238,6 +238,18 @@ sub delivery()
   				$deliveryhash{$del[1]}=$del[3];
   			}	
   		}
+  		if($file =~ /DASHBOARDSRC/)
+  		{
+  			my @del=split(/\s+/,$file);
+  			if($del[3] eq ".")
+  			{
+  				$deliveryhash{$del[1]}=$del[1];
+  			}
+  			else
+  			{
+  				$deliveryhash{$del[1]}=$del[3];
+  			}	
+  		}
   		else
   		{
   			my @del=split(/\s+/,$file);
