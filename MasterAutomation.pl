@@ -92,7 +92,7 @@ sub getTasksnReadme()
 		$task_number=~ s/^\s+|\s+$//g;
 		push(@tasks,$task_number);		
 		#get mrnumber
-		($mr_number,$synopsis,$summary)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber,%synopsis,%summary"`;
+		($mr_number,$synopsis,$summary)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber,%problem_synopsis,%problem_description"`;
 		open OP,">>$Bin/synopsis.txt";
 		print OP "CR$cr $synopsis\n";
 		close OP;
