@@ -57,7 +57,7 @@ my @platforms;
 my $workarea;
 my @op;
 my @file_list;
-my $mr_number;
+my $mrnumber;
 #my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
 #my $mailto='kiran.daadhi@evolving.com';
 my %hash;
