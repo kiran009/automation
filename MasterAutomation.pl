@@ -79,7 +79,7 @@ print "The following list of CRs to the included in the patch:@crs\n";
 sub main()
 {	
 		start_ccm();
-		fetch_tasks();
+		getTasksnReadme();
 		reconfigure_devproject();
 		ccm_stop();		
 }
