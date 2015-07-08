@@ -159,7 +159,6 @@ sub pkg()
   			if($file =~ /TOMESRC/)
   			{
   				my @del=split(/\s+/,$file);
-  				print "TOMESRC one's: @del \n";
   				if($del[3] eq ".")
   				{
   					$deliveryhash{$del[1]}=$del[1];
@@ -172,7 +171,6 @@ sub pkg()
   			elsif($file =~ /DASHBOARDSRC/)
   			{
   				my @del=split(/\s+/,$file);
-  				print "DASHBOARDSRC one's: @del \n";
   				if($del[3] eq ".")
   				{
   					$deliveryhash{$del[1]}=$del[1];
@@ -185,7 +183,6 @@ sub pkg()
   			else
   			{
   				my @del=split(/\s+/,$file);
-  				print "Other's: @del \n";
   				if($del[3] eq ".")
   				{
 	  				$deliveryhash{"$delroot/$del[1]"}=$del[1];
@@ -214,9 +211,7 @@ sub pkg()
   		}
 		foreach $key(keys %deliveryhash)
   		{
-	  		print "Key is: $key and value is: $deliveryhash{$key} \n";
-  			$dirname=dirname($deliveryhash{$key});
-  			print "Dirname is: $dirname, creating directory $destdir/$dirname \n"; 
+	  		$dirname=dirname($deliveryhash{$key});
   			mkpath("$destdir/$dirname");
   			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   		}
