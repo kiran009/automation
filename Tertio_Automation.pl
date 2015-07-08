@@ -186,7 +186,7 @@ sub createhtml()
 {
 	open (my $FILE, "+> releasenotes.html");
 	print $FILE "<HTML><body>";
-	print $FILE "<table width=\"100%\ border=\"1\"><br/>"; 
+	print $FILE "<table width=\"100%\" border=\"1\"><br/>"; 
 	print $FILE "<tr><b><td>Product</td></b><td>Tertio</td></tr><br/>"; 
 	print $FILE "<tr><b><td>Release</td></b><td>$mr_number</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Number</td></b><td></td></tr><br/>";
