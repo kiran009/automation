@@ -81,7 +81,7 @@ sub main()
 {	
 		start_ccm();
 		createMailnReadme();
-		package();		
+		pkg();		
 }
 
 sub createMailnReadme()
@@ -149,7 +149,7 @@ sub createMail()
 	close $FILE;
 }
 
-sub package()
+sub pkg()
 {
 	foreach $prj(@projectlist)
 	{
