@@ -146,7 +146,7 @@ sub createMail()
 	foreach $cr(@crresolv)
 	{
 		($crid,$synopsis,$requesttype,$severity,$resolver,$priority)=split(/#/,$cr);
-		print $FILE "<tr><b><td>$crid</td><td>$synopsis</td><td>$requesttype</td><td>$severity</td><td>$resolver</td><td>$priority</td></tr><br/>";
+		print $FILE "<tr><b><td>$crid</td><td>$synopsis</td><td>$requesttype</td><td>$severity</td><td>$resolver</td><td>$priority</td></tr>";
 	}
 	print $FILE "</table>";
 	print $FILE "<b>The checked in tasks since the last build are:</b><br/>";
