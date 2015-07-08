@@ -239,6 +239,7 @@ sub delivery()
   		if($file =~ /TOMESRC/)
   		{
   			my @del=split(/\s+/,$file);
+  			print "TOMESRC one's: @del \n";
   			if($del[3] eq ".")
   			{
   				$deliveryhash{$del[1]}=$del[1];
@@ -251,6 +252,7 @@ sub delivery()
   		if($file =~ /DASHBOARDSRC/)
   		{
   			my @del=split(/\s+/,$file);
+  			print "DASHBOARDSRC one's: @del \n";
   			if($del[3] eq ".")
   			{
   				$deliveryhash{$del[1]}=$del[1];
@@ -263,6 +265,7 @@ sub delivery()
   		else
   		{
   			my @del=split(/\s+/,$file);
+  			print "Other's: @del \n";
   			if($del[3] eq ".")
   			{
 	  			$deliveryhash{"$delroot/$del[1]"}=$del[1];
