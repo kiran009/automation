@@ -9,6 +9,7 @@ use Getopt::Long;
 use File::Copy;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
+use Sys::Hostname;
 
 #/************ Setting Environment Variables *******************/
 $ENV{'CCM_HOME'}="/opt/ccm71";
@@ -18,6 +19,24 @@ my $database="/data/ccmdb/provident/";
 my $dbbmloc="/data/ccmbm/provident/";
 my $binarylist="$Bin/fileplacement.fp";
 my $javabinarylist="$Bin/javabinaries.fp";
+my $hostname = hostname;
+my $hostplatform;
+if($hostname =~ /pedlinux5/)
+{
+	$hostplatform="linas5";
+}
+elsif($hostname =~ /pedlinux6/)
+{
+	$hostplatform="rhel6";
+}
+elsif($hostname =~ /pedsun2/)
+{
+	$hostplatform="sol10";	
+}
+elsif($hostname =~ /pesthp2/)
+{
+	$hostplatform="hpiav3";
+}
 $result=GetOptions("devproject=s"=>\$devprojectname,"javaproject=s"=>\$javaprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs);
 if(!$result)
 {
@@ -72,6 +91,7 @@ sub main()
 	#reconfigure_del_project();
 	delivery();
 	send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
+	createhtml();
 	#move_cr_status();
 	ccm_stop();	
 }
@@ -162,97 +182,125 @@ sub reconfigure_dev_proj_and_compile()
 	#close OP;		
 }
 
-sub reconfigure_del_project()
+sub createhtml()
 {
-	print "*************** Delivery devprojectname is: $javaprojectname  ***************\n";
-	$ccmworkarea=`$CCM wa -show -recurse $javaprojectname`;
-	($temp,$workarea)=split(/'/,$ccmworkarea);
-	print "***************CCM WorkArea of Delivery Project is: $workarea ***************\n";	
-	`$CCM reconfigure -rs -r -p $javaprojectname 2>&1 1>/tmp/reconfigure_$javaprojectname.log`;
-	open OP, "< /tmp/reconfigure_$javaprojectname.log";
-	@op=<OP>;
-	close OP;
-	print "Contents of gmake.log for delivery project is: @op \n";
-	$javaprojectname=~ s/^\s+|\s+$//g;
-	if($javaprojectname =~ /Java/)
-	{
-		chdir "$workarea/Provident_Java";
-	}
-	else
-	{
-	    chdir "$workarea/Provident_Delivery";
-	}
-	# Execute gmake clean delivery
-	$ENV{'PATH'}="$workarea/Provident_Delivery/:./:$ENV{'PATH'}";
-	`/usr/bin/gmake clean deliver 2>&1 1>/tmp/gmake_$javaprojectname.log`;
-	open OP, "< /tmp/gmake_$javaprojectname.log";
-	@op=<OP>;
-	close OP;
-	
+	open (my $FILE, "+> releasenotes.html");
+	print $FILE "<HTML>\n";
+	print $FILE "<table width=\"100%\ border=\"1\">\n"; 
+	print $FILE "<tr><td>Product</td><td>Tertio</td></tr>\n"; 
+	print $FILE "<tr><td>Release</td><td>$mr_number</td></tr>\n";
+	print $FILE "<tr><td>Build Number</td><td></td></tr>\n";
+	print $FILE "<tr><td>Release Type</td><td>Maintenance Release</td></tr>\n";
+	print $FILE "<tr><td>Location</td><td>?</td></tr>\n";
+	print $FILE "<tr><td>Build Date</td><td>?</td></tr>\n";
+	print $FILE "<tr><td>Major changes in the new build</td><td>?</td></tr>\n";
+	print $FILE "<tr><td>TOME</td><td>TOMEVERSION</td><td>TOMESUBVERSION</td></tr>\n";
+	print $FILE "<tr><td>Tertio ADK</td><td>-</td><td>-</td></tr>\n";
+	print $FILE "<tr><td>CAF</td><td>-</td><td>-</td></tr>\n";
+	print $FILE "<tr><td>Dashboard SDK</td><td>-</td><td>-</td></tr>\n";
+	print $FILE "<tr><td>DDA Protocol Version</td><td>-</td><td>-</td></tr>\n";
+	print $FILE "<tr><td>Menu Server Extension</td><td>-</td><td>-</td></tr>\n";
+	print $FILE "<tr><td>SMS payload STK</td><td>-</td><td>-</td></tr>\n";
+	print $FILE "<tr><td>RM CDK</td><td>-</td><td>-</td></tr>\n";
+	print $FILE "<tr><td>PE CDK</td><td>-</td><td>-</td></tr>\n";
+	print $FILE "<tr><td>Has the developer documentation been updated?</td><td colspan=\"2\">N/A</td></tr></table>\n";
+	print $FILE "<b>Installation instructions: </b>\n";
+	print $FILE "Same as previous Tertio Maintenance Release\n\n";
+	print $FILE "<b>Additional information about the changes</b>N/A<br />The Resolved CRs are:\n";
+	print $FILE "<b><table width=\"100%\" border=\"1\">";
+	print $FILE "<tr><b><td>CR ID</td><td>Synopsis</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr></table>\n";
+	print $FILE "<b>The checked in tasks since the last build are:</b>\n";
+	print $FILE "<b><table width=\"100%\" border=\"1\">";
+	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr></table>\n";
+	print $FILE "<b>Note:</b> To install Tertio $mr_number, please use the latest PatchManager\n";	
+	close $FILE;
 }
 
 sub delivery()
 {
 	rmtree($destdir);
 	open OP, "< $binarylist";
-  @file_list=<OP>;
-  close OP;
-  my %deliveryhash;
-  #print "Filelist is: @file_list \n";
-  $delroot="$dbbmloc/$devprojectname/Provident_Dev/";
-  foreach $file(@file_list)
-  {
-  	#SRC iagent/BandWidthScheduling DEST bin/BandWidthScheduling
-  	if($file =~ /TOMESRC/)
+  	@file_list=<OP>;
+  	close OP;
+  	my %deliveryhash;  
+  	$delroot="$dbbmloc/$devprojectname/Provident_Dev/";
+  	foreach $file(@file_list)
+  	{  	
+  		if($file =~ /TOMESRC/)
+  		{
+  			my @del=split(/\s+/,$file);
+  			if($del[3] eq ".")
+  			{
+  				$deliveryhash{$del[1]}=$del[1];
+  			}
+  			else
+  			{
+  				$deliveryhash{$del[1]}=$del[3];
+  			}	
+  		}
+  		else
+  		{
+  			my @del=split(/\s+/,$file);
+  			if($del[3] eq ".")
+  			{
+	  			$deliveryhash{"$delroot/$del[1]"}=$del[1];
+  			}
+  			else
+  			{
+  				$deliveryhash{"$delroot/$del[1]"}=$del[3];
+  			}
+  		}  	
+  	}
+  	open OP, "< $javabinarylist";
+  	@file_list=<OP>;
+  	close OP;
+  	$delroot="$dbbmloc/$javaprojectname/Provident_Java/";
+  	foreach $file(@file_list)
   	{
   		my @del=split(/\s+/,$file);
   		if($del[3] eq ".")
   		{
-  			$deliveryhash{$del[1]}=$del[1];
-  		}
+ 	 		$deliveryhash{"$delroot/$del[1]"}=$del[1];
+	  	}
   		else
   		{
-  			$deliveryhash{$del[1]}=$del[3];
-  		}	
-  	}
-  	else
-  	{
-  		my @del=split(/\s+/,$file);
-  		if($del[3] eq ".")
-  		{
-  			$deliveryhash{"$delroot/$del[1]"}=$del[1];
+	  		$deliveryhash{"$delroot/$del[1]"}=$del[3];
   		}
-  		else
-  		{
-  			$deliveryhash{"$delroot/$del[1]"}=$del[3];
-  		}
-  	}  	
-  }
-  open OP, "< $javabinarylist";
-  @file_list=<OP>;
-  close OP;
-  $delroot="$dbbmloc/$javaprojectname/Provident_Java/";
-  foreach $file(@file_list)
-  {
-  	my @del=split(/\s+/,$file);
-  	if($del[3] eq ".")
-  	{
-  		$deliveryhash{"$delroot/$del[1]"}=$del[1];
   	}
-  	else
+	foreach $key(keys %deliveryhash)
   	{
-  		$deliveryhash{"$delroot/$del[1]"}=$del[3];
+	  	print "Key is: $key and value is: $deliveryhash{$key} \n";
+  		$dirname=dirname($deliveryhash{$key});
+  		print "Dirname is: $dirname, creating directory $destdir/$dirname \n"; 
+  		mkpath("$destdir/$dirname");
+  		copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   	}
-  }
-  # Read the complete hash and display values
-  foreach $key(keys %deliveryhash)
-  {
-  	print "Key is: $key and value is: $deliveryhash{$key} \n";
-  	$dirname=dirname($deliveryhash{$key});
-  	print "Dirname is: $dirname, creating directory $destdir/$dirname \n"; 
-  	mkpath("$destdir/$dirname");
-  	copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
-  }
+  	chdir($destdir);
+  	`find ./ -type f | xargs tar uvf tertio-$mr_number-$hostplatform\.tar; gzip tertio-$mr_number-$hostplatform\.tar;`;
+  	`zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
+}
+sub start_ccm()
+{
+	print "In Start CCM \n";
+	open(ccm_addr,"$ENV{'CCM_HOME'}/bin/ccm start -d $database -m -q -r build_mgr -h ccmuk1 -nogui |");
+	$ENV{'CCM_ADDR'}=<ccm_addr>;
+	close(ccm_addr);
+}
+
+sub ccm_stop()
+{
+	print "In Stop CCM \n";
+	open(ccm_addr,"$ENV{'CCM_HOME'}/bin/ccm stop |");
+	close(ccm_addr);
+}
+sub send_email()
+{
+	($subject,$attachment)=@_;
+	print "\$attachment value is: $attachment \n";
+	system("/usr/bin/mutt -s '$subject' $mailto -a $attachment < /dev/null");
+}
+main();
+
 #  exit;
  # print "Create tar bundle for the platform \n";
   #if($devprojectname =~ /Java/)
@@ -282,29 +330,3 @@ sub delivery()
  # 	}
  # 	copy("$delroot/$file","$destdir") or die("Couldn't able to copy $file \n");
  # }
-  chdir($destdir);
-  `find ./ -type f | xargs tar uvf tertio-$mr_number\.tar`;
-  `zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
-}
-
-sub start_ccm()
-{
-	print "In Start CCM \n";
-	open(ccm_addr,"$ENV{'CCM_HOME'}/bin/ccm start -d $database -m -q -r build_mgr -h ccmuk1 -nogui |");
-	$ENV{'CCM_ADDR'}=<ccm_addr>;
-	close(ccm_addr);
-}
-
-sub ccm_stop()
-{
-	print "In Stop CCM \n";
-	open(ccm_addr,"$ENV{'CCM_HOME'}/bin/ccm stop |");
-	close(ccm_addr);
-}
-sub send_email()
-{
-	($subject,$attachment)=@_;
-	print "\$attachment value is: $attachment \n";
-	system("/usr/bin/mutt -s '$subject' $mailto -a $attachment < /dev/null");
-}
-main();
