@@ -233,7 +233,7 @@ sub pkg()
   		chdir($destdir);
   		`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
   		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log $Bin/gmake_*.log`;
-  		copy("tertio-$mr_number-$hostplatform\.tar\.gz","/u/kkdaadhi/") or die("Couldn't copy to destination $!");
+  		copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/u/kkdaadhi/") or die("Couldn't copy to destination $!");
 	} 
 }
 sub start_ccm()
