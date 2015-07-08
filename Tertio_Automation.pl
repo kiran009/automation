@@ -301,7 +301,7 @@ sub delivery()
   		copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   	}
   	chdir($destdir);
-  	`find ./ -type f | xargs tar uvf tertio-$mr_number-$hostplatform\.tar; gzip tertio-$mr_number-$hostplatform\.tar;`;
+  	`find ./ -type f | xargs tar cvf tertio-$mr_number-$hostplatform\.tar; gzip tertio-$mr_number-$hostplatform\.tar;`;
   	`zip -r /tmp/logs.zip /tmp/reconfigure_devproject_$devprojectname.log /tmp/gmake_$devprojectname.log`; 
 }
 sub start_ccm()
