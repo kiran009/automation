@@ -249,7 +249,7 @@ sub delivery()
   				$deliveryhash{$del[1]}=$del[3];
   			}	
   		}
-  		if($file =~ /DASHBOARDSRC/)
+  		elsif($file =~ /DASHBOARDSRC/)
   		{
   			my @del=split(/\s+/,$file);
   			print "DASHBOARDSRC one's: @del \n";
