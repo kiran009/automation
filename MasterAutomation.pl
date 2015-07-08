@@ -87,6 +87,8 @@ sub getTasksnReadme()
 {	
 	open SYNOP,"+>$Bin/synopsis.txt";
 	open SUMM,"+> $Bin/summary.txt";
+	open CRRESOLV, "+> $Bin/crresolv.txt";
+	open TASKINF,"+>$Bin/taskinfo.txt";
 	
 	foreach my $cr(@crs)
 	{
@@ -98,6 +100,14 @@ sub getTasksnReadme()
 		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
 		($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
 		($summary)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_description"`;
+		($requesttype)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%request_type"`;
+		($severity)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%severity"`;
+		($priority)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%priority"`;
+		($resolver)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%resolver"`;
+		($task_synopsis)=`$CCM task -show info 10771 -u -format "%task_synopsis"`;
+		($task_resolver)=`$CCM task -show info 10771 -u -format "%resolver"`;
+		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
+		print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 		print SYNOP "CR$cr $synopsis\n";
 		print SUMM "CR$cr $summary\n";
 		$mr_number=~ s/^\s+|\s+$//g;
@@ -124,11 +134,13 @@ sub getTasksnReadme()
 	}
 	close SYNOP;
 	close SUMM;
+	close CRRESOLV;
+	close TASKINF;
 	#close MR;
 	$tasklist=join(",",@tasks);
-	$formattsks=join("PROV_",@tasks);
+	@formattsks=join("\n", map { 'PROV_' . $_ } @tasks);
 	open OP,"+>$Bin/formattsks.txt";
-	print OP $formattsks;
+	print OP @formattsks;
 	close OP;	
 }
 

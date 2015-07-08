@@ -94,26 +94,32 @@ sub createReadme()
 	open OP,"<$Bin/synopsis.txt";
 	my @synopsis=<OP>;
 	close OP;
-	open OP,">>$Bin/summary.txt";
+	open OP,"<$Bin/summary.txt";
 	my @summary=<OP>;
+	close OP;
+	open OP,"<$Bin/crresolv.txt";
+	my @crresolv=<OP>;
+	close OP;
+	open OP,"<$Bin/taskinfo.txt";
+	my @taskinfo=<OP>;
 	close OP;
 	
 	$mrnumber=~ s/^\s+|\s+$//g;
 	
-	open  FILE, "+> $Bin/tertio-$mrnumber_README.txt";
+	open  FILE, "+> $Bin/tertio-$mrnumber\_README.txt";
 	print FILE "Maintenance Release : Tertio $mrnumber\n\n";
 	print FILE "Created: $dt\n\n";
 	print FILE "TASKS:$formattsks\n";
 	print FILE "FIXES:@synopsis";
 	print FILE "AFFECTS:";
-	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summaryISSUES: None\n";
+	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
 	close FILE;
 	
 }
 sub createMail()
 {
 	open (my $FILE, "+> $Bin/releasenotes.html");
-	print $FILE "<html><body>";
+	print $FILE "<html><head><style>table,td,th { 	border: 1px solid black; font: 12px arial, sans-serif;}</style></head><body>";
 	print $FILE "<table width=\"100%\" border=\"1\"><br/>"; 
 	print $FILE "<tr><b><td>Product</td></b><td>Tertio</td></tr><br/>"; 
 	print $FILE "<tr><b><td>Release</td></b><td>$mrnumber</td></tr><br/>";
@@ -136,10 +142,21 @@ sub createMail()
 	print $FILE "Same as previous Tertio Maintenance Release<br/><br/>";
 	print $FILE "<b>Additional information about the changes</b>N/A<br />The Resolved CRs are:<br/>";
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
-	print $FILE "<tr><b><td>CR ID</td><td>Synopsis</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr></table><br/>";
+	print $FILE "<tr><b><td>CR ID</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr><br/>";
+	foreach $cr(@crresolv)
+	{
+		($crid,$synopsis,$requesttype,$severity,$resolver,$priority)=split(/#/,$cr);
+		print $FILE "<tr><b><td>$crid</td><td>$synopsis</td><td>$requesttype</td><td>$severity</td><td>$resolver</td><td>$priority</td></tr><br/>";
+	}
+	print $FILE "</table>";
 	print $FILE "<b>The checked in tasks since the last build are:</b><br/>";
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
 	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr></table><br/>";
+	foreach $tsk(@taskinfo)
+	{
+		($task_synopsis,$task_resolver)=split(/#/,$cr);
+		print $FILE "<tr><b><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
+	}
 	print $FILE "<b>Note:</b> To install Tertio $mr_number, please use the latest PatchManager<br/></body></html>";	
 	close $FILE;
 }
