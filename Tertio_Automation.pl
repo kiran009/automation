@@ -88,7 +88,7 @@ sub main()
 	{
 		start_ccm();
 		fetch_tasks();
-		reconfigure_devproj();
+		reconfigure_devproject();
 	}
 	#fetch_readme();
 	#compile();
