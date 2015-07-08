@@ -231,7 +231,7 @@ sub pkg()
   			$hostplatform="sol10";
   		}
   		chdir($destdir);
-  		`find ./ -type f | xargs tar cvf tertio-$mr_number-$hostplatform\.tar; gzip tertio-$mr_number-$hostplatform\.tar;`;
+  		`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
   		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log $Bin/gmake_*.log`;
   		copy("tertio-$mr_number-$hostplatform\.tar\.gz","/u/kkdaadhi/") or die("Couldn't copy to destination $!");
 	} 

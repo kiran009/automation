@@ -94,8 +94,10 @@ sub getTasksnReadme()
 		$task_number=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		$task_number=~ s/^\s+|\s+$//g;
 		push(@tasks,$task_number);		
-		#get mrnumber
-		($mr_number,$synopsis,$summary)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber,%problem_synopsis,%problem_description"`;
+		#get mrnumber, synopsis and summary
+		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
+		($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
+		($summary)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_description"`;
 		print SYNOP "CR$cr $synopsis\n";
 		print SUMM "CR$cr $summary\n";
 		$mr_number=~ s/^\s+|\s+$//g;
