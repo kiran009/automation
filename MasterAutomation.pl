@@ -87,7 +87,7 @@ sub getTasksnReadme()
 {	
 	open SYNOP,"+>$Bin/synopsis.txt";
 	open SUMM,"+> $Bin/summary.txt";
-	open MR,"+> $Bin/mrnumber.txt";
+	
 	foreach my $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
@@ -101,7 +101,9 @@ sub getTasksnReadme()
 		print SYNOP "CR$cr $synopsis\n";
 		print SUMM "CR$cr $summary\n";
 		$mr_number=~ s/^\s+|\s+$//g;
+		open MR,"+> $Bin/mrnumber.txt";
 		print MR "$mr_number";
+		close MR;
 		#fetch readme
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
     	$patch_number=`$CCM query -u -f %patch_number`;
@@ -122,7 +124,7 @@ sub getTasksnReadme()
 	}
 	close SYNOP;
 	close SUMM;
-	close MR;
+	#close MR;
 	$tasklist=join(",",@tasks);
 	$formattsks=join("PROV_",@tasks);
 	open OP,"+>$Bin/formattsks.txt";
