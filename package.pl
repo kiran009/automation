@@ -69,18 +69,19 @@ my $readmeIssue;
 $year+=1900;
 my $dt="$mday $months[$mon] $year\n";
 my @taskinfo,@synopsis,@summary,@crresolv,@formattsks,@binarylist;
-my $dtformat="$year$mon$mday";
+my $dtformat="$year$months[$mon]$mday_$hour::$min";
+my 	@location;
 # /* Global Environment Variables ******* /
 sub main()
 {	
 		start_ccm();
-		createMailnReadme();
-		pkg();		
+		createMailnReadme();				
 }
 
 sub createMailnReadme()
 {
 	createReadme();
+	pkg();
 	createMail();
 }
 
@@ -125,15 +126,15 @@ sub createMail()
 {
 	open (my $FILE, "+> $Bin/releasenotes.html");
 	print $FILE "<html><head><style>table {border: 1 solid black; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif;}</style></head><body>";
-	print $FILE "<table width=\"100%\ border=\"1\"<br/>"; 
+	print $FILE "<table width=\"100%\" border=\"1\"<br/>"; 
 	print $FILE "<tr><b><td>Product</td></b><td>Tertio</td></tr><br/>"; 
 	print $FILE "<tr><b><td>Release</td></b><td>$mrnumber</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Number</td></b><td>$build_number</td></tr><br/>";
 	print $FILE "<tr><b><td>Release Type</td></b><td>Maintenance Release</td></tr><br/>";
-	print $FILE "<tr><b><td>Location</td></b><td>?</td></tr><br/>";
+	print $FILE "<tr><b><td>Location</td></b><td>@location</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Date</td></b><td>$dtformat</td></tr><br/>";
 	print $FILE "<tr><b><td>Major changes in the new build</td></b><td>?</td></tr><br/>";
-	print $FILE "<tr><b><td>3.0.0</td></b><td>TOMEVERSION</td><td>BUILD19</td></tr><br/>";
+	print $FILE "<tr><b><td>TOME</td></b><td>3.0.0</td><td>BUILD19</td></tr><br/>";
 	print $FILE "<tr><b><td>Tertio ADK</td></b><td>-</td><td>-</td></tr><br/>";
 	print $FILE "<tr><b><td>CAF</td></b><td>-</td><td>-</td></tr><br/>";
 	print $FILE "<tr><b><td>Dashboard SDK</td></b><td>-</td><td>-</td></tr><br/>";
@@ -240,25 +241,28 @@ sub pkg()
   		}
   		chdir($destdir);
   		copy("$Bin/tertio-$mrnumber\_README.txt",$destdir);
-  		
+  	
   		if($prj =~ /linAS5/)
   		{
   			$hostos="rhel5";
   			$hostplatform="linAS5";
   			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostos\.tar; gzip tertio-$mrnumber-$hostos\.tar;`;  			
   			copy("tertio-$mrnumber-$hostos\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos\_$dtformat\.tar\.gz");
   		}
   		elsif($prj =~ /hpiav3/)
   		{
   			$hostplatform="hpiav3";
   			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
   			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz");
   		}
   		elsif($prj =~ /sol10/)
   		{
   			$hostplatform="sol10";
   			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
   			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz");
   		}
   		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log`;
   	} 
