@@ -29,7 +29,7 @@ if($hostname !~ /pesthp2/)
 
 
 #$result=GetOptions("devproject=s"=>\$devprojectname);
-$result=GetOptions("hpuxproject=s"=>\$hpuxproject,"linuxproject=s"=>\$linuxproject,"solproject=s"=>\$solproject,"javaproject=s"=>\$javaprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs);
+$result=GetOptions("hpuxproject=s"=>\$hpuxproject,"linuxproject=s"=>\$linuxproject,"solproject=s"=>\$solproject,"javaproject=s"=>\$javaprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs,"buildnumber=s"=>\$build_number);
 if(!$result)
 {
 	print "Please provide devprojectname \n";
@@ -112,7 +112,7 @@ sub createReadme()
 	$mrnumber=~ s/^\s+|\s+$//g;
 	
 	open  FILE, "+> $Bin/tertio-$mrnumber\_README.txt";
-	print FILE "Maintenance Release : Tertio $mrnumber build $BUILD_NUMBER\n\n";
+	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
 	print FILE "TASKS:$formattsks\n";
 	print FILE "FIXES:@synopsis";
@@ -128,7 +128,7 @@ sub createMail()
 	print $FILE "<table width=\"100%\ border=\"1\"<br/>"; 
 	print $FILE "<tr><b><td>Product</td></b><td>Tertio</td></tr><br/>"; 
 	print $FILE "<tr><b><td>Release</td></b><td>$mrnumber</td></tr><br/>";
-	print $FILE "<tr><b><td>Build Number</td></b><td>$BUILD_NUMBER</td></tr><br/>";
+	print $FILE "<tr><b><td>Build Number</td></b><td>$build_number</td></tr><br/>";
 	print $FILE "<tr><b><td>Release Type</td></b><td>Maintenance Release</td></tr><br/>";
 	print $FILE "<tr><b><td>Location</td></b><td>?</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Date</td></b><td>$dtformat</td></tr><br/>";
@@ -242,22 +242,22 @@ sub pkg()
   		
   		if($prj =~ /linAS5/)
   		{
-  			$hostplatform="rhel5";
-  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
-  			$hostplatform=~s/rhel5/linAS5/g;
-  			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			$hostos="rhel5";
+  			$hostplatform="linAS5";
+  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostos\.tar;`;  			
+  			copy("tertio-$mrnumber-$hostos.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   		}
   		elsif($prj =~ /hpiav3/)
   		{
   			$hostplatform="hpiav3";
   			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
-  			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   		}
   		elsif($prj =~ /sol10/)
   		{
   			$hostplatform="sol10";
   			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
-  			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   		}
   		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log $Bin/gmake_*.log`;
   	} 
