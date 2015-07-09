@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.7 Build Script
+# Tertio 7.6 Build Script
 use Cwd;
 use File::Path;
 use File::Find;
@@ -114,7 +114,7 @@ sub createReadme()
 	
 	$mrnumber=~ s/^\s+|\s+$//g;
 	
-	open  FILE, "+> $Bin/tertio-$mrnumber\_README.txt";
+	open  FILE, "+> $Bin/tertio_7.6_README.txt";
 	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
 	print FILE "TASKS:$formattedtsks\n\n";
@@ -242,7 +242,7 @@ sub pkg()
   			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   		}
   		chdir($destdir);
-  		copy("$Bin/tertio-$mrnumber\_README.txt",$destdir);
+  		copy("$Bin/tertio_7.6_README.txt",$destdir);
   	
   		if($prj =~ /linAS5/)
   		{
