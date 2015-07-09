@@ -30,13 +30,14 @@ elsif($hostname =~ /pedsun2/)
 elsif($hostname =~ /pesthp2/)
 {	$hostplatform="hpiav3";}
 
-$result=GetOptions("762afolder=s"=>\$762.af,"762cfolder=s"=>\$762.cf,"763afolder=s"=>\$763.af);
+$result=GetOptions("folder_762a=s"=>\$f_762a,"folder_762c=s"=>\$f_762c,"folder_763a=s"=>\$f_763a);
 
+#  Executing instructions: perl Fetch_FOLDER_TASK_CRINFO.pl -762afolder 1409 -762cfolder 1413 -763afolder 1431
 my @PatchFiles;
 my @files;
 my $patch_number;
 my $problem_number;
-my @crs;
+
 my @tasks;
 my $tasklist;
 my $CRlist;
@@ -68,9 +69,9 @@ sub main()
 }
 sub listfolderTasks()
 {
-	@tasks_7.6.2.a=`$CCM folder -show tasks '$762.af'" -u -f "%task_number"`;
-	@tasks_7.6.2.c=`$CCM folder -show tasks '$762.cf'" -u -f "%task_number"`;
-	@tasks_7.6.3.a=`$CCM folder -show tasks '$763.af'" -u -f "%task_number"`;
+	@tasks_7.6.2.a=`$CCM folder -show tasks '$f_762a'" -u -f "%task_number"`;
+	@tasks_7.6.2.c=`$CCM folder -show tasks '$f_762c'" -u -f "%task_number"`;
+	@tasks_7.6.3.a=`$CCM folder -show tasks '$f_763a'" -u -f "%task_number"`;
 	
 	print "Tasks in 7.6.2.a are => @tasks_7.6.2.a \n\n";
 	print "Tasks in 7.6.2.c are => @tasks_7.6.2.c \n\n";
