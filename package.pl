@@ -120,8 +120,8 @@ sub createReadme()
 sub createMail()
 {
 	open (my $FILE, "+> $Bin/releasenotes.html");
-	print $FILE "<html><head><style>table,td,th { 	border: 1px solid black; font: 12px arial, sans-serif;}</style></head><body>";
-	print $FILE "<table width=\"100%\" border=\"1\"><br/>"; 
+	print $FILE "<html><head><style>table,td,th,tr,body {border: 1px solid black; font: 12px arial, sans-serif;}</style></head><body>";
+	print $FILE "<table width=\"100%\"<br/>"; 
 	print $FILE "<tr><b><td>Product</td></b><td>Tertio</td></tr><br/>"; 
 	print $FILE "<tr><b><td>Release</td></b><td>$mrnumber</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Number</td></b><td></td></tr><br/>";
@@ -158,7 +158,7 @@ sub createMail()
 		($task_synopsis,$task_resolver)=split(/#/,$cr);
 		print $FILE "<tr><b><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
 	}
-	print $FILE "<b>Note:</b> To install Tertio $mr_number, please use the latest PatchManager<br/></body></html>";	
+	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";	
 	close $FILE;
 }
 
