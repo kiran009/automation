@@ -57,8 +57,9 @@ my $mailto='kiran.daadhi@evolving.com';
 my %hash;
 my $readmeIssue;
 my @consumreadme;
-my @tasks_7.6.2.a;
-my @tasks_7.6.2.c,@tasks_7.6.3.a,@crs_7.6.2.a,@crs_7.6.2.c,@crs_7.6.3.a;
+my @tasks_762a;
+my @tasks_762c,@tasks_763a,@crs_762a,@crs_762c,@crs_763a;
+my @uniq762a,@uniq762c,@uniq763a;
 # /* Global Environment Variables ******* /
 sub main()
 {	
@@ -76,6 +77,29 @@ sub listfolderTasks()
 	print "Tasks in 7.6.2.a are => @tasks_762a \n\n";
 	print "Tasks in 7.6.2.c are => @tasks_762c \n\n";
 	print "Tasks in 7.6.3.a are => @tasks_763a \n\n";
+	foreach $task(@tasks_762a)
+	{
+		$crinfo=`$CCM ccm task -show cr $task -u -f "%problem_number"`;
+		print "CR corresponding to task $task is: $crinfo\n";
+		push(@crs_762a,$crinfo);		
+	}
+	@uniq762a = do { my %seen; grep { !$seen{$_}++ } @crs_762a};
+	foreach $task(@tasks_762c)
+	{
+		$crinfo=`$CCM ccm task -show cr $task -u -f "%problem_number"`;
+		print "CR corresponding to task $task is: $crinfo\n";
+		push(@crs_762c,$crinfo);
+	}
+	@uniq762c = do { my %seen; grep { !$seen{$_}++ } @crs_762c};
+	foreach $task(@tasks_763a)
+	{
+		$crinfo=`$CCM ccm task -show cr $task -u -f "%problem_number"`;
+		print "CR corresponding to task $task is: $crinfo\n";
+		push(@crs_763a,$crinfo);
+	}
+	@uniq763a = do { my %seen; grep { !$seen{$_}++ } @crs_763a};
+	
+	print "Uniq CRs in 7.6.2.a are: @uniq762a \nUniq CRs in 7.6.2.c are: @uniq762c \nUniq CRs in 7.6.3.a are: @uniq763a\n";
 	
 }
 
