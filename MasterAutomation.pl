@@ -129,7 +129,8 @@ sub getTasksnReadme()
     	$patch_number=`$CCM query -u -f %patch_number`;
     	$patch_readme=`$CCM query -u -f %patch_readme`;
     	$patch_number=~ s/^\s+|\s+$//g;
-    
+    	
+    	open README, "+> $Bin/summary_readme.txt";
     	if($patch_readme =~ /N\/A/)
     	{
     		print "The following CR doesn't have a README \n";
@@ -145,16 +146,14 @@ sub getTasksnReadme()
         	#chomp(@PatchFiles);  
         	push(@patchbinarylist,@PatchFiles);
         	@sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | sed '/^\$/d'`;
-        	push(@consumreadme,@sumreadme);             	
+        	print README "$cr#@sumreadme";    	
     	}
 	}
 	open OP, "+> $Bin/patchbinarylist.txt";
 	print OP @patchbinarylist;
 	close OP;
 	
-	open OP, "+> $Bin/summary_readme.txt";
-	print OP @consumreadme;
-	close OP;
+	close README;
 	
 	close SYNOP;
 	close SUMM;
