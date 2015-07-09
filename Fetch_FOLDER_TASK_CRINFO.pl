@@ -69,9 +69,9 @@ sub main()
 }
 sub listfolderTasks()
 {
-	@tasks_762a=`$CCM folder -show tasks '$f_762a'" -u -f "%task_number"`;
-	@tasks_762c=`$CCM folder -show tasks '$f_762c'" -u -f "%task_number"`;
-	@tasks_763a=`$CCM folder -show tasks '$f_763a'" -u -f "%task_number"`;
+	@tasks_762a=`$CCM folder -show tasks '$f_762a' -u -f "%task_number"`;
+	@tasks_762c=`$CCM folder -show tasks '$f_762c' -u -f "%task_number"`;
+	@tasks_763a=`$CCM folder -show tasks '$f_763a' -u -f "%task_number"`;
 	
 	print "Tasks in 7.6.2.a are => @tasks_762a \n\n";
 	print "Tasks in 7.6.2.c are => @tasks_762c \n\n";
