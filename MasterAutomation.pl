@@ -89,7 +89,7 @@ sub main()
 sub getTasksnReadme()
 {	
 	open SYNOP,"+>$Bin/synopsis.txt";
-	#open SUMM,"+> $Bin/summary.txt";
+	open SUMM,"+> $Bin/summary_readme.txt";
 	open CRRESOLV, "+> $Bin/crresolv.txt";
 	open TASKINF,"+>$Bin/taskinfo.txt";
 	
@@ -120,7 +120,6 @@ sub getTasksnReadme()
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 		print SYNOP "CR$cr $synopsis\n";
-		#print SUMM "CR$cr $summary\n";
 		$mr_number=~ s/^\s+|\s+$//g;
 		open MR,"+> $Bin/mrnumber.txt";
 		print MR "$mr_number";
@@ -131,7 +130,7 @@ sub getTasksnReadme()
     	$patch_readme=`$CCM query -u -f %patch_readme`;
     	$patch_number=~ s/^\s+|\s+$//g;
     	
-    	open SUMM,"+> $Bin/summary_readme.txt";
+    	
     	if($patch_readme =~ /N\/A/)
     	{
     		print "The following CR: $cr doesn't have a README \n";
@@ -154,14 +153,12 @@ sub getTasksnReadme()
         	#}
         	push(@patchbinarylist,@PatchFiles);
         	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
-        	print "Summary from readme is: $sumreadme \n";
-        	print SUMM "$sumreadme";    	
+        	print SUMM "$cr#$sumreadme\n";    	
     	}
 	}
 	my %seen;
 	$seen{$_}++ foreach @patchbinarylist;
-	my @uniqbinlist = grep { $seen{$_} == 1 } @patchbinarylist;
-	#my @uniqbinlist=uniq @patchbinarylist;
+	my @uniqbinlist = grep { $seen{$_} == 1 } @patchbinarylist;	
 	open OP, "+> $Bin/patchbinarylist.txt";
 	print OP @uniqbinlist;
 	print "Patch binary list is: @patchbinarylist \n";
@@ -169,8 +166,7 @@ sub getTasksnReadme()
 	close SUMM;
 	close SYNOP;
 	close CRRESOLV;
-	close TASKINF;
-	#close MR;
+	close TASKINF;	
 	$tasklist=join(",",@tasks);
 	@formattsks=join("\n", map { 'PROV_' . $_ } @tasks);
 	open OP,"+>$Bin/formattsks.txt";
