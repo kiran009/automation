@@ -93,6 +93,7 @@ sub createReadme()
 	open OP,"<$Bin/formattsks.txt";
 	@formattsks=<OP>;
 	$formattedtsks=join(",",@formattsks);
+	$formattedtsks =~ s/[\n\r]//g;
 	close OP;
 	open OP,"<$Bin/synopsis.txt";
 	@synopsis=<OP>;

@@ -142,6 +142,7 @@ sub getTasksnReadme()
     		close OP1;
     		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`; 
     		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
+    		
     		#print "Binary file list is: @PatchFiles \n";
         	#chomp(@PatchFiles);
         	#my @newPatchFiles;  
@@ -155,8 +156,9 @@ sub getTasksnReadme()
         	print README "$cr@sumreadme";    	
     	}
 	}
+	my @uniqbinlist=uniq(@patchbinarylist);
 	open OP, "+> $Bin/patchbinarylist.txt";
-	print OP @patchbinarylist;
+	print OP @uniqbinlist;
 	close OP;
 	
 	close README;
