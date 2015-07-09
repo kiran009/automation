@@ -119,7 +119,7 @@ sub createReadme()
 	print FILE "Created: $dt\n\n";
 	print FILE "TASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
-	print FILE "AFFECTS:@binarylist\n\n";
+	print FILE "@binarylist\n\n";
 	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
 	close FILE;
 	

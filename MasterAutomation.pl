@@ -152,7 +152,7 @@ sub getTasksnReadme()
         	#}
         	push(@patchbinarylist,@PatchFiles);
         	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
-        	print SUMM "CR$cr-$sumreadme\n";    	
+        	print SUMM "CR$cr - $sumreadme\n";    	
     	}
 	}	
 		
