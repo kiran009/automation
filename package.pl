@@ -68,6 +68,7 @@ my $readmeIssue;
 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
 $year+=1900;
 my $dt="$mday $months[$mon] $year\n";
+my @taskinfo,@synopsis,@summary,@crresolv,$formattsks;
 
 # /* Global Environment Variables ******* /
 sub main()
@@ -92,16 +93,16 @@ sub createReadme()
 	$formattsks=<OP>;
 	close OP;
 	open OP,"<$Bin/synopsis.txt";
-	my @synopsis=<OP>;
+	@synopsis=<OP>;
 	close OP;
 	open OP,"<$Bin/summary.txt";
-	my @summary=<OP>;
+	@summary=<OP>;
 	close OP;
 	open OP,"<$Bin/crresolv.txt";
-	my @crresolv=<OP>;
+	@crresolv=<OP>;
 	close OP;
 	open OP,"<$Bin/taskinfo.txt";
-	my @taskinfo=<OP>;
+	@taskinfo=<OP>;
 	close OP;
 	
 	$mrnumber=~ s/^\s+|\s+$//g;
