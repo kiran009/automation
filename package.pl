@@ -69,7 +69,7 @@ my $readmeIssue;
 $year+=1900;
 my $dt="$mday $months[$mon] $year\n";
 my @taskinfo,@synopsis,@summary,@crresolv,@formattsks,@binarylist;
-my $dtformat="$year$months[$mon]$mday_$hour::$min";
+my $dtformat="$year$months[$mon]$mday\_$hour\:$min";
 my 	@location;
 # /* Global Environment Variables ******* /
 sub main()
