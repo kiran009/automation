@@ -125,15 +125,15 @@ sub createReadme()
 sub createMail()
 {
 	open (my $FILE, "+> $Bin/releasenotes.html");
-	print $FILE "<html><head><style>table {border: 1 solid black; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif;}</style></head><body>";
+	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
 	print $FILE "<table width=\"100%\" border=\"1\"<br/>"; 
-	print $FILE "<tr><b><td>Product</td></b><td>Tertio</td></tr><br/>"; 
-	print $FILE "<tr><b><td>Release</td></b><td>$mrnumber</td></tr><br/>";
-	print $FILE "<tr><b><td>Build Number</td></b><td>$build_number</td></tr><br/>";
-	print $FILE "<tr><b><td>Release Type</td></b><td>Maintenance Release</td></tr><br/>";
-	print $FILE "<tr><b><td>Location</td></b><td>@location</td></tr><br/>";
-	print $FILE "<tr><b><td>Build Date</td></b><td>$dtformat</td></tr><br/>";
-	print $FILE "<tr><b><td>Major changes in the new build</td></b><td>?</td></tr><br/>";
+	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>"; 
+	print $FILE "<tr><b><td>Release</td></b><td colspan=\'2\'>$mrnumber</td></tr><br/>";
+	print $FILE "<tr><b><td>Build Number</td></b><td colspan=\'2\'>$build_number</td></tr><br/>";
+	print $FILE "<tr><b><td>Release Type</td></b><td colspan=\'2\'>Maintenance Release</td></tr><br/>";
+	print $FILE "<tr><b><td>Location</td></b><td colspan=\'2\'>@location</td></tr><br/>";
+	print $FILE "<tr><b><td>Build Date</td></b><td colspan=\'2\'>$dtformat</td></tr><br/>";
+	print $FILE "<tr><b><td>Major changes in the new build</td></b><td colspan=\'2\'>?</td></tr><br/>";
 	print $FILE "<tr><b><td>TOME</td></b><td>3.0.0</td><td>BUILD19</td></tr><br/>";
 	print $FILE "<tr><b><td>Tertio ADK</td></b><td>-</td><td>-</td></tr><br/>";
 	print $FILE "<tr><b><td>CAF</td></b><td>-</td><td>-</td></tr><br/>";
