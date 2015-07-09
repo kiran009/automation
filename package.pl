@@ -239,13 +239,14 @@ sub pkg()
   			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   		}
   		chdir($destdir);
+  		copy("$Bin/tertio-$mrnumber\_README.txt",$destdir);
   		
   		if($prj =~ /linAS5/)
   		{
   			$hostos="rhel5";
   			$hostplatform="linAS5";
-  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostos\.tar;`;  			
-  			copy("tertio-$mrnumber-$hostos.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostos\.tar; gzip tertio-$mrnumber-$hostos\.tar;`;  			
+  			copy("tertio-$mrnumber-$hostos.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   		}
   		elsif($prj =~ /hpiav3/)
   		{
@@ -259,7 +260,7 @@ sub pkg()
   			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
   			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   		}
-  		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log $Bin/gmake_*.log`;
+  		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log`;
   	} 
 }
 sub start_ccm()
