@@ -68,6 +68,7 @@ my @op;
 my @file_list;
 my $mr_number;
 my @patchbinarylist;
+my $cr;
 #my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
 #my $mailto='kiran.daadhi@evolving.com';
 my %hash;
@@ -92,7 +93,7 @@ sub getTasksnReadme()
 	open CRRESOLV, "+> $Bin/crresolv.txt";
 	open TASKINF,"+>$Bin/taskinfo.txt";
 	
-	foreach my $cr(@crs)
+	foreach $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
 		$task_number=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
@@ -152,11 +153,15 @@ sub getTasksnReadme()
         	#	push(@newPatchFiles, $newpatchfile);
         	#}
         	push(@patchbinarylist,@PatchFiles);
-        	@sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
-        	print README "$cr@sumreadme";    	
+        	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
+        	print "Summary from readme is: $sumreadme \n";
+        	print README "$cr $sumreadme";    	
     	}
 	}
-	my @uniqbinlist=uniq(@patchbinarylist);
+	my %seen;
+	$seen{$_}++ foreach @patchbinarylist;
+	my @uniqbinlist = grep { $seen{$_} == 1 } @patchbinarylist;
+	#my @uniqbinlist=uniq @patchbinarylist;
 	open OP, "+> $Bin/patchbinarylist.txt";
 	print OP @uniqbinlist;
 	close OP;
