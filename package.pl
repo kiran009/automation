@@ -120,7 +120,7 @@ sub createReadme()
 sub createMail()
 {
 	open (my $FILE, "+> $Bin/releasenotes.html");
-	print $FILE "<html><head><style>table {border: 1px solid black; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif;}</style></head><body>";
+	print $FILE "<html><head><style>table {border: 1 solid black; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif;}</style></head><body>";
 	print $FILE "<table width=\"100%\"<br/>"; 
 	print $FILE "<tr><b><td>Product</td></b><td>Tertio</td></tr><br/>"; 
 	print $FILE "<tr><b><td>Release</td></b><td>$mrnumber</td></tr><br/>";
@@ -155,8 +155,8 @@ sub createMail()
 	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr></table><br/>";
 	foreach $tsk(@taskinfo)
 	{
-		($task_synopsis,$task_resolver)=split(/#/,$tsk);
-		print $FILE "<tr><b><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
+		($task_number,$task_synopsis,$task_resolver)=split(/#/,$tsk);
+		print $FILE "<tr><b><td>$task_number</td><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
 	}
 	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";	
 	close $FILE;
