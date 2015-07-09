@@ -96,13 +96,13 @@ sub getTasksnReadme()
 	foreach $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
+		print "CRNumber is : $cr\n";
 		$task_number=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		$task_number=~ s/^\s+|\s+$//g;
 		push(@tasks,$task_number);		
-		#get mrnumber, synopsis and summary
+		#get mrnumber, synopsis and other fields
 		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
 		($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
-		#($summary)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_description"`;
 		($requesttype)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%request_type"`;
 		($severity)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%severity"`;
 		($priority)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%priority"`;
@@ -110,7 +110,6 @@ sub getTasksnReadme()
 		($task_synopsis)=`$CCM task -show info $task_number -u -format "%task_synopsis"`;
 		($task_resolver)=`$CCM task -show info $task_number -u -format "%resolver"`;
 		$synopsis=~ s/^\s+|\s+$//g;
-		$summary=~ s/^\s+|\s+$//g;
 		$requesttype=~ s/^\s+|\s+$//g;
 		$severity=~ s/^\s+|\s+$//g;
 		$resolver=~ s/^\s+|\s+$//g;
@@ -153,15 +152,17 @@ sub getTasksnReadme()
         	#}
         	push(@patchbinarylist,@PatchFiles);
         	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
-        	print SUMM "$cr#$sumreadme\n";    	
+        	print SUMM "CR$cr-$sumreadme\n";    	
     	}
 	}
-	my %seen;
-	$seen{$_}++ foreach @patchbinarylist;
-	my @uniqbinlist = grep { $seen{$_} == 1 } @patchbinarylist;	
+	#my %seen;
+	#$seen{$_}++ foreach @patchbinarylist;
+	#my @uniqbinlist = grep { $seen{$_} == 1 } @patchbinarylist;
+		
+	my @uniqubinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
 	open OP, "+> $Bin/patchbinarylist.txt";
 	print OP @uniqbinlist;
-	print "Patch binary list is: @patchbinarylist \n";
+	#print "Patch binary list is: @patchbinarylist \n";
 	close OP;
 	close SUMM;
 	close SYNOP;
