@@ -64,7 +64,7 @@ sub main()
 {	
 		start_ccm();
 		listfolderTasks();
-		listTaskCRs();
+		#listTaskCRs();
 		ccm_stop();		
 }
 sub listfolderTasks()
