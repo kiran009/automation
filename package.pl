@@ -246,7 +246,7 @@ sub pkg()
   			$hostos="rhel5";
   			$hostplatform="linAS5";
   			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostos\.tar; gzip tertio-$mrnumber-$hostos\.tar;`;  			
-  			copy("tertio-$mrnumber-$hostos.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			copy("tertio-$mrnumber-$hostos\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   		}
   		elsif($prj =~ /hpiav3/)
   		{
