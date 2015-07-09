@@ -121,7 +121,7 @@ sub createMail()
 {
 	open (my $FILE, "+> $Bin/releasenotes.html");
 	print $FILE "<html><head><style>table {border: 1 solid black; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif;}</style></head><body>";
-	print $FILE "<table width=\"100%\"<br/>"; 
+	print $FILE "<table width=\"100%\ border=\"1\""<br/>"; 
 	print $FILE "<tr><b><td>Product</td></b><td>Tertio</td></tr><br/>"; 
 	print $FILE "<tr><b><td>Release</td></b><td>$mrnumber</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Number</td></b><td></td></tr><br/>";
@@ -129,7 +129,7 @@ sub createMail()
 	print $FILE "<tr><b><td>Location</td></b><td>?</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Date</td></b><td>?</td></tr><br/>";
 	print $FILE "<tr><b><td>Major changes in the new build</td></b><td>?</td></tr><br/>";
-	print $FILE "<tr><b><td>TOME</td></b><td>TOMEVERSION</td><td>TOMESUBVERSION</td></tr><br/>";
+	print $FILE "<tr><b><td>3.0.0</td></b><td>TOMEVERSION</td><td>BUILD19</td></tr><br/>";
 	print $FILE "<tr><b><td>Tertio ADK</td></b><td>-</td><td>-</td></tr><br/>";
 	print $FILE "<tr><b><td>CAF</td></b><td>-</td><td>-</td></tr><br/>";
 	print $FILE "<tr><b><td>Dashboard SDK</td></b><td>-</td><td>-</td></tr><br/>";
@@ -141,7 +141,7 @@ sub createMail()
 	print $FILE "<tr><b><td>Has the developer documentation been updated?</td></b><td colspan=\"2\">N/A</td></tr></table><br/>";
 	print $FILE "<b>Installation instructions: </b><br/>";
 	print $FILE "Same as previous Tertio Maintenance Release<br/><br/>";
-	print $FILE "<b>Additional information about the changes</b>N/A<br />The Resolved CRs are:<br/>";
+	print $FILE "<b>Additional information about the changes:</b>N/A<br /><b>The Resolved CRs are:</b><br/>";
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
 	print $FILE "<tr><b><td>CR ID</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr><br/>";
 	foreach $cr(@crresolv)
@@ -149,15 +149,16 @@ sub createMail()
 		($crid,$synopsis,$requesttype,$severity,$resolver,$priority)=split(/#/,$cr);
 		print $FILE "<tr><b><td>$crid</td><td>$synopsis</td><td>$requesttype</td><td>$severity</td><td>$resolver</td><td>$priority</td></tr>";
 	}
-	print $FILE "</table>";
+	print $FILE "</table><br/>";
 	print $FILE "<b>The checked in tasks since the last build are:</b><br/>";
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
-	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr></table><br/>";
+	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr>";
 	foreach $tsk(@taskinfo)
 	{
 		($task_number,$task_synopsis,$task_resolver)=split(/#/,$tsk);
 		print $FILE "<tr><b><td>$task_number</td><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
 	}
+	print $FILE "</table><br/>";
 	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";	
 	close $FILE;
 }
@@ -233,23 +234,29 @@ sub pkg()
   			mkpath("$destdir/$dirname");
   			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   		}
+  		chdir($destdir);
+  		my $dtformat="$year$mon$mday";
   		if($prj =~ /linAS5/)
   		{
-  			$hostplatform="linas5";
+  			$hostplatform="rhel5";
+  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
+  			$hostplatform=~s/rhel5/linAS5/g;
+  			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   		}
   		elsif($prj =~ /hpiav3/)
   		{
   			$hostplatform="hpiav3";
+  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
+  			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   		}
   		elsif($prj =~ /sol10/)
   		{
   			$hostplatform="sol10";
+  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
+  			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   		}
-  		chdir($destdir);
-  		`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
   		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log $Bin/gmake_*.log`;
-  		copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/u/kkdaadhi/") or die("Couldn't copy to destination $!");
-	} 
+  	} 
 }
 sub start_ccm()
 {
