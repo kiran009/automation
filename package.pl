@@ -69,7 +69,7 @@ my $readmeIssue;
 $year+=1900;
 my $dt="$mday $months[$mon] $year\n";
 my @taskinfo,@synopsis,@summary,@crresolv,@formattsks,@binarylist;
-my $dtformat="$year$months[$mon]$mday\_$hour\:$min";
+my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
 # /* Global Environment Variables ******* /
 sub main()
@@ -92,11 +92,12 @@ sub createReadme()
 	close OP;
 	open OP,"<$Bin/formattsks.txt";
 	@formattsks=<OP>;
+	$formattedtsks=join(",",@formattsks);
 	close OP;
 	open OP,"<$Bin/synopsis.txt";
 	@synopsis=<OP>;
 	close OP;
-	open OP,"<$Bin/summary.txt";
+	open OP,"<$Bin/summary_readme.txt";
 	@summary=<OP>;
 	close OP;
 	open OP,"<$Bin/crresolv.txt";
@@ -115,9 +116,9 @@ sub createReadme()
 	open  FILE, "+> $Bin/tertio-$mrnumber\_README.txt";
 	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
-	print FILE "TASKS:@formattsks\n";
-	print FILE "FIXES:@synopsis";
-	print FILE "AFFECTS:@binarylist";
+	print FILE "TASKS:$formattedtsks\n\n";
+	print FILE "FIXES:@synopsis\n\n";
+	print FILE "AFFECTS:@binarylist\n\n";
 	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
 	close FILE;
 	
