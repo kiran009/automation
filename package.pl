@@ -68,8 +68,8 @@ my $readmeIssue;
 ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
 $year+=1900;
 my $dt="$mday $months[$mon] $year\n";
-my @taskinfo,@synopsis,@summary,@crresolv,$formattsks;
-
+my @taskinfo,@synopsis,@summary,@crresolv,$formattsks,@binarylist;
+my $dtformat="$year$mon$mday";
 # /* Global Environment Variables ******* /
 sub main()
 {	
@@ -104,15 +104,19 @@ sub createReadme()
 	open OP,"<$Bin/taskinfo.txt";
 	@taskinfo=<OP>;
 	close OP;
+	open OP, "< $Bin/patchbinarylist.txt";
+	@binarylist=<OP>;
+	close OP;
+	
 	
 	$mrnumber=~ s/^\s+|\s+$//g;
 	
 	open  FILE, "+> $Bin/tertio-$mrnumber\_README.txt";
-	print FILE "Maintenance Release : Tertio $mrnumber\n\n";
+	print FILE "Maintenance Release : Tertio $mrnumber build $BUILD_NUMBER\n\n";
 	print FILE "Created: $dt\n\n";
 	print FILE "TASKS:$formattsks\n";
 	print FILE "FIXES:@synopsis";
-	print FILE "AFFECTS:";
+	print FILE "AFFECTS:@binarylist";
 	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
 	close FILE;
 	
@@ -124,10 +128,10 @@ sub createMail()
 	print $FILE "<table width=\"100%\ border=\"1\""<br/>"; 
 	print $FILE "<tr><b><td>Product</td></b><td>Tertio</td></tr><br/>"; 
 	print $FILE "<tr><b><td>Release</td></b><td>$mrnumber</td></tr><br/>";
-	print $FILE "<tr><b><td>Build Number</td></b><td></td></tr><br/>";
+	print $FILE "<tr><b><td>Build Number</td></b><td>$BUILD_NUMBER</td></tr><br/>";
 	print $FILE "<tr><b><td>Release Type</td></b><td>Maintenance Release</td></tr><br/>";
 	print $FILE "<tr><b><td>Location</td></b><td>?</td></tr><br/>";
-	print $FILE "<tr><b><td>Build Date</td></b><td>?</td></tr><br/>";
+	print $FILE "<tr><b><td>Build Date</td></b><td>$dtformat</td></tr><br/>";
 	print $FILE "<tr><b><td>Major changes in the new build</td></b><td>?</td></tr><br/>";
 	print $FILE "<tr><b><td>3.0.0</td></b><td>TOMEVERSION</td><td>BUILD19</td></tr><br/>";
 	print $FILE "<tr><b><td>Tertio ADK</td></b><td>-</td><td>-</td></tr><br/>";
@@ -235,7 +239,7 @@ sub pkg()
   			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
   		}
   		chdir($destdir);
-  		my $dtformat="$year$mon$mday";
+  		
   		if($prj =~ /linAS5/)
   		{
   			$hostplatform="rhel5";

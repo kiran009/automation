@@ -67,11 +67,13 @@ my $workarea;
 my @op;
 my @file_list;
 my $mr_number;
+my @patchbinarylist;
 #my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
 #my $mailto='kiran.daadhi@evolving.com';
 my %hash;
 #$destdir="/u/kkdaadhi/Tertio_Deliverable";
 my $readmeIssue;
+my @consumreadme;
 
 @crs=split(/,/,$crs);
 print "The following list of CRs to the included in the patch:@crs\n";
@@ -137,9 +139,23 @@ sub getTasksnReadme()
        		open OP1,"+> $Bin/$patch_number\_README.txt";
     		print OP1 $patch_readme;
     		close OP1;
-    		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;                  	
+    		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`; 
+    		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTS' | sed '/^\$/d'`;
+    		#print "Binary file list is: @PatchFiles \n";
+        	#chomp(@PatchFiles);  
+        	push(@patchbinarylist,@PatchFiles);
+        	@sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | sed '/^\$/d'`;
+        	push(@consumreadme,@sumreadme);             	
     	}
 	}
+	open OP, "+> $Bin/patchbinarylist.txt";
+	print OP @patchbinarylist;
+	close OP;
+	
+	open OP, "+> $Bin/summary_readme.txt";
+	print OP @consumreadme;
+	close OP;
+	
 	close SYNOP;
 	close SUMM;
 	close CRRESOLV;
