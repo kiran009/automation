@@ -59,3 +59,7 @@ SRC composer/ServiceComposer/Engine/PrismInterface.tcl DEST scripts/service_logi
 SRC composer/ServiceComposer/Engine/XmlParser.tcl DEST scripts/service_logic/System/ServiceComposer/Engine/XmlParser.tcl
 SRC scripts/stp/DbUtils.tcl DEST .
 SRC scripts/stp/DesignerEngine.tcl DEST .
+SRC etc/mr_postinstall.ksh	DEST etc/7.6.3_postinstall.ksh
+SRC etc/mr_postuninstall.ksh	DEST etc/7.6.3_postuninstall.ksh
+SRC etc/mr_preinstall.ksh	DEST etc/7.6.3_preinstall.ksh
+SRC etc/mr_preuninstall.ksh	DEST etc/7.6.3_preuninstall.ksh

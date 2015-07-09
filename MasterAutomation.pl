@@ -144,15 +144,15 @@ sub getTasksnReadme()
     		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
     		#print "Binary file list is: @PatchFiles \n";
         	#chomp(@PatchFiles);
-        	my @newPatchFiles;  
-        	foreach my $patchfile(@PatchFiles)
-        	{
-        		$newpatchfile=($patchfile=~s/mr_/$mr_number\_/g);
-        		push(@newPatchFiles, $newpatchfile);
-        	}
-        	push(@patchbinarylist,@newPatchFiles);
+        	#my @newPatchFiles;  
+        	#foreach my $patchfile(@PatchFiles)
+        	#{
+        	#	$newpatchfile=($patchfile=~s/mr_/$mr_number\_/g);
+        	#	push(@newPatchFiles, $newpatchfile);
+        	#}
+        	push(@patchbinarylist,@PatchFiles);
         	@sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
-        	print README "$cr#@sumreadme";    	
+        	print README "$cr@sumreadme";    	
     	}
 	}
 	open OP, "+> $Bin/patchbinarylist.txt";
