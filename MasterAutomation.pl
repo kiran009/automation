@@ -154,15 +154,12 @@ sub getTasksnReadme()
         	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
         	print SUMM "CR$cr-$sumreadme\n";    	
     	}
-	}
-	#my %seen;
-	#$seen{$_}++ foreach @patchbinarylist;
-	#my @uniqbinlist = grep { $seen{$_} == 1 } @patchbinarylist;
+	}	
 		
-	my @uniqubinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
+	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
 	open OP, "+> $Bin/patchbinarylist.txt";
 	print OP @uniqbinlist;
-	#print "Patch binary list is: @patchbinarylist \n";
+	#
 	close OP;
 	close SUMM;
 	close SYNOP;
