@@ -106,6 +106,14 @@ sub getTasksnReadme()
 		($resolver)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%resolver"`;
 		($task_synopsis)=`$CCM task -show info 10771 -u -format "%task_synopsis"`;
 		($task_resolver)=`$CCM task -show info 10771 -u -format "%resolver"`;
+		$synopsis=~ s/^\s+|\s+$//g;
+		$summary=~ s/^\s+|\s+$//g;
+		$requesttype=~ s/^\s+|\s+$//g;
+		$severity=~ s/^\s+|\s+$//g;
+		$resolver=~ s/^\s+|\s+$//g;
+		$task_synopsis=~ s/^\s+|\s+$//g;
+		$task_resolver=~ s/^\s+|\s+$//g;
+		$priority=~ s/^\s+|\s+$//g;		
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 		print SYNOP "CR$cr $synopsis\n";
