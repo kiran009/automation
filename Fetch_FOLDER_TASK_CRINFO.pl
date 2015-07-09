@@ -79,21 +79,21 @@ sub listfolderTasks()
 	print "Tasks in 7.6.3.a are => @tasks_763a \n\n";
 	foreach $task(@tasks_762a)
 	{
-		$crinfo=`$CCM task -show cr $task -u -f "%problem_number"`;
+		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
 		print "CR corresponding to task $task is: $crinfo\n";
 		push(@crs_762a,$crinfo);		
 	}
 	@uniq762a = do { my %seen; grep { !$seen{$_}++ } @crs_762a};
 	foreach $task(@tasks_762c)
 	{
-		$crinfo=`$CCM task -show cr $task -u -f "%problem_number"`;
+		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
 		print "CR corresponding to task $task is: $crinfo\n";
 		push(@crs_762c,$crinfo);
 	}
 	@uniq762c = do { my %seen; grep { !$seen{$_}++ } @crs_762c};
 	foreach $task(@tasks_763a)
 	{
-		$crinfo=`$CCM task -show cr $task -u -f "%problem_number"`;
+		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
 		print "CR corresponding to task $task is: $crinfo\n";
 		push(@crs_763a,$crinfo);
 	}
