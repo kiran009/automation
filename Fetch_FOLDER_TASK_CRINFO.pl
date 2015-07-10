@@ -58,8 +58,23 @@ my %hash;
 my $readmeIssue;
 my @consumreadme;
 my @tasks_762a;
-my @tasks_762c,@tasks_763a,@crs_762a,@crs_762c,@crs_763a;
-my @uniq762a,@uniq762c,@uniq763a;
+my (@tasks_762c,@tasks_763a,@crs_762a,@crs_762c,@crs_763a);
+my (@uniq762a,@uniq762c,@uniq763a);
+my $destdir="/u/kkdaadhi/Tertio_Deliverable";
+my $readmeIssue;
+@months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+my @days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+$year+=1900;
+my $dt="$mday $months[$mon] $year\n";
+my @taskinfo;
+my @synopsis;
+my @summary;
+my @crresolv;
+my @formattsks;
+my @binarylist;
+my $dtformat="$year$months[$mon]$mday$hour$min";
+my 	@location;
 # /* Global Environment Variables ******* /
 sub main()
 {	
@@ -122,6 +137,53 @@ sub ccm_stop()
 }
 
 main();
+
+
+
+sub createMail()
+{
+	open (my $FILE, "+> $Bin/releasenotes.html");
+	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
+	print $FILE "<table width=\"100%\" border=\"1\"<br/>"; 
+	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>"; 
+	print $FILE "<tr><b><td>Release</td></b><td colspan=\'2\'>$mrnumber</td></tr><br/>";
+	print $FILE "<tr><b><td>Build Number</td></b><td colspan=\'2\'>$build_number</td></tr><br/>";
+	print $FILE "<tr><b><td>Release Type</td></b><td colspan=\'2\'>Maintenance Release</td></tr><br/>";
+	print $FILE "<tr><b><td>Build Date</td></b><td colspan=\'2\'>$dtformat</td></tr><br/>";
+	print $FILE "<tr><b><td>Major changes in the new build</td></b><td colspan=\'2\'>BUG FIXES</td></tr><br/>";
+	print $FILE "<tr><b><td>TOME</td></b><td>3.0.0</td><td>BUILD19</td></tr><br/>";
+	print $FILE "<tr><b><td>Tertio ADK</td></b><td>-</td><td>-</td></tr><br/>";
+	print $FILE "<tr><b><td>CAF</td></b><td>-</td><td>-</td></tr><br/>";
+	print $FILE "<tr><b><td>Dashboard SDK</td></b><td>-</td><td>-</td></tr><br/>";
+	print $FILE "<tr><b><td>DDA Protocol Version</td></b><td>-</td><td>-</td></tr><br/>";
+	print $FILE "<tr><b><td>Menu Server Extension</td></b><td>-</td><td>-</td></tr><br/>";
+	print $FILE "<tr><b><td>SMS payload STK</td></b><td>-</td><td>-</td></tr><br/>";
+	print $FILE "<tr><b><td>RM CDK</td><td>-</td></b><td>-</td></tr><br/>";
+	print $FILE "<tr><b><td>PE CDK</td><td>-</td></b><td>-</td></tr><br/>";
+	print $FILE "<tr><b><td>Has the developer documentation been updated?</td></b><td colspan=\"2\">N/A</td></tr></table><br/>";
+	print $FILE "<b>Installation instructions: </b><br/>";
+	print $FILE "Same as previous Tertio Maintenance Release<br/><br/>";
+	print $FILE "<b>Additional information about the changes:</b>N/A<br /><b>The Resolved CRs are:</b><br/>";
+	print $FILE "<b><table width=\"100%\" border=\"1\">";
+	print $FILE "<tr><b><td>CR ID</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr><br/>";
+	foreach $cr(@crresolv)
+	{
+		($crid,$synopsis,$requesttype,$severity,$resolver,$priority)=split(/#/,$cr);
+		print $FILE "<tr><b><td>$crid</td><td>$synopsis</td><td>$requesttype</td><td>$severity</td><td>$resolver</td><td>$priority</td></tr>";
+	}
+	print $FILE "</table><br/>";
+	print $FILE "<b>The checked in tasks since the last build are:</b><br/>";
+	print $FILE "<b><table width=\"100%\" border=\"1\">";
+	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr>";
+	foreach $tsk(@taskinfo)
+	{
+		($task_number,$task_synopsis,$task_resolver)=split(/#/,$tsk);
+		print $FILE "<tr><b><td>$task_number</td><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
+	}
+	print $FILE "</table><br/>";
+	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";	
+	close $FILE;
+}
 
 sub getTasksnReadme()
 {	

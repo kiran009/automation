@@ -65,6 +65,7 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
+my $teriodest="/u/kkdaadhi/Tertio_Deliverable/Tertio_Dest";
 # /* Global Environment Variables ******* /
 sub main()
 {	
@@ -234,22 +235,22 @@ sub pkg()
   			$hostos="rhel5";
   			$hostplatform="linAS5";
   			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostos-build$build_number\.tar; gzip tertio-$mrnumber-$hostos-build$build_number\.tar;`;  			
-  			copy("tertio-$mrnumber-$hostos-build$build_number\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  			push(@location,"/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
+  			copy("tertio-$mrnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
   		}
   		elsif($prj =~ /hpiav3/)
   		{
   			$hostplatform="hpiav3";
   			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
-  			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  			push(@location,"/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
   		}
   		elsif($prj =~ /sol10/)
   		{
   			$hostplatform="sol10";
   			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
-  			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  			push(@location,"/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
   		}
   		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log`;
   	}
