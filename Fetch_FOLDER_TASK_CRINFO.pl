@@ -30,8 +30,7 @@ elsif($hostname =~ /pedsun2/)
 elsif($hostname =~ /pesthp2/)
 {	$hostplatform="hpiav3";}
 
-$result=GetOptions("folder_762a=s"=>\$f_762a,"folder_762c=s"=>\$f_762c,"folder_763a=s"=>\$f_763a);
-
+my $result=GetOptions("folder_762a=s"=>\$f_762a,"folder_762c=s"=>\$f_762c,"folder_763a=s"=>\$f_763a);
 #  Executing instructions: perl Fetch_FOLDER_TASK_CRINFO.pl -folder_762a 1409 -folder_762c 1413 -folder_763a 1431
 my @PatchFiles;
 my @files;
@@ -44,7 +43,6 @@ my $CRlist;
 my $PatchReleaseVersion;
 my $projectName;
 my $platformlist;
-my $hostname;
 my @platforms;
 my $workarea;
 my @op;
@@ -61,7 +59,6 @@ my @tasks_762a;
 my (@tasks_762c,@tasks_763a,@crs_762a,@crs_762c,@crs_763a);
 my (@uniq762a,@uniq762c,@uniq763a);
 my $destdir="/u/kkdaadhi/Tertio_Deliverable";
-my $readmeIssue;
 @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 my @days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
@@ -118,7 +115,12 @@ sub listfolderTasks()
 	@uniq763a = do { my %seen; grep { !$seen{$_}++ } @crs_763a};
 	
 	print "Uniq CRs in 7.6.2.a are: @uniq762a \nUniq CRs in 7.6.2.c are: @uniq762c \nUniq CRs in 7.6.3.a are: @uniq763a\n";
-	
+	getTasksnReadme(@uniq762a);
+	createReadme();
+	getTasksnReadme(@uniq762c);
+	createReadme();
+	getTasksnReadme(@uniq763a);
+	createReadme();		
 }
 
 sub start_ccm()
@@ -138,16 +140,13 @@ sub ccm_stop()
 
 main();
 
-
-
 sub createMail()
 {
 	open (my $FILE, "+> $Bin/releasenotes.html");
 	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
 	print $FILE "<table width=\"100%\" border=\"1\"<br/>"; 
 	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>"; 
-	print $FILE "<tr><b><td>Release</td></b><td colspan=\'2\'>$mrnumber</td></tr><br/>";
-	print $FILE "<tr><b><td>Build Number</td></b><td colspan=\'2\'>$build_number</td></tr><br/>";
+	print $FILE "<tr><b><td>Release</td></b><td colspan=\'2\'>$mrnumber</td></tr><br/>";	
 	print $FILE "<tr><b><td>Release Type</td></b><td colspan=\'2\'>Maintenance Release</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Date</td></b><td colspan=\'2\'>$dtformat</td></tr><br/>";
 	print $FILE "<tr><b><td>Major changes in the new build</td></b><td colspan=\'2\'>BUG FIXES</td></tr><br/>";
@@ -185,8 +184,44 @@ sub createMail()
 	close $FILE;
 }
 
+sub createReadme()
+{
+	open OP,"<$Bin/mrnumber.txt";
+	$mrnumber=<OP>;
+	close OP;
+	open OP,"<$Bin/formattsks.txt";
+	@formattsks=<OP>;
+	$formattedtsks=join(",",@formattsks);
+	$formattedtsks =~ s/[\n\r]//g;
+	close OP;
+	open OP,"<$Bin/synopsis.txt";
+	@synopsis=<OP>;
+	close OP;
+	open OP,"<$Bin/summary_readme.txt";
+	@summary=<OP>;
+	close OP;
+	open OP,"<$Bin/crresolv.txt";
+	@crresolv=<OP>;
+	close OP;
+	open OP,"<$Bin/taskinfo.txt";
+	@taskinfo=<OP>;
+	close OP;
+	open OP, "< $Bin/patchbinarylist.txt";
+	@binarylist=<OP>;
+	close OP;
+	
+	$mrnumber=~ s/^\s+|\s+$//g;
+	open  FILE, "> $Bin/tertio_7.6_README.txt";	
+	print FILE "Created: $dt\n\n";
+	print FILE "TASKS:$formattedtsks\n\n";
+	print FILE "FIXES:@synopsis\n\n";
+	print FILE "@binarylist\n\n";
+	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
+	close FILE;	
+}
 sub getTasksnReadme()
 {	
+	my @crs=@_;
 	open SYNOP,"+>$Bin/synopsis.txt";
 	open SUMM,"+> $Bin/summary_readme.txt";
 	open CRRESOLV, "+> $Bin/crresolv.txt";
@@ -226,8 +261,7 @@ sub getTasksnReadme()
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
     	$patch_number=`$CCM query -u -f %patch_number`;
     	$patch_readme=`$CCM query -u -f %patch_readme`;
-    	$patch_number=~ s/^\s+|\s+$//g;
-    	
+    	$patch_number=~ s/^\s+|\s+$//g;    	
     	
     	if($patch_readme =~ /N\/A/)
     	{
@@ -239,16 +273,8 @@ sub getTasksnReadme()
     		print OP1 $patch_readme;
     		close OP1;
     		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`; 
-    		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
+    		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;   		
     		
-    		#print "Binary file list is: @PatchFiles \n";
-        	#chomp(@PatchFiles);
-        	#my @newPatchFiles;  
-        	#foreach my $patchfile(@PatchFiles)
-        	#{
-        	#	$newpatchfile=($patchfile=~s/mr_/$mr_number\_/g);
-        	#	push(@newPatchFiles, $newpatchfile);
-        	#}
         	push(@patchbinarylist,@PatchFiles);
         	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
         	print SUMM "CR$cr - $sumreadme\n";    	
@@ -269,16 +295,4 @@ sub getTasksnReadme()
 	open OP,"+>$Bin/formattsks.txt";
 	print OP @formattsks;
 	close OP;	
-}
-
-sub reconfigure_devproject()
-{	
-	$ccmworkarea=`$CCM wa -show -recurse $devprojectname`;
-	($temp,$workarea)=split(/'/,$ccmworkarea);
-	$workarea=~ s/^\s+|\s+$//g;
-	$folder=~ s/^\s+|\s+$//g;
-	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>$Bin/task_addition_$devprojectname.log`;	
-	umask 002;
-	$devprojectname=~ s/^\s+|\s+$//g;
-	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>$Bin/reconfigure_devproject_$devprojectname.log`;	
 }
