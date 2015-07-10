@@ -263,21 +263,36 @@ sub getTasksnReadme()
     	$patch_readme=`$CCM query -u -f %patch_readme`;
     	$patch_number=~ s/^\s+|\s+$//g;    	
     	
-    	if($patch_readme =~ /N\/A/)
+    	if(($patch_readme =~ /N\/A/) || (not defined $patch_readme))
     	{
     		print "The following CR: $cr doesn't have a README \n";
     	}
     	else
     	{
-       		open OP1,"+> $Bin/$patch_number\_README.txt";
-    		print OP1 $patch_readme;
-    		close OP1;
-    		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`; 
-    		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;   		
+    		if(($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4575/) || ($cr =~ /4596/) || ($cr =~ /4606/) || ($cr =~ /4609/))
+    		{
+    			open OP1,"+> $Bin/$patch_number\_README.txt";
+    			print OP1 $patch_readme;
+    			close OP1;
+    			`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`; 
+    			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;   		
     		
-        	push(@patchbinarylist,@PatchFiles);
-        	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
-        	print SUMM "CR$cr - $sumreadme\n";    	
+        		push(@patchbinarylist,@PatchFiles);
+        		$sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | grep -v 'ISSUES' | sed '/^\$/d'`;
+        		print SUMM "CR$cr - $sumreadme\n";
+    		}
+    		else
+    		{ 
+       			open OP1,"+> $Bin/$patch_number\_README.txt";
+    			print OP1 $patch_readme;
+    			close OP1;
+    			`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`; 
+    			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;   		
+    		
+	        	push(@patchbinarylist,@PatchFiles);
+        		$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
+        		print SUMM "CR$cr - $sumreadme\n";
+    		}    	
     	}
 	}	
 		
