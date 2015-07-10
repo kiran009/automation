@@ -32,7 +32,9 @@ sub transition_cr()
 	foreach (@crresolv)
 	{
 		($crnumber)=split(/#/,$_);
-		print "CR number is: $crnumber \n";		 
+		print "CR number is: $crnumber \n";
+		$crnumber =~ s/^\s+|\s+$//g;
+		`perl ModifyCRTransistion.pl $crnumber Patch_test`;		 
 	}
 }
 main();
