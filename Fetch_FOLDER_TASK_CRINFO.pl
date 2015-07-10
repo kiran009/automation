@@ -243,8 +243,8 @@ sub getTasksnReadme()
 		foreach $task_number(@task_numbers)
 		{
 			$task_number=~ s/^\s+|\s+$//g;
-			($task_synopsis)=`$CCM task -show info $task_number -u -format "%task_synopsis"`;
-			($task_resolver)=`$CCM task -show info $task_number -u -format "%resolver"`;
+			($task_synopsis)=`$CCM task -show info $task_number \-u \-format "%task_synopsis"`;
+			($task_resolver)=`$CCM task -show info $task_number \-u \-format "%resolver"`;
 			print "TASKINFO:$task_synopsis\n TASK RESOLVER:$task_resolver\n";
 			print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 		}
