@@ -142,7 +142,7 @@ main();
 
 sub createMail()
 {
-	open (my $FILE, "+> $Bin/releasenotes.html");
+	open (my $FILE, "+> $Bin/releasenotes_test.html");
 	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
 	print $FILE "<table width=\"100%\" border=\"1\"<br/>"; 
 	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>"; 
@@ -211,7 +211,7 @@ sub createReadme()
 	close OP;
 	
 	$mrnumber=~ s/^\s+|\s+$//g;
-	open  FILE, "> $Bin/tertio_7.6_README.txt";	
+	open  FILE, "> $Bin/tertio_7.6_TESTREADME.txt";	
 	print FILE "Created: $dt\n\n";
 	print FILE "TASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
