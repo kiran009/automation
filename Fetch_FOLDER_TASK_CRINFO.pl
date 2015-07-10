@@ -117,13 +117,14 @@ sub listfolderTasks()
 	print "Uniq CRs in 7.6.2.a are: @uniq762a \nUniq CRs in 7.6.2.c are: @uniq762c \nUniq CRs in 7.6.3.a are: @uniq763a\n";
 	open  FILE, "+> $Bin/tertio_7.6_TESTREADME.txt";	
 	print FILE "Created: $dt\n\n";
-	getTasksnReadme(@uniq762a);
-	createReadme('7.6.2a');
+	getTasksnReadme(@uniq763a);
+	createReadme('7.6.3a');
 	getTasksnReadme(@uniq762c);
 	createReadme('7.6.2c');
-	getTasksnReadme(@uniq763a);
-	createReadme('7.6.3a');	
-	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n";
+	getTasksnReadme(@uniq762a);
+	createReadme('7.6.2a');	
+	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n";
+	print FILE "ISSUES: None";
 	close FILE;	
 }
 
@@ -194,9 +195,17 @@ sub createReadme()
 	#$mrnumber=<OP>;
 	#close OP;
 	my ($folderinfo)=@_;
+	undef @formattsks;
+	undef @synopsis;
+	undef @summary;
+	undef @crresolv;
+	undef @taskinfo;
+	undef @binarylist;
+	
 	open OP,"<$Bin/formattsks.txt";
 	@formattsks=<OP>;
-	$formattedtsks=join(",",@formattsks);
+	@fformattsks=map{"$_\n"} @formattsks;
+	$formattedtsks=join(",",@fformattsks);
 	$formattedtsks =~ s/[\n\r]//g;
 	close OP;
 	open OP,"<$Bin/synopsis.txt";
@@ -216,12 +225,12 @@ sub createReadme()
 	close OP;
 	
 	#$mrnumber=~ s/^\s+|\s+$//g;
-	print FILE "\nFollowing details about folder: $folderinfo\n";
+	print FILE "\nFollowing details about the maintenance release: $folderinfo\n";
 	print FILE "#"x80;
 	print FILE "\nTASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
 	print FILE "@binarylist\n\n";
-	print FILE "SUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
+	print FILE "SUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary\n";
 	print FILE "#"x80;		
 }
 sub getTasksnReadme()
@@ -319,6 +328,7 @@ sub getTasksnReadme()
 	close CRRESOLV;
 	close TASKINF;	
 	$tasklist=join(",",@tasks);
+	undef @formattsks;
 	@formattsks=join("\n", map { 'PROV_' . $_ } @tasks);
 	open OP,"+>$Bin/formattsks.txt";
 	print OP @formattsks;
