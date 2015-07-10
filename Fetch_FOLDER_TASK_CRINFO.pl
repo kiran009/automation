@@ -262,7 +262,7 @@ sub getTasksnReadme()
     	$patch_number=`$CCM query -u -f %patch_number`;
     	$patch_readme=`$CCM query -u -f %patch_readme`;
     	$patch_number=~ s/^\s+|\s+$//g;    	
-    	
+    	$patch_number =~ s/\s+/_/g;
     	if(($patch_readme =~ /N\/A/) || (not defined $patch_readme))
     	{
     		print "The following CR: $cr doesn't have a README \n";
