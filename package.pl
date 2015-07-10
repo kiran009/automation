@@ -18,18 +18,8 @@ my $binarylist="$Bin/fileplacement.fp";
 my $javabinarylist="$Bin/javabinaries.fp";
 my $hostname = hostname;
 my $hostplatform;
-my $gmake;
-if($hostname !~ /pesthp2/)
-{
-	# On HPUX, CCM client doesn't exist, ignore setting this environment there
-	$ENV{'CCM_HOME'}="/opt/ccm71";
-	$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
-	$CCM="$ENV{'CCM_HOME'}/bin/ccm";
-}
 
-
-#$result=GetOptions("devproject=s"=>\$devprojectname);
-$result=GetOptions("hpuxproject=s"=>\$hpuxproject,"linuxproject=s"=>\$linuxproject,"solproject=s"=>\$solproject,"javaproject=s"=>\$javaprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs,"buildnumber=s"=>\$build_number);
+my $result=GetOptions("hpuxproject=s"=>\$hpuxproject,"linuxproject=s"=>\$linuxproject,"solproject=s"=>\$solproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number);
 if(!$result)
 {
 	print "Please provide devprojectname \n";
@@ -53,38 +43,35 @@ my $PatchReleaseVersion;
 my $projectName;
 my $platformlist;
 my $hostname;
-my @platforms;
-my $workarea;
 my @op;
 my @file_list;
 my $mrnumber;
+my @location_explode;
 #my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
 #my $mailto='kiran.daadhi@evolving.com';
 my %hash;
 $destdir="/u/kkdaadhi/Tertio_Deliverable";
 my $readmeIssue;
 @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
-@days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
-($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+my @days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
 $year+=1900;
 my $dt="$mday $months[$mon] $year\n";
-my @taskinfo,@synopsis,@summary,@crresolv,@formattsks,@binarylist;
+my @taskinfo;
+my @synopsis;
+my @summary;
+my @crresolv;
+my @formattsks;
+my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
 # /* Global Environment Variables ******* /
 sub main()
 {	
-		start_ccm();
-		createMailnReadme();				
+		createReadme();
+		pkg();
+		createMail();				
 }
-
-sub createMailnReadme()
-{
-	createReadme();
-	pkg();
-	createMail();
-}
-
 sub createReadme()
 {
 	open OP,"<$Bin/mrnumber.txt";
@@ -111,9 +98,7 @@ sub createReadme()
 	@binarylist=<OP>;
 	close OP;
 	
-	
 	$mrnumber=~ s/^\s+|\s+$//g;
-	
 	open  FILE, "+> $Bin/tertio_7.6_README.txt";
 	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
@@ -121,11 +106,11 @@ sub createReadme()
 	print FILE "FIXES:@synopsis\n\n";
 	print FILE "@binarylist\n\n";
 	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
-	close FILE;
-	
+	close FILE;	
 }
 sub createMail()
 {
+	@location_explode=map{"$_\n"} @location;
 	open (my $FILE, "+> $Bin/releasenotes.html");
 	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
 	print $FILE "<table width=\"100%\" border=\"1\"<br/>"; 
@@ -133,7 +118,7 @@ sub createMail()
 	print $FILE "<tr><b><td>Release</td></b><td colspan=\'2\'>$mrnumber</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Number</td></b><td colspan=\'2\'>$build_number</td></tr><br/>";
 	print $FILE "<tr><b><td>Release Type</td></b><td colspan=\'2\'>Maintenance Release</td></tr><br/>";
-	print $FILE "<tr><b><td>Location</td></b><td colspan=\'2\'>@location</td></tr><br/>";
+	print $FILE "<tr><b><td>Location</td></b><td colspan=\'2\'>@location_explode</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Date</td></b><td colspan=\'2\'>$dtformat</td></tr><br/>";
 	print $FILE "<tr><b><td>Major changes in the new build</td></b><td colspan=\'2\'>BUG FIXES</td></tr><br/>";
 	print $FILE "<tr><b><td>TOME</td></b><td>3.0.0</td><td>BUILD19</td></tr><br/>";
@@ -248,40 +233,25 @@ sub pkg()
   		{
   			$hostos="rhel5";
   			$hostplatform="linAS5";
-  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostos\.tar; gzip tertio-$mrnumber-$hostos\.tar;`;  			
-  			copy("tertio-$mrnumber-$hostos\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  			push(@location,"/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos\_$dtformat\.tar\.gz");
+  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostos-build$build_number\.tar; gzip tertio-$mrnumber-$hostos-build$build_number\.tar;`;  			
+  			copy("tertio-$mrnumber-$hostos-build$build_number\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
   		}
   		elsif($prj =~ /hpiav3/)
   		{
   			$hostplatform="hpiav3";
-  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
-  			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  			push(@location,"/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz");
+  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
   		}
   		elsif($prj =~ /sol10/)
   		{
   			$hostplatform="sol10";
-  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform\.tar; gzip tertio-$mrnumber-$hostplatform\.tar;`;
-  			copy("tertio-$mrnumber-$hostplatform\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  			push(@location,"/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform\_$dtformat\.tar\.gz");
+  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"/data/releases/tertio/7.6.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
   		}
   		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log`;
-  	} 
+  	}
 }
-sub start_ccm()
-{
-	print "In Start CCM \n";
-	open(ccm_addr,"$ENV{'CCM_HOME'}/bin/ccm start -d $database -m -q -r build_mgr -h ccmuk1 -nogui |");
-	$ENV{'CCM_ADDR'}=<ccm_addr>;
-	close(ccm_addr);
-}
-
-sub ccm_stop()
-{
-	print "In Stop CCM \n";
-	open(ccm_addr,"$ENV{'CCM_HOME'}/bin/ccm stop |");
-	close(ccm_addr);
-}
-
 main();
