@@ -275,11 +275,13 @@ sub getTasksnReadme()
     			print OP1 $patch_readme;
     			close OP1;
     			`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`; 
-    			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;   		
+    			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
+    			print "PatchFiles information is : @PatchFiles \n";   		
     		
         		push(@patchbinarylist,@PatchFiles);
         		$sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | grep -v 'ISSUES' | sed '/^\$/d'`;
         		print SUMM "CR$cr - $sumreadme\n";
+        		print "Summary from README is: $sumreadme\n";
     		}
     		else
     		{ 
@@ -288,10 +290,12 @@ sub getTasksnReadme()
     			close OP1;
     			`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`; 
     			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;   		
-    		
+    			print "PatchFiles information is : @PatchFiles \n";
+    			
 	        	push(@patchbinarylist,@PatchFiles);
         		$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
         		print SUMM "CR$cr - $sumreadme\n";
+        		print "Summary from README is: $sumreadme\n";
     		}    	
     	}
 	}	
