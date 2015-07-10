@@ -115,12 +115,16 @@ sub listfolderTasks()
 	@uniq763a = do { my %seen; grep { !$seen{$_}++ } @crs_763a};
 	
 	print "Uniq CRs in 7.6.2.a are: @uniq762a \nUniq CRs in 7.6.2.c are: @uniq762c \nUniq CRs in 7.6.3.a are: @uniq763a\n";
+	open  FILE, ">> $Bin/tertio_7.6_TESTREADME.txt";	
+	print FILE "Created: $dt\n\n";
 	getTasksnReadme(@uniq762a);
-	createReadme();
+	createReadme('7.6.2a');
 	getTasksnReadme(@uniq762c);
-	createReadme();
+	createReadme('7.6.2c');
 	getTasksnReadme(@uniq763a);
-	createReadme();		
+	createReadme('7.6.3a');	
+	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
+	close FILE;	
 }
 
 sub start_ccm()
@@ -189,6 +193,7 @@ sub createReadme()
 	#open OP,"<$Bin/mrnumber.txt";
 	#$mrnumber=<OP>;
 	#close OP;
+	my $folderinfo=@_;
 	open OP,"<$Bin/formattsks.txt";
 	@formattsks=<OP>;
 	$formattedtsks=join(",",@formattsks);
@@ -210,14 +215,14 @@ sub createReadme()
 	@binarylist=<OP>;
 	close OP;
 	
-	$mrnumber=~ s/^\s+|\s+$//g;
-	open  FILE, ">> $Bin/tertio_7.6_TESTREADME.txt";	
-	print FILE "Created: $dt\n\n";
+	#$mrnumber=~ s/^\s+|\s+$//g;
+	print FILE "Following details about folder: $folderinfo\n";
+	print FILE "#"x80;
 	print FILE "TASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
 	print FILE "@binarylist\n\n";
-	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
-	close FILE;	
+	print FILE "SUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
+	print FILE "#"x80;		
 }
 sub getTasksnReadme()
 {	
@@ -275,7 +280,7 @@ sub getTasksnReadme()
     	}
     	else
     	{
-    		if(($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4575/) || ($cr =~ /4596/) || ($cr =~ /4606/) || ($cr =~ /4609/))
+    		if(($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4596/) || ($cr =~ /4606/) || ($cr =~ /4609/))
     		{
     			open OP1,"+> $Bin/$patch_number\_README.txt";
     			print OP1 $patch_readme;
@@ -304,8 +309,7 @@ sub getTasksnReadme()
         		#print "Summary from README is: $sumreadme\n";
     		}    	
     	}
-	}	
-		
+	}			
 	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
 	open OP, "+> $Bin/patchbinarylist.txt";
 	print OP @uniqbinlist;	
