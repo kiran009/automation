@@ -245,7 +245,9 @@ sub getTasksnReadme()
 			$task_number=~ s/^\s+|\s+$//g;
 			($task_synopsis)=`$CCM task -show info $task_number \-u \-format "%task_synopsis"`;
 			($task_resolver)=`$CCM task -show info $task_number \-u \-format "%resolver"`;
-			print "TASKINFO:$task_synopsis\n TASK RESOLVER:$task_resolver\n";
+			$task_synopsis=~ s/^\s+|\s+$//g;
+			$task_resolver=~ s/^\s+|\s+$//g;
+			#print "TASKINFO:$task_synopsis TASK RESOLVER:$task_resolver\n";
 			print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 		}
 		$synopsis=~ s/^\s+|\s+$//g;
@@ -294,12 +296,12 @@ sub getTasksnReadme()
     			close OP1;
     			`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`; 
     			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;   		
-    			print "PatchFiles information is : @PatchFiles \n";
+    			#print "PatchFiles information is : @PatchFiles \n";
     			
 	        	push(@patchbinarylist,@PatchFiles);
         		$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
         		print SUMM "CR$cr - $sumreadme\n";
-        		print "Summary from README is: $sumreadme\n";
+        		#print "Summary from README is: $sumreadme\n";
     		}    	
     	}
 	}	
