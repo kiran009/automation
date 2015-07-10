@@ -34,7 +34,8 @@ sub transition_cr()
 		($crnumber)=split(/#/,$_);
 		print "CR number is: $crnumber \n";
 		$crnumber =~ s/^\s+|\s+$//g;
-		`perl ModifyCRTransistion.pl $crnumber Patch_test`;		 
+		my	@crtransition_log=`perl ModifyCRTransistion.pl $crnumber Patch_test`;
+		print "CR Transition log: @crtransition_log \n";		 
 	}
 }
 main();
