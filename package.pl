@@ -65,7 +65,7 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
-my $teriodest="/u/kkdaadhi/Tertio_Deliverable/Tertio_Dest";
+my $tertiodest="/u/kkdaadhi/Tertio_Deliverable/Tertio_Dest";
 # /* Global Environment Variables ******* /
 sub main()
 {	
