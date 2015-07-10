@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.7 Build Script
+# Tertio Readme generator
 use Cwd;
 use File::Path;
 use File::Find;
@@ -115,7 +115,7 @@ sub listfolderTasks()
 	@uniq763a = do { my %seen; grep { !$seen{$_}++ } @crs_763a};
 	
 	print "Uniq CRs in 7.6.2.a are: @uniq762a \nUniq CRs in 7.6.2.c are: @uniq762c \nUniq CRs in 7.6.3.a are: @uniq763a\n";
-	open  FILE, ">> $Bin/tertio_7.6_TESTREADME.txt";	
+	open  FILE, "+> $Bin/tertio_7.6_TESTREADME.txt";	
 	print FILE "Created: $dt\n\n";
 	getTasksnReadme(@uniq762a);
 	createReadme('7.6.2a');
@@ -123,7 +123,7 @@ sub listfolderTasks()
 	createReadme('7.6.2c');
 	getTasksnReadme(@uniq763a);
 	createReadme('7.6.3a');	
-	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
+	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n";
 	close FILE;	
 }
 
@@ -193,7 +193,7 @@ sub createReadme()
 	#open OP,"<$Bin/mrnumber.txt";
 	#$mrnumber=<OP>;
 	#close OP;
-	my $folderinfo=@_;
+	my ($folderinfo)=@_;
 	open OP,"<$Bin/formattsks.txt";
 	@formattsks=<OP>;
 	$formattedtsks=join(",",@formattsks);
@@ -216,9 +216,9 @@ sub createReadme()
 	close OP;
 	
 	#$mrnumber=~ s/^\s+|\s+$//g;
-	print FILE "Following details about folder: $folderinfo\n";
+	print FILE "\nFollowing details about folder: $folderinfo\n";
 	print FILE "#"x80;
-	print FILE "TASKS:$formattedtsks\n\n";
+	print FILE "\nTASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
 	print FILE "@binarylist\n\n";
 	print FILE "SUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
