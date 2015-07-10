@@ -211,7 +211,7 @@ sub createReadme()
 	close OP;
 	
 	$mrnumber=~ s/^\s+|\s+$//g;
-	open  FILE, "> $Bin/tertio_7.6_TESTREADME.txt";	
+	open  FILE, ">> $Bin/tertio_7.6_TESTREADME.txt";	
 	print FILE "Created: $dt\n\n";
 	print FILE "TASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
