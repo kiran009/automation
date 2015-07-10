@@ -111,7 +111,7 @@ sub createReadme()
 }
 sub createMail()
 {
-	@location_explode=map{"$_\n"} @location;
+	@location_explode=map{"$_<br/>"} @location;
 	open (my $FILE, "+> $Bin/releasenotes.html");
 	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
 	print $FILE "<table width=\"100%\" border=\"1\"<br/>"; 
