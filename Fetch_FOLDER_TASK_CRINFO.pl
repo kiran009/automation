@@ -186,9 +186,9 @@ sub createMail()
 
 sub createReadme()
 {
-	open OP,"<$Bin/mrnumber.txt";
-	$mrnumber=<OP>;
-	close OP;
+	#open OP,"<$Bin/mrnumber.txt";
+	#$mrnumber=<OP>;
+	#close OP;
 	open OP,"<$Bin/formattsks.txt";
 	@formattsks=<OP>;
 	$formattedtsks=join(",",@formattsks);
@@ -231,9 +231,8 @@ sub getTasksnReadme()
 	{
 		$cr=~ s/^\s+|\s+$//g;
 		print "CRNumber is : $cr\n";
-		$task_number=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
-		$task_number=~ s/^\s+|\s+$//g;
-		push(@tasks,$task_number);		
+		@task_numbers=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;		
+		push(@tasks,@task_numbers);		
 		#get mrnumber, synopsis and other fields
 		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
 		($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
@@ -241,8 +240,12 @@ sub getTasksnReadme()
 		($severity)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%severity"`;
 		($priority)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%priority"`;
 		($resolver)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%resolver"`;
-		($task_synopsis)=`$CCM task -show info $task_number -u -format "%task_synopsis"`;
-		($task_resolver)=`$CCM task -show info $task_number -u -format "%resolver"`;
+		foreach $task_number(@task_numbers)
+		{
+			($task_synopsis)=`$CCM task -show info $task_number -u -format "%task_synopsis"`;
+			($task_resolver)=`$CCM task -show info $task_number -u -format "%resolver"`;
+			print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
+		}
 		$synopsis=~ s/^\s+|\s+$//g;
 		$requesttype=~ s/^\s+|\s+$//g;
 		$severity=~ s/^\s+|\s+$//g;
@@ -250,13 +253,12 @@ sub getTasksnReadme()
 		$task_synopsis=~ s/^\s+|\s+$//g;
 		$task_resolver=~ s/^\s+|\s+$//g;
 		$priority=~ s/^\s+|\s+$//g;		
-		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
-		print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
+		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";		
 		print SYNOP "CR$cr $synopsis\n";
-		$mr_number=~ s/^\s+|\s+$//g;
-		open MR,"+> $Bin/mrnumber.txt";
-		print MR "$mr_number";
-		close MR;
+		#$mr_number=~ s/^\s+|\s+$//g;
+		#open MR,"+> $Bin/mrnumber.txt";
+		#print MR "$mr_number";
+		#close MR;
 		#fetch readme
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
     	$patch_number=`$CCM query -u -f %patch_number`;
@@ -302,8 +304,7 @@ sub getTasksnReadme()
 		
 	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
 	open OP, "+> $Bin/patchbinarylist.txt";
-	print OP @uniqbinlist;
-	#
+	print OP @uniqbinlist;	
 	close OP;
 	close SUMM;
 	close SYNOP;
