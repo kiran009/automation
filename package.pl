@@ -19,18 +19,18 @@ my $javabinarylist="$Bin/javabinaries.fp";
 my $hostname = hostname;
 my $hostplatform;
 
-my $result=GetOptions("hpuxproject=s"=>\$hpuxproject,"linuxproject=s"=>\$linuxproject,"solproject=s"=>\$solproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number);
+my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number);
 if(!$result)
 {
-	print "Please provide devprojectname \n";
+	print "Please provide coreprojectname \n";
 	exit;
 }
-if((!$hpuxproject) || (!$linuxproject) || (!$solproject) || (!$javaprojectname))
+if(!$coreproject)
 {
-	print "You need to supply all projects \n";
+	print "You need to supply core project name \n";
 	exit;
 }
-push(@projectlist,($hpuxproject,$linuxproject,$solproject));
+push(@projectlist,$coreproject);
 my @PatchFiles;
 my @files;
 my $patch_number;
