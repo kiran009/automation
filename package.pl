@@ -255,7 +255,7 @@ sub pkg()
   			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
   		}
-  		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log`;
+  		`tar -cvf $Bin/logs.tar $Bin/reconfigure_devproject_*.log`;
   	}
 }
 main();
