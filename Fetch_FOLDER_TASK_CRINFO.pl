@@ -236,6 +236,7 @@ sub createReadme()
 sub getTasksnReadme()
 {	
 	my @crs=@_;
+	undef @tasks;
 	open SYNOP,"+>$Bin/synopsis.txt";
 	open SUMM,"+> $Bin/summary_readme.txt";
 	open CRRESOLV, "+> $Bin/crresolv.txt";
