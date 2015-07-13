@@ -1,5 +1,15 @@
 #!/usr/bin/perl
 # Tertio 7.6 send E-mail Script
+use Cwd;
+use File::Path;
+use File::Find;
+use File::Basename;
+use Switch;
+use Getopt::Long;
+use File::Copy;
+use FindBin qw($Bin);
+use lib "$Bin/../lib";
+use Sys::Hostname;
 
 @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 my @days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
