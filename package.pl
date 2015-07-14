@@ -71,10 +71,10 @@ my 	@location;
 my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
 sub main()
-{	
+{
 		createReadme();
 		pkg();
-		#createMail();				
+		#createMail();
 }
 sub createReadme()
 {
@@ -101,7 +101,7 @@ sub createReadme()
 	open OP, "< $Bin/patchbinarylist.txt";
 	@binarylist=<OP>;
 	close OP;
-	
+
 	$mrnumber=~ s/^\s+|\s+$//g;
 	open  FILE, "+> $Bin/tertio_7.6_README.txt";
 	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
@@ -110,15 +110,15 @@ sub createReadme()
 	print FILE "FIXES:@synopsis\n\n";
 	print FILE "@binarylist\n\n";
 	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
-	close FILE;	
+	close FILE;
 }
 sub createMail()
 {
 	@location_explode=map{"$_<br/>"} @location;
 	open (my $FILE, "+> $Bin/releasenotes.html");
 	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
-	print $FILE "<table width=\"100%\" border=\"1\"<br/>"; 
-	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>"; 
+	print $FILE "<table width=\"100%\" border=\"1\"<br/>";
+	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>";
 	print $FILE "<tr><b><td>Release</td></b><td colspan=\'2\'>$mrnumber</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Number</td></b><td colspan=\'2\'>$build_number</td></tr><br/>";
 	print $FILE "<tr><b><td>Release Type</td></b><td colspan=\'2\'>Maintenance Release</td></tr><br/>";
@@ -155,7 +155,7 @@ sub createMail()
 		print $FILE "<tr><b><td>$task_number</td><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
 	}
 	print $FILE "</table><br/>";
-	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";	
+	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";
 	close $FILE;
 }
 
@@ -168,10 +168,10 @@ sub pkg()
 		open OP, "< $binarylist";
   		@file_list=<OP>;
   		close OP;
-  		my %deliveryhash;  
+  		my %deliveryhash;
   		$delroot="$dbbmloc/$prj/Provident_Dev/";
   		foreach $file(@file_list)
-  		{  	
+  		{
   			if($file =~ /TOMESRC/)
   			{
   				my @del=split(/\s+/,$file);
@@ -182,7 +182,7 @@ sub pkg()
   				else
   				{
   					$deliveryhash{$del[1]}=$del[3];
-  				}	
+  				}
   			}
   			elsif($file =~ /DASHBOARDSRC/)
   			{
@@ -194,7 +194,7 @@ sub pkg()
   				else
   				{
   					$deliveryhash{$del[1]}=$del[3];
-  				}	
+  				}
   			}
   			else
   			{
@@ -207,7 +207,7 @@ sub pkg()
   				{
   					$deliveryhash{"$delroot/$del[1]"}=$del[3];
   				}
-  			}  	
+  			}
   		}
   		open OP, "< $javabinarylist";
   		@file_list=<OP>;
@@ -229,26 +229,26 @@ sub pkg()
   		{
 	  		$dirname=dirname($deliveryhash{$key});
   			mkpath("$destdir/$dirname");
-  			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
+  			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!");
   		}
   		chdir($destdir);
   		copy("$Bin/tertio_7.6_README.txt",$destdir);
-  	
+
   		if($prj =~ /linAS5/)
   		{
   			$hostos="rhel5";
   			$hostplatform="linAS5";
-  			`chmod -R 0775 *; find ./ -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostos-build$build_number\.tar; find ./ -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostos-build$build_number\.tar;gzip tertio-$mrnumber-$hostos-build$build_number\.tar;`;
-  			print "tertio-$mrnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";  			
+  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostos-build$build_number\.tar;gzip tertio-$mrnumber-$hostos-build$build_number\.tar;`;
+  			print "tertio-$mrnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
   			copy("tertio-$mrnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
   			print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
-  			
+
   		}
   		elsif($prj =~ /hpiav3/)
   		{
   			$hostplatform="hpiav3";
-  			`chmod -R 0775 *;  find ./ -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find ./ -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; /usr/contrib/bin/gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  			`chmod -R 0775 *;  find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; /usr/contrib/bin/gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
   			print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
   			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
@@ -257,7 +257,7 @@ sub pkg()
   		elsif($prj =~ /sol10/)
   		{
   			$hostplatform="sol10";
-  			`chmod -R 0775 *; find ./ -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find ./ -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
   			print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
   			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
