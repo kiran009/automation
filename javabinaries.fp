@@ -1,11 +1,11 @@
-SRC jars/ProvRMI.jar DEST lib/ProvRMI.jar 
-SRC jars/ProvSC.jar DEST lib/ProvSC.jar 
-SRC jars/ProvSDK.jar DEST lib/ProvSDK.jar 
-SRC jars/ProvServer.jar DEST lib/ProvServer.jar 
-SRC jars/ProvTest.jar DEST lib/ProvTest.jar 
-SRC jars/ProvUI.jar DEST lib/ProvUI.jar 
-SRC jars/ProvUninstaller.jar DEST lib/ProvUninstaller.jar 
-SRC jars/Testbench.jar DEST lib/Testbench.jar 
-SRC jars/ProvAD.jar DEST lib/ProvAD.jar 
-SRC jars/ProvAPI.jar DEST lib/ProvAPI.jar 
-SRC jars/ProvJWS.jar DEST etc/download/ProvJWS.jar
+SRC jars/ProvRMI.jar DEST lib/ProvRMI.jar 0644
+SRC jars/ProvSC.jar DEST lib/ProvSC.jar 0644
+SRC jars/ProvSDK.jar DEST lib/ProvSDK.jar 0644
+SRC jars/ProvServer.jar DEST lib/ProvServer.jar 0644
+SRC jars/ProvTest.jar DEST lib/ProvTest.jar 0644
+SRC jars/ProvUI.jar DEST lib/ProvUI.jar 0644
+SRC jars/ProvUninstaller.jar DEST lib/ProvUninstaller.jar 0644
+SRC jars/Testbench.jar DEST lib/Testbench.jar 0644
+SRC jars/ProvAD.jar DEST lib/ProvAD.jar 0644
+SRC jars/ProvAPI.jar DEST lib/ProvAPI.jar 0644
+SRC jars/ProvJWS.jar DEST etc/download/ProvJWS.jar 0644

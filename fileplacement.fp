@@ -1,65 +1,65 @@
-SRC iagent/BandWidthScheduling DEST bin/BandWidthScheduling
-SRC erp/erp DEST bin/erp
-SRC jip/eventlog DEST bin/eventlog
-SRC jip/jip DEST bin/jip
-SRC psdk/JPSDKAgent DEST bin/JPSDKAgent
-SRC sasdk/javasrc/JSASDKAgent DEST bin/JSASDKAgent
-SRC iagent/LayeredSLAgent DEST bin/LayeredSLAgent
-SRC sasdk/legacysrc/LegacySourceAgent DEST bin/LegacySourceAgent
-SRC iagent/ManualAgent DEST bin/ManualAgent
-SRC jip/MonMon DEST bin/MonMon
-SRC installer/bin/package DEST bin/package
-SRC cli/ProvCLI DEST bin/ProvCLI
-SRC admin/readconfig DEST bin/readconfig
-SRC stg/stg DEST bin/stg
-SRC sto/sto DEST bin/sto
-SRC stp/stp DEST bin/stp
-SRC psdk/TclProvisioningAgent DEST bin/TclProvisioningAgent
-SRC iagent/TimeBasedScheduling DEST bin/TimeBasedScheduling
-SRC conf/descriptors/admin.properties DEST .
-SRC conf/descriptors/composer.properties DEST .
-SRC conf/descriptors/designer.properties DEST .
-SRC conf/descriptors/essim.properties DEST .
-SRC conf/descriptors/nesim.properties DEST .
-SRC conf/err/provident.err DEST .
-SRC conf/err/psdk.err DEST .
-SRC etc/Cluster DEST etc/Cluster
-SRC etc/download/deployJava.js DEST .
-SRC etc/download/index.html_template DEST .
-SRC etc/download/tertio.jnlp_template DEST .
-SRC etc/symlinks.list DEST .
-SRC etc/ProvError DEST .
-DASHBOARDSRC /opt/dashboard_sdk/2.4.0/lib/libaggnet.so DEST lib/libaggnet.so
-SRC designer/libsrc/libdesigner.so DEST lib/libdesigner.so
-SRC designer/libsrc/libdesigner.so.1 DEST lib/libdesigner.so.1
-SRC lib/libgpsutils.so DEST .
-SRC iagent/libiagent.so DEST lib/libiagent.so
-SRC lib/libprovcpp.so DEST .
-SRC provdb/src/libprovdb.so DEST lib/libprovdb.so
-SRC provdb/src/libprovdb.so.1 DEST lib/libprovdb.so.1
-SRC lib/libprovjvm.so DEST .
-SRC lib/libprovtcl.so DEST .
-SRC psdk/libpsdk.so DEST lib/libpsdk.so
-SRC psdk/libpsdk.so.1 DEST lib/libpsdk.so.1
-SRC sasdk/libsrc/libsasdk.so DEST lib/libsasdk.so
-SRC sasdk/libsrc/libsasdk.so DEST lib/libsasdk.so.1
-TOMESRC /opt/tome/3.0.0_build19/bin/mwerrhandler DEST bin/mwerrhandler
-TOMESRC /opt/tome/3.0.0_build19/lib/libtome.so DEST lib/libtome.so
-TOMESRC /opt/tome/3.0.0_build19/lib/libtome_as.so DEST lib/libtome_as.so
-TOMESRC /opt/tome/3.0.0_build19/lib/libtomecppas.so DEST lib/libtomecppas.so
-TOMESRC /opt/tome/3.0.0_build19/lib/libtome_tcl.so DEST lib/libtome_tcl.so
-TOMESRC /opt/tome/3.0.0_build19/lib/libjtome.so DEST lib/libjtome.so
-TOMESRC /opt/tome/3.0.0_build19/lib/libtomecpp.so DEST lib/libtomecpp.so
-TOMESRC /opt/tome/3.0.0_build19/lib/libtome_ev.so DEST lib/libtome_ev.so
-TOMESRC /opt/tome/3.0.0_build19/lib/libtome_mon.so DEST lib/libtome_mon.so
-SRC installer/lib/package.tbc DEST lib/provpkg1.0/package.tbc
-SRC installer/lib/packageutils.tbc DEST lib/provpkg1.0/packageutils.tbc
-SRC designer/systemTasks/ManualIntervention.xml DEST scripts/service_logic/System/ManualIntervention.xml
-SRC composer/ServiceComposer/Engine/PrismInterface.tcl DEST scripts/service_logic/System/ServiceComposer/Engine/PrismInterface.tcl
-SRC composer/ServiceComposer/Engine/XmlParser.tcl DEST scripts/service_logic/System/ServiceComposer/Engine/XmlParser.tcl
-SRC scripts/stp/DbUtils.tcl DEST .
-SRC scripts/stp/DesignerEngine.tcl DEST .
-SRC etc/mr_postinstall.ksh	DEST etc/7.6.3_postinstall.ksh
-SRC etc/mr_postuninstall.ksh	DEST etc/7.6.3_postuninstall.ksh
-SRC etc/mr_preinstall.ksh	DEST etc/7.6.3_preinstall.ksh
-SRC etc/mr_preuninstall.ksh	DEST etc/7.6.3_preuninstall.ksh
+SRC iagent/BandWidthScheduling DEST bin/BandWidthScheduling PERM 0755
+SRC erp/erp DEST bin/erp PERM 0755
+SRC jip/eventlog DEST bin/eventlog PERM 0755
+SRC jip/jip DEST bin/jip PERM 0755
+SRC psdk/JPSDKAgent DEST bin/JPSDKAgent PERM 0755
+SRC sasdk/javasrc/JSASDKAgent DEST bin/JSASDKAgent PERM 0755
+SRC iagent/LayeredSLAgent DEST bin/LayeredSLAgent  PERM 0755
+SRC sasdk/legacysrc/LegacySourceAgent DEST bin/LegacySourceAgent PERM 0755
+SRC iagent/ManualAgent DEST bin/ManualAgent PERM 0755
+SRC jip/MonMon DEST bin/MonMon PERM 0755
+SRC installer/bin/package DEST bin/package PERM 0555
+SRC cli/ProvCLI DEST bin/ProvCLI PERM 0755
+SRC admin/readconfig DEST bin/readconfig PERM 0755
+SRC stg/stg DEST bin/stg PERM 0755
+SRC sto/sto DEST bin/sto PERM 0755
+SRC stp/stp DEST bin/stp PERM 0755
+SRC psdk/TclProvisioningAgent DEST bin/TclProvisioningAgent PERM 0755
+SRC iagent/TimeBasedScheduling DEST bin/TimeBasedScheduling PERM 0755
+SRC conf/descriptors/admin.properties DEST . PERM 0444
+SRC conf/descriptors/composer.properties DEST . PERM 0444
+SRC conf/descriptors/designer.properties DEST . PERM 0444
+SRC conf/descriptors/essim.properties DEST . PERM 0444
+SRC conf/descriptors/nesim.properties DEST . PERM 0444
+SRC conf/err/provident.err DEST . PERM 0444
+SRC conf/err/psdk.err DEST . PERM 0444
+SRC etc/Cluster DEST etc/Cluster PERM 0555
+SRC etc/download/deployJava.js DEST . PERM 0444
+SRC etc/download/index.html_template DEST . PERM 0444
+SRC etc/download/tertio.jnlp_template DEST . PERM 0444
+SRC etc/symlinks.list DEST . PERM 0664
+SRC etc/ProvError DEST . PERM 0555
+DASHBOARDSRC /opt/dashboard_sdk/2.4.0/lib/libaggnet.so DEST lib/libaggnet.so  PERM 0555
+SRC designer/libsrc/libdesigner.so DEST lib/libdesigner.so PERM 0755
+SRC designer/libsrc/libdesigner.so.1 DEST lib/libdesigner.so.1 PERM 0755
+SRC lib/libgpsutils.so DEST . PERM 0755
+SRC iagent/libiagent.so DEST lib/libiagent.so PERM 0755
+SRC lib/libprovcpp.so DEST . PERM 0755
+SRC provdb/src/libprovdb.so DEST lib/libprovdb.so PERM 0755
+SRC provdb/src/libprovdb.so.1 DEST lib/libprovdb.so.1 PERM 0755
+SRC lib/libprovjvm.so DEST . PERM 0755
+SRC lib/libprovtcl.so DEST . PERM 0755
+SRC psdk/libpsdk.so DEST lib/libpsdk.so PERM 0755
+SRC psdk/libpsdk.so.1 DEST lib/libpsdk.so.1 PERM 0755
+SRC sasdk/libsrc/libsasdk.so DEST lib/libsasdk.so PERM 0755
+SRC sasdk/libsrc/libsasdk.so DEST lib/libsasdk.so.1 PERM 0755
+TOMESRC /opt/tome/3.0.0_build19/bin/mwerrhandler DEST bin/mwerrhandler PERM 0755
+TOMESRC /opt/tome/3.0.0_build19/lib/libtome.so DEST lib/libtome.so PERM 0755
+TOMESRC /opt/tome/3.0.0_build19/lib/libtome_as.so DEST lib/libtome_as.so  PERM 0755
+TOMESRC /opt/tome/3.0.0_build19/lib/libtomecppas.so DEST lib/libtomecppas.so PERM 0755
+TOMESRC /opt/tome/3.0.0_build19/lib/libtome_tcl.so DEST lib/libtome_tcl.so PERM 0755
+TOMESRC /opt/tome/3.0.0_build19/lib/libjtome.so DEST lib/libjtome.so PERM 0755
+TOMESRC /opt/tome/3.0.0_build19/lib/libtomecpp.so DEST lib/libtomecpp.so PERM 0755
+TOMESRC /opt/tome/3.0.0_build19/lib/libtome_ev.so DEST lib/libtome_ev.so PERM 0755
+TOMESRC /opt/tome/3.0.0_build19/lib/libtome_mon.so DEST lib/libtome_mon.so PERM 0755
+SRC installer/lib/package.tbc DEST lib/provpkg1.0/package.tbc PERM 0644
+SRC installer/lib/packageutils.tbc DEST lib/provpkg1.0/packageutils.tbc PERM 0644
+SRC designer/systemTasks/ManualIntervention.xml DEST scripts/service_logic/System/ManualIntervention.xml PERM 0644
+SRC composer/ServiceComposer/Engine/PrismInterface.tcl DEST scripts/service_logic/System/ServiceComposer/Engine/PrismInterface.tcl PERM 0644
+SRC composer/ServiceComposer/Engine/XmlParser.tcl DEST scripts/service_logic/System/ServiceComposer/Engine/XmlParser.tcl PERM 0644
+SRC scripts/stp/DbUtils.tcl DEST . PERM 0644
+SRC scripts/stp/DesignerEngine.tcl DEST . PERM 0644
+SRC etc/mr_postinstall.ksh	DEST etc/7.6.3_postinstall.ksh PERM 0644
+SRC etc/mr_postuninstall.ksh	DEST etc/7.6.3_postuninstall.ksh PERM 0644
+SRC etc/mr_preinstall.ksh	DEST etc/7.6.3_preinstall.ksh PERM 0644
+SRC etc/mr_preuninstall.ksh	DEST etc/7.6.3_preuninstall.ksh PERM 0755
