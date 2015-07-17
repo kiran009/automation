@@ -161,6 +161,7 @@ sub createMail()
 
 sub pkg()
 {
+	umask 002;
 	open LOCATION,">>$Bin/location.txt";
 	foreach $prj(@projectlist)
 	{
