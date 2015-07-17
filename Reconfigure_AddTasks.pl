@@ -15,10 +15,6 @@ use Sys::Hostname;
 $ENV{'CCM_HOME'}="/opt/ccm71";
 $ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
 $CCM="$ENV{'CCM_HOME'}/bin/ccm";
-my $database="/data/ccmdb/provident/";
-my $dbbmloc="/data/ccmbm/provident/";
-my $binarylist="$Bin/fileplacement.fp";
-my $javabinarylist="$Bin/javabinaries.fp";
 my $hostname = hostname;
 my $hostplatform;
 if($hostname =~ /pedlinux5/)
@@ -30,7 +26,7 @@ elsif($hostname =~ /pedsun2/)
 elsif($hostname =~ /pesthp2/)
 {	$hostplatform="hpiav3";}
 
-$result=GetOptions("devproject=s"=>\$devprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs);
+$result=GetOptions("devproject=s"=>\$devprojectname,"database=s"=>\$db,"folder=s"=>\$folder,"crs=s"=>\$crs);
 #$result=GetOptions("devproject=s"=>\$devprojectname,"javaproject=s"=>\$javaprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs);
 if(!$result)
 {
@@ -48,8 +44,16 @@ if(!$folder)
 }
 if(!$crs)
 {
-	print "No extra CRs are provided for this build, proceeding with already added one's \n";	
+	print "No extra CRs are provided for this build, proceeding with already added one's \n";
 }
+if(!$db)
+{
+	print "Database is mandatory\n";
+}
+
+$db=~ s/^\s+|\s+$//g;
+my $database="/data/ccmdb/$db/";
+my $dbbmloc="/data/ccmbm/$db/";
 my @PatchFiles;
 my @files;
 my $patch_number;
@@ -68,37 +72,33 @@ my @file_list;
 my $mr_number;
 my @patchbinarylist;
 my $cr;
-#my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
-#my $mailto='kiran.daadhi@evolving.com';
 my %hash;
-#$destdir="/u/kkdaadhi/Tertio_Deliverable";
-my $readmeIssue;
 my @consumreadme;
 
 @crs=split(/,/,$crs);
 print "The following list of CRs to the included in the patch:@crs\n";
 # /* Global Environment Variables ******* /
 sub main()
-{	
+{
 		start_ccm();
 		getTasksnReadme();
 		reconfigure_devproject();
-		ccm_stop();		
+		ccm_stop();
 }
 sub getTasksnReadme()
-{	
+{
 	open SYNOP,"+>$Bin/synopsis.txt";
 	open SUMM,"+> $Bin/summary_readme.txt";
 	open CRRESOLV, "+> $Bin/crresolv.txt";
 	open TASKINF,"+>$Bin/taskinfo.txt";
-	
+
 	foreach $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
 		print "CRNumber is : $cr\n";
 		$task_number=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		$task_number=~ s/^\s+|\s+$//g;
-		push(@tasks,$task_number);		
+		push(@tasks,$task_number);
 		#get mrnumber, synopsis and other fields
 		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
 		($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
@@ -114,7 +114,7 @@ sub getTasksnReadme()
 		$resolver=~ s/^\s+|\s+$//g;
 		$task_synopsis=~ s/^\s+|\s+$//g;
 		$task_resolver=~ s/^\s+|\s+$//g;
-		$priority=~ s/^\s+|\s+$//g;		
+		$priority=~ s/^\s+|\s+$//g;
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 		print SYNOP "CR$cr $synopsis\n";
@@ -127,8 +127,8 @@ sub getTasksnReadme()
     	$patch_number=`$CCM query -u -f %patch_number`;
     	$patch_readme=`$CCM query -u -f %patch_readme`;
     	$patch_number=~ s/^\s+|\s+$//g;
-    	
-    	
+
+
     	if($patch_readme =~ /N\/A/)
     	{
     		print "The following CR: $cr doesn't have a README \n";
@@ -138,12 +138,12 @@ sub getTasksnReadme()
        		open OP1,"+> $Bin/$patch_number\_README.txt";
     		print OP1 $patch_readme;
     		close OP1;
-    		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`; 
+    		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
     		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
-    		
+
     		#print "Binary file list is: @PatchFiles \n";
         	#chomp(@PatchFiles);
-        	#my @newPatchFiles;  
+        	#my @newPatchFiles;
         	#foreach my $patchfile(@PatchFiles)
         	#{
         	#	$newpatchfile=($patchfile=~s/mr_/$mr_number\_/g);
@@ -151,10 +151,10 @@ sub getTasksnReadme()
         	#}
         	push(@patchbinarylist,@PatchFiles);
         	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
-        	print SUMM "CR$cr - $sumreadme\n";    	
+        	print SUMM "CR$cr - $sumreadme\n";
     	}
-	}	
-		
+	}
+
 	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
 	open OP, "+> $Bin/patchbinarylist.txt";
 	print OP @uniqbinlist;
@@ -163,24 +163,24 @@ sub getTasksnReadme()
 	close SUMM;
 	close SYNOP;
 	close CRRESOLV;
-	close TASKINF;	
+	close TASKINF;
 	$tasklist=join(",",@tasks);
 	@formattsks=join("\n", map { 'PROV_' . $_ } @tasks);
 	open OP,"+>$Bin/formattsks.txt";
 	print OP @formattsks;
-	close OP;	
+	close OP;
 }
 
 sub reconfigure_devproject()
-{	
+{
 	$ccmworkarea=`$CCM wa -show -recurse $devprojectname`;
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	$workarea=~ s/^\s+|\s+$//g;
 	$folder=~ s/^\s+|\s+$//g;
-	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>$Bin/task_addition_$devprojectname.log`;	
+	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>$Bin/task_addition_$devprojectname.log`;
 	umask 002;
 	$devprojectname=~ s/^\s+|\s+$//g;
-	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>$Bin/reconfigure_devproject_$devprojectname.log`;	
+	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>$Bin/reconfigure_devproject_$devprojectname.log`;
 }
 
 sub start_ccm()
@@ -199,5 +199,4 @@ sub ccm_stop()
 	# Nullify the location.txt file
 	`> $Bin/location.txt`;
 }
-
 main();

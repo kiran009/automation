@@ -12,28 +12,29 @@ use lib "$Bin/../lib";
 use Sys::Hostname;
 
 #/************ Setting Environment Variables *******************/
-my $database="/data/ccmdb/provident/";
-my $dbbmloc="/data/ccmbm/provident/";
-my $binarylist="$Bin/fileplacement.fp";
-my $javabinarylist="$Bin/javabinaries.fp";
+my $binarylist="$Bin/furfileplacement.fp";
 my $hostname = hostname;
 my $hostplatform;
 if($hostname =~ /pesthp2/)
 {
 	$ENV{'PATH'}="/usr/contrib/bin:$ENV{'PATH'}";
 }
-my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number);
+#my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number);
+my $result=GetOptions("delproject=s"=>\$delprojectname,"database=s"=>\$db,"folder=s"=>\$folder,"crs=s"=>\$crs);
 if(!$result)
 {
 	print "Please provide coreprojectname \n";
 	exit;
 }
-if(!$coreproject)
+if(!$delproject)
 {
-	print "You need to supply core project name \n";
+	print "You need to supply delivery project name \n";
 	exit;
 }
-push(@projectlist,$coreproject);
+$delprojectname=~ s/^\s+|\s+$//g;
+$db=~ s/^\s+|\s+$//g;
+my $database="/data/ccmdb/$db/";
+my $dbbmloc="/data/ccmbm/$db/";
 my @PatchFiles;
 my @files;
 my $patch_number;
@@ -49,10 +50,8 @@ my @op;
 my @file_list;
 my $mrnumber;
 my @location_explode;
-#my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
-#my $mailto='kiran.daadhi@evolving.com';
 my %hash;
-$destdir="/u/kkdaadhi/Tertio_Deliverable";
+$destdir="/u/kkdaadhi/DSA_Deliverable";
 my $readmeIssue;
 @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 my @days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
@@ -67,8 +66,8 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
-#my $tertiodest="/u/kkdaadhi/Tertio_Dest";
-my $tertiodest="/data/releases/tertio/7.6.0/patches";
+my $tertiodest="/u/kkdaadhi/DSA_Dest";
+#my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
 sub main()
 {

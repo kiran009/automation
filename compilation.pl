@@ -12,9 +12,6 @@ use lib "$Bin/../lib";
 use Sys::Hostname;
 
 #/************ Setting Environment Variables *******************/
-my $database="/data/ccmdb/provident/";
-my $dbbmloc="/data/ccmbm/provident/";
-
 my $hostname = hostname;
 my $hostplatform;
 my $gmake;
@@ -34,7 +31,7 @@ elsif($hostname =~ /pedsun2/)
 elsif($hostname =~ /pesthp2/)
 {	$hostplatform="hpiav3";$gmake='/usr/local/bin/gmake';}
 
-$result=GetOptions("devproject=s"=>\$devprojectname);
+$result=GetOptions("devproject=s"=>\$devprojectname,"database=s"=>\$db,");
 if(!$result)
 {
 	print "Please provide devprojectname \n";
@@ -46,34 +43,38 @@ if(!$devprojectname)
 	exit;
 }
 $devprojectname=~ s/^\s+|\s+$//g;
-my $workarea="$dbbmloc/$devprojectname";
+$db=~ s/^\s+|\s+$//g;
+my $database="/data/ccmdb/$db/";
+my $dbbmloc="/data/ccmbm/$db/";
+my $workarea;
+if($database =~ /dsa/)
+{
+	$workarea="$dbbmloc/$devprojectname/DSA_FUR_Dev";
+}
+elseif($database =~ /provident/)
+{
+	$workarea="$dbbmloc/$devprojectname/Provident_Dev";
+}
 umask 002;
 # /* Global Environment Variables ******* /
 sub main()
-{	
+{
 		if($hostname !~ /pesthp2/)
-		{		
+		{
 			start_ccm();
 		}
 		compile();
 		if($hostname !~ /pesthp2/)
 		{
 			ccm_stop();
-		}		
+		}
 }
 
 sub compile()
 {
-	if($devprojectname =~ /Java/)
-	{
-		chdir "$workarea/Provident_Java";
-	}
-	else
-	{
-		chdir "$workarea/Provident_Dev";
-	}
-	umask 002;
-	`$gmake clean all 2>&1 1>$Bin/gmake_$devprojectname_$hostplatform.log`;			
+		chdir "$workarea";
+		umask 002;
+	`$gmake clean all 2>&1 1>$Bin/gmake_$devprojectname_$hostplatform.log`;
 }
 
 sub start_ccm()
