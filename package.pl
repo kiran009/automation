@@ -234,7 +234,7 @@ sub pkg()
   			mkpath("$destdir/$dirname");
 				print "Permission for the file $filename is $permission\n";
   			copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
-				chmod $permission,"$destdir/$filename";
+				chmod($permission,"$destdir/$filename") or die("Couldn't able to set the permission $!");
   		}
   		chdir($destdir);
   		copy("$Bin/tertio_7.6_README.txt",$destdir);
