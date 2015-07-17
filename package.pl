@@ -177,11 +177,11 @@ sub pkg()
   				my @del=split(/\s+/,$file);
   				if($del[3] eq ".")
   				{
-  					$deliveryhash{$del[1]}=$del[1];
+  					$deliveryhash{$del[1]}="$del[1],$del[5]";
   				}
   				else
   				{
-  					$deliveryhash{$del[1]}=$del[3];
+  					$deliveryhash{$del[1]}="$del[3],$del[5]";
   				}
   			}
   			elsif($file =~ /DASHBOARDSRC/)
@@ -189,11 +189,11 @@ sub pkg()
   				my @del=split(/\s+/,$file);
   				if($del[3] eq ".")
   				{
-  					$deliveryhash{$del[1]}=$del[1];
+  					$deliveryhash{$del[1]}="$del[1],$del[5]";
   				}
   				else
   				{
-  					$deliveryhash{$del[1]}=$del[3];
+  					$deliveryhash{$del[1]}="$del[3],$del[5]";
   				}
   			}
   			else
@@ -201,11 +201,11 @@ sub pkg()
   				my @del=split(/\s+/,$file);
   				if($del[3] eq ".")
   				{
-	  				$deliveryhash{"$delroot/$del[1]"}=$del[1];
+	  				$deliveryhash{"$delroot/$del[1]"}="$del[1],$del[5]";
   				}
   				else
   				{
-  					$deliveryhash{"$delroot/$del[1]"}=$del[3];
+  					$deliveryhash{"$delroot/$del[1]"}="$del[3],$del[5]";
   				}
   			}
   		}
@@ -218,18 +218,20 @@ sub pkg()
   			my @del=split(/\s+/,$file);
   			if($del[3] eq ".")
   			{
- 	 			$deliveryhash{"$delroot/$del[1]"}=$del[1];
+ 	 			$deliveryhash{"$delroot/$del[1]"}="$del[1],$del[5]";
 	  		}
   			else
   			{
-	  			$deliveryhash{"$delroot/$del[1]"}=$del[3];
+	  			$deliveryhash{"$delroot/$del[1]"}="$del[3],$del[5]";
   			}
   		}
 		foreach $key(keys %deliveryhash)
   		{
 	  		$dirname=dirname($deliveryhash{$key});
+				($filename,$permission)=split(/,/,$deliveryhash{$key});
   			mkpath("$destdir/$dirname");
-  			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!");
+  			copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
+				chmod($permission,"$destdir/$filename");
   		}
   		chdir($destdir);
   		copy("$Bin/tertio_7.6_README.txt",$destdir);
@@ -238,7 +240,7 @@ sub pkg()
   		{
   			$hostos="rhel5";
   			$hostplatform="linAS5";
-  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostos-build$build_number\.tar;gzip tertio-$mrnumber-$hostos-build$build_number\.tar;`;
+  			`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostos-build$build_number\.tar;gzip tertio-$mrnumber-$hostos-build$build_number\.tar;`;
   			print "tertio-$mrnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
   			copy("tertio-$mrnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
@@ -248,7 +250,7 @@ sub pkg()
   		elsif($prj =~ /hpiav3/)
   		{
   			$hostplatform="hpiav3";
-  			`chmod -R 0775 *;  find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; /usr/contrib/bin/gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  			`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; /usr/contrib/bin/gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
   			print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
   			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
@@ -257,7 +259,7 @@ sub pkg()
   		elsif($prj =~ /sol10/)
   		{
   			$hostplatform="sol10";
-  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  			`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
   			print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
   			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
