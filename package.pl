@@ -234,7 +234,7 @@ sub pkg()
 				$permission=~ s/^\s+|\s+$//g;
   			mkpath("$destdir/$dirname");
 				copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
-				chmod($permission,"$destdir/$filename") or die("Couldn't able to set the permission $!");
+				chmod(oct($permission),"$destdir/$filename") or die("Couldn't able to set the permission $!");
 				print "Permission: $permission for file: $destdir/$filename \n";
   		}
   		chdir($destdir);
