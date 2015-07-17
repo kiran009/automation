@@ -35,3 +35,22 @@ mv tertio-adk-7.7.0/* ./
 rm -rf tertio-adk-7.7.0
 
 
+# DSA
+
+fur 4.0
+linux platform
+add folder
+add tasks
+
+Platforms:
+RHEL5
+
+1. Dev project
+2. Reconfigure
+3. cd $devproject/DSA_FUR_Dev
+4. gmake clean all
+
+1. Go to Delivery project
+2. Reconfigure
+3. Parse the fileplacement
+4. tar cvf <tar name> 
