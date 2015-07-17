@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.6 Build Script
+# dsa 7.6 Build Script
 use Cwd;
 use File::Path;
 use File::Find;
@@ -34,7 +34,7 @@ if(!$delproject)
 $delprojectname=~ s/^\s+|\s+$//g;
 $db=~ s/^\s+|\s+$//g;
 my $database="/data/ccmdb/$db/";
-my $dbbmloc="/data/ccmbm/$db/";
+my $dbbmloc="/u/kkdaadhi/ccm_wa/$db/";
 my @PatchFiles;
 my @files;
 my $patch_number;
@@ -66,8 +66,8 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
-my $tertiodest="/u/kkdaadhi/DSA_Dest";
-#my $tertiodest="/data/releases/tertio/7.6.0/patches";
+my $dsadest="/u/kkdaadhi/DSA_Dest";
+#my $dsadest="/data/releases/dsa/7.6.0/patches";
 # /* Global Environment Variables ******* /
 sub main()
 {
@@ -102,8 +102,8 @@ sub createReadme()
 	close OP;
 
 	$mrnumber=~ s/^\s+|\s+$//g;
-	open  FILE, "+> $Bin/tertio_7.6_README.txt";
-	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
+	open  FILE, "+> $Bin/dsa_4.0_README.txt";
+	print FILE "Maintenance Release : dsa $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
 	print FILE "TASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
@@ -117,7 +117,7 @@ sub createMail()
 	open (my $FILE, "+> $Bin/releasenotes.html");
 	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
 	print $FILE "<table width=\"100%\" border=\"1\"<br/>";
-	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>";
+	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>dsa</td></tr><br/>";
 	print $FILE "<tr><b><td>Release</td></b><td colspan=\'2\'>$mrnumber</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Number</td></b><td colspan=\'2\'>$build_number</td></tr><br/>";
 	print $FILE "<tr><b><td>Release Type</td></b><td colspan=\'2\'>Maintenance Release</td></tr><br/>";
@@ -125,7 +125,7 @@ sub createMail()
 	print $FILE "<tr><b><td>Build Date</td></b><td colspan=\'2\'>$dtformat</td></tr><br/>";
 	print $FILE "<tr><b><td>Major changes in the new build</td></b><td colspan=\'2\'>BUG FIXES</td></tr><br/>";
 	print $FILE "<tr><b><td>TOME</td></b><td>3.0.0</td><td>BUILD19</td></tr><br/>";
-	print $FILE "<tr><b><td>Tertio ADK</td></b><td>-</td><td>-</td></tr><br/>";
+	print $FILE "<tr><b><td>dsa ADK</td></b><td>-</td><td>-</td></tr><br/>";
 	print $FILE "<tr><b><td>CAF</td></b><td>-</td><td>-</td></tr><br/>";
 	print $FILE "<tr><b><td>Dashboard SDK</td></b><td>-</td><td>-</td></tr><br/>";
 	print $FILE "<tr><b><td>DDA Protocol Version</td></b><td>-</td><td>-</td></tr><br/>";
@@ -135,7 +135,7 @@ sub createMail()
 	print $FILE "<tr><b><td>PE CDK</td><td>-</td></b><td>-</td></tr><br/>";
 	print $FILE "<tr><b><td>Has the developer documentation been updated?</td></b><td colspan=\"2\">N/A</td></tr></table><br/>";
 	print $FILE "<b>Installation instructions: </b><br/>";
-	print $FILE "Same as previous Tertio Maintenance Release<br/><br/>";
+	print $FILE "Same as previous dsa Maintenance Release<br/><br/>";
 	print $FILE "<b>Additional information about the changes:</b>N/A<br /><b>The Resolved CRs are:</b><br/>";
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
 	print $FILE "<tr><b><td>CR ID</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr><br/>";
@@ -154,7 +154,7 @@ sub createMail()
 		print $FILE "<tr><b><td>$task_number</td><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
 	}
 	print $FILE "</table><br/>";
-	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";
+	print $FILE "<b>Note:</b> To install dsa $mrnumber, please use the latest PatchManager<br/></body></html>";
 	close $FILE;
 }
 
@@ -168,7 +168,7 @@ sub pkg()
   		@file_list=<OP>;
   		close OP;
   		my %deliveryhash;
-  		$delroot="$dbbmloc/$prj/Provident_Dev/";
+  		$delroot="$dbbmloc/$prj/DSA_FUR_Delivery/";
   		foreach $file(@file_list)
   		{
   			if($file =~ /TOMESRC/)
@@ -208,22 +208,6 @@ sub pkg()
   				}
   			}
   		}
-  		open OP, "< $javabinarylist";
-  		@file_list=<OP>;
-  		close OP;
-  		$delroot="$dbbmloc/$javaprojectname/Provident_Java/";
-  		foreach $file(@file_list)
-  		{
-  			my @del=split(/\s+/,$file);
-  			if($del[3] eq ".")
-  			{
- 	 			$deliveryhash{"$delroot/$del[1]"}=$del[1];
-	  		}
-  			else
-  			{
-	  			$deliveryhash{"$delroot/$del[1]"}=$del[3];
-  			}
-  		}
 		foreach $key(keys %deliveryhash)
   		{
 	  		$dirname=dirname($deliveryhash{$key});
@@ -231,36 +215,36 @@ sub pkg()
   			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!");
   		}
   		chdir($destdir);
-  		copy("$Bin/tertio_7.6_README.txt",$destdir);
+  		copy("$Bin/dsa_4.0_README.txt",$destdir);
 
   		if($prj =~ /linAS5/)
   		{
   			$hostos="rhel5";
   			$hostplatform="linAS5";
-  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostos-build$build_number\.tar;gzip tertio-$mrnumber-$hostos-build$build_number\.tar;`;
-  			print "tertio-$mrnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
-  			copy("tertio-$mrnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
-  			print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
+  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf dsa-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf dsa-$mrnumber-$hostos-build$build_number\.tar;gzip dsa-$mrnumber-$hostos-build$build_number\.tar;`;
+  			print "dsa-$mrnumber-$hostos-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
+  			copy("dsa-$mrnumber-$hostos-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
+  			print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
 
   		}
   		elsif($prj =~ /hpiav3/)
   		{
   			$hostplatform="hpiav3";
-  			`chmod -R 0775 *;  find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; /usr/contrib/bin/gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
-  			print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-  			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
-  			print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+  			`chmod -R 0775 *;  find * -type f -name "*README.txt" | xargs tar cvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; /usr/contrib/bin/gzip dsa-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  			print "dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  			copy("dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  			print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
   		}
   		elsif($prj =~ /sol10/)
   		{
   			$hostplatform="sol10";
-  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
-  			print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-  			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
-  			print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; gzip dsa-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  			print "dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  			copy("dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  			print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
   		}
   		`tar -cvf $Bin/logs.tar $Bin/reconfigure_devproject_*.log`;
   		close LOCATION;

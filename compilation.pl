@@ -45,7 +45,7 @@ if(!$devprojectname)
 $devprojectname=~ s/^\s+|\s+$//g;
 $db=~ s/^\s+|\s+$//g;
 my $database="/data/ccmdb/$db/";
-my $dbbmloc="/data/ccmbm/$db/";
+my $dbbmloc="/u/kkdaadhi/ccm_wa/$db/";
 my $workarea;
 if($database =~ /dsa/)
 {

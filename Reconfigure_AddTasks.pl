@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.7 Build Script
+# DSA Build Automation Script
 use Cwd;
 use File::Path;
 use File::Find;
@@ -53,7 +53,8 @@ if(!$db)
 
 $db=~ s/^\s+|\s+$//g;
 my $database="/data/ccmdb/$db/";
-my $dbbmloc="/data/ccmbm/$db/";
+#my $dbbmloc="/data/ccmbm/$db/";
+my $dbbmloc="/u/kkdaadhi/ccm_wa/$db/";
 my @PatchFiles;
 my @files;
 my $patch_number;
@@ -124,34 +125,24 @@ sub getTasksnReadme()
 		close MR;
 		#fetch readme
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
-    	$patch_number=`$CCM query -u -f %patch_number`;
-    	$patch_readme=`$CCM query -u -f %patch_readme`;
-    	$patch_number=~ s/^\s+|\s+$//g;
+  	$patch_number=`$CCM query -u -f %patch_number`;
+  	$patch_readme=`$CCM query -u -f %patch_readme`;
+  	$patch_number=~ s/^\s+|\s+$//g;
 
-
-    	if($patch_readme =~ /N\/A/)
-    	{
-    		print "The following CR: $cr doesn't have a README \n";
-    	}
-    	else
-    	{
-       		open OP1,"+> $Bin/$patch_number\_README.txt";
-    		print OP1 $patch_readme;
-    		close OP1;
-    		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
-    		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
-
-    		#print "Binary file list is: @PatchFiles \n";
-        	#chomp(@PatchFiles);
-        	#my @newPatchFiles;
-        	#foreach my $patchfile(@PatchFiles)
-        	#{
-        	#	$newpatchfile=($patchfile=~s/mr_/$mr_number\_/g);
-        	#	push(@newPatchFiles, $newpatchfile);
-        	#}
-        	push(@patchbinarylist,@PatchFiles);
-        	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
-        	print SUMM "CR$cr - $sumreadme\n";
+  	if($patch_readme =~ /N\/A/)
+  	{
+  		print "The following CR: $cr doesn't have a README \n";
+  	}
+  	else
+  	{
+   		open OP1,"+> $Bin/$patch_number\_README.txt";
+  		print OP1 $patch_readme;
+  		close OP1;
+  		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
+  		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
+    	push(@patchbinarylist,@PatchFiles);
+    	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
+    	print SUMM "CR$cr - $sumreadme\n";
     	}
 	}
 
