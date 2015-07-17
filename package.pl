@@ -232,9 +232,9 @@ sub pkg()
 				$filename=~ s/^\s+|\s+$//g;
 				$permission=~ s/^\s+|\s+$//g;
   			mkpath("$destdir/$dirname");
-				print "Permission for the file $filename is $permission\n";
-  			copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
+				copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
 				chmod($permission,"$destdir/$filename") or die("Couldn't able to set the permission $!");
+				print "Permission: $permission for file: $destdir/$filename \n";
   		}
   		chdir($destdir);
   		copy("$Bin/tertio_7.6_README.txt",$destdir);
