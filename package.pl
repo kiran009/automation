@@ -229,8 +229,10 @@ sub pkg()
   		{
 	  		$dirname=dirname($deliveryhash{$key});
 				($filename,$permission)=split(/,/,$deliveryhash{$key});
+				$filename=~ s/^\s+|\s+$//g;
+				$permission=~ s/^\s+|\s+$//g;
   			mkpath("$destdir/$dirname");
-				print "Permission of the file is: $permission\n";
+				print "Permission for the file $filename is $permission\n";
   			copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
 				chmod $permission,"$destdir/$filename";
   		}
