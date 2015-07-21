@@ -15,6 +15,8 @@ use Sys::Hostname;
 my $hostname = hostname;
 my $hostplatform;
 my $gmake;
+my $devprojectname;
+my $hostplatform;
 if($hostname !~ /pesthp2/)
 {
 	# On HPUX, CCM client doesn't exist, ignore setting this environment there
