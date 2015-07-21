@@ -99,6 +99,7 @@ sub getTasksnReadme()
 		print "CRNumber is : $cr\n";
 		$task_number=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		$task_number=~ s/^\s+|\s+$//g;
+		print "TASKNUMBER is: $task_number \n";
 		push(@tasks,$task_number);
 		#get mrnumber, synopsis and other fields
 		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
@@ -116,6 +117,8 @@ sub getTasksnReadme()
 		$task_synopsis=~ s/^\s+|\s+$//g;
 		$task_resolver=~ s/^\s+|\s+$//g;
 		$priority=~ s/^\s+|\s+$//g;
+		print "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
+		print "$task_number#$task_synopsis#$task_resolver#$synopsis\n";
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 		print SYNOP "CR$cr $synopsis\n";
@@ -127,6 +130,8 @@ sub getTasksnReadme()
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
   	$patch_number=`$CCM query -u -f %patch_number`;
   	$patch_readme=`$CCM query -u -f %patch_readme`;
+
+		print "Patch Number is: $patch_number \n Patch Readme is: %patch_readme \n";
   	$patch_number=~ s/^\s+|\s+$//g;
 
   	if($patch_readme =~ /N\/A/)
