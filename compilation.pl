@@ -56,7 +56,7 @@ if($database =~ /dsa/)
 {
 	$workarea="$dbbmloc/$devprojectname/DSA_FUR_Dev";
 }
-elseif($database =~ /provident/)
+elsif($database =~ /provident/)
 {
 	$workarea="$dbbmloc/$devprojectname/Provident_Dev";
 }
