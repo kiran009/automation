@@ -42,6 +42,10 @@ if(!$devprojectname)
 	print "Projectname is mandatory \n";
 	exit;
 }
+if(!$db)
+{
+	print "Database name is mandatory \n";
+}
 $devprojectname=~ s/^\s+|\s+$//g;
 $db=~ s/^\s+|\s+$//g;
 my $database="/data/ccmdb/$db/";
