@@ -31,7 +31,7 @@ elsif($hostname =~ /pedsun2/)
 elsif($hostname =~ /pesthp2/)
 {	$hostplatform="hpiav3";$gmake='/usr/local/bin/gmake';}
 
-$result=GetOptions("devproject=s"=>\$devprojectname,"database=s"=>\$db,");
+$result=GetOptions("devproject=s"=>\$devprojectname,"database=s"=>\$db);
 if(!$result)
 {
 	print "Please provide devprojectname \n";
@@ -45,6 +45,7 @@ if(!$devprojectname)
 if(!$db)
 {
 	print "Database name is mandatory \n";
+	exit;
 }
 $devprojectname=~ s/^\s+|\s+$//g;
 $db=~ s/^\s+|\s+$//g;
