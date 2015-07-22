@@ -79,10 +79,13 @@ sub main()
 
 sub compile()
 {
-		chdir "$workarea";
-		umask 002;
+	chdir "$workarea";
+	umask 002;
 	`$gmake clobber all 2>&1 1>$Bin/gmake_$devprojectname\_$hostplatform.log`;
-	print "$Bin/gmake_$devprojectname\_$hostplatform.log";
+	open OP "< $Bin/gmake_$devprojectname\_$hostplatform.log";
+	my @op=<OP>;
+	close OP;
+	print @op;
 	#`$gmake clean all`;
 }
 
