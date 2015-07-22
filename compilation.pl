@@ -81,8 +81,8 @@ sub compile()
 {
 		chdir "$workarea";
 		umask 002;
-	`$gmake clean all 2>&1 1>$Bin/gmake_$devprojectname_$hostplatform.log`;
-	`cat $Bin/gmake_$devprojectname_$hostplatform.log`;
+	`$gmake clean all 2>&1 1>$Bin/gmake_$devprojectname\_$hostplatform.log`;
+	print "$Bin/gmake_$devprojectname\_$hostplatform.log";
 	#`$gmake clean all`;
 }
 
