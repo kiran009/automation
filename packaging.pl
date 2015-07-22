@@ -72,14 +72,15 @@ my $tertiodest="/u/kkdaadhi/Tertio_Dest";
 # /* Global Environment Variables ******* /
 sub main()
 {
+		open OP,"<$Bin/mrnumber.txt";
+		$mrnumber=<OP>;
+		close OP;
+		print "MRNumber is: $mrnumber\n";
 		pkg();
 }
 sub pkg()
 {
 	umask 002;
-	open OP,"<$Bin/mrnumber.txt";
-	$mrnumber=<OP>;
-	close OP;
 	open LOCATION,">>$Bin/location.txt";
 	foreach $prj(@projectlist)
 	{
