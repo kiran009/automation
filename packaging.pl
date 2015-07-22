@@ -22,13 +22,6 @@ if($hostname =~ /pesthp2/)
 {
 	$ENV{'PATH'}="/usr/contrib/bin:$ENV{'PATH'}";
 }
-if($hostname !~ /pesthp2/)
-{
-	# On HPUX, CCM client doesn't exist, ignore setting this environment there
-	$ENV{'CCM_HOME'}="/opt/ccm71";
-	$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
-	$CCM="$ENV{'CCM_HOME'}/bin/ccm";
-}
 my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number);
 if(!$result)
 {
@@ -79,7 +72,7 @@ my $tertiodest="/u/kkdaadhi/Tertio_Dest";
 # /* Global Environment Variables ******* /
 sub main()
 {
-		pkg();		
+		pkg();
 }
 sub pkg()
 {
