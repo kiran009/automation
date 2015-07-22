@@ -70,17 +70,18 @@ my 	@location;
 my $tertiodest="/u/kkdaadhi/Tertio_Dest";
 #my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
-my $f_762a=1409;
-my $f_762c=1413;
-my $f_763a=1431;
+my $f_762a='1409';
+my $f_762c='1413';
+my $f_763a='1431';
 sub main()
 {
 		#createReadme();
+		start_ccm();
 		listfolderTasks();
+		ccm_stop();
 		pkg();
 		#createMail();
 }
-
 sub listfolderTasks()
 {
 	@tasks_762a=`$CCM folder -show tasks '$f_762a' -u -f "%task_number"`;
@@ -471,5 +472,19 @@ sub pkg()
   		`tar -cvf $Bin/logs.tar $Bin/reconfigure_devproject_*.log`;
   		close LOCATION;
   	}
+}
+sub start_ccm()
+{
+	print "In Start CCM \n";
+	open(ccm_addr,"$ENV{'CCM_HOME'}/bin/ccm start -d $database -m -q -r build_mgr -h ccmuk1 -nogui |");
+	$ENV{'CCM_ADDR'}=<ccm_addr>;
+	close(ccm_addr);
+}
+
+sub ccm_stop()
+{
+	print "In Stop CCM \n";
+	open(ccm_addr,"$ENV{'CCM_HOME'}/bin/ccm stop |");
+	close(ccm_addr);
 }
 main();
