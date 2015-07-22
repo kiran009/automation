@@ -124,7 +124,7 @@ sub listfolderTasks()
 	@uniq763a = do { my %seen; grep { !$seen{$_}++ } @crs_763a};
 
 	print "Uniq CRs in 7.6.2.a are: @uniq762a \nUniq CRs in 7.6.2.c are: @uniq762c \nUniq CRs in 7.6.3.a are: @uniq763a\n";
-	open  FILE, "+> $Bin/tertio_7.6_TESTREADME.txt";
+	open  FILE, "+> $Bin/tertio_7.6_README.txt";
 	print FILE "Created: $dt\n\n";
 	getTasksnReadme(@uniq763a);
 	createReadme('7.6.3a');

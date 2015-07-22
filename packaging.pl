@@ -34,7 +34,6 @@ if(!$coreproject)
 	print "You need to supply core project name \n";
 	exit;
 }
-my @projectlist;
 push(@projectlist,$coreproject);
 my @PatchFiles;
 my @files;
