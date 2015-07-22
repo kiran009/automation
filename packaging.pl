@@ -77,6 +77,9 @@ sub main()
 sub pkg()
 {
 	umask 002;
+	open OP,"<$Bin/mrnumber.txt";
+	$mrnumber=<OP>;
+	close OP;
 	open LOCATION,">>$Bin/location.txt";
 	foreach $prj(@projectlist)
 	{
