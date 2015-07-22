@@ -18,6 +18,7 @@ my $binarylist="$Bin/fileplacement.fp";
 my $javabinarylist="$Bin/javabinaries.fp";
 my $hostname = hostname;
 my $hostplatform;
+my @projectlist;
 if($hostname =~ /pesthp2/)
 {
 	$ENV{'PATH'}="/usr/contrib/bin:$ENV{'PATH'}";
@@ -33,6 +34,7 @@ if(!$coreproject)
 	print "You need to supply core project name \n";
 	exit;
 }
+my @projectlist;
 push(@projectlist,$coreproject);
 my @PatchFiles;
 my @files;
@@ -192,3 +194,4 @@ sub pkg()
   		close LOCATION;
   	}
 }
+main();
