@@ -16,13 +16,8 @@ my $database="/data/ccmdb/provident/";
 my $dbbmloc="/data/ccmbm/provident/";
 my $binarylist="$Bin/fileplacement.fp";
 my $javabinarylist="$Bin/javabinaries.fp";
-my $hostname = hostname;
 my $hostplatform;
 my @projectlist;
-if($hostname =~ /pesthp2/)
-{
-	$ENV{'PATH'}="/usr/contrib/bin:$ENV{'PATH'}";
-}
 my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number);
 if(!$result)
 {
