@@ -42,7 +42,7 @@ SRC lib/libprovtcl.so DEST . PERM 0755
 SRC psdk/libpsdk.so DEST lib/libpsdk.so PERM 0755
 SRC psdk/libpsdk.so.1 DEST lib/libpsdk.so.1 PERM 0755
 SRC sasdk/libsrc/libsasdk.so DEST lib/libsasdk.so PERM 0755
-SRC sasdk/libsrc/libsasdk.so DEST lib/libsasdk.so.1 PERM 0755
+SRC sasdk/libsrc/libsasdk.so.1 DEST lib/libsasdk.so.1 PERM 0755
 TOMESRC /opt/tome/3.0.0_build19/bin/mwerrhandler DEST bin/mwerrhandler PERM 0755
 TOMESRC /opt/tome/3.0.0_build19/lib/libtome.so DEST lib/libtome.so PERM 0755
 TOMESRC /opt/tome/3.0.0_build19/lib/libtome_as.so DEST lib/libtome_as.so  PERM 0755

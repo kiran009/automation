@@ -125,7 +125,9 @@ sub listfolderTasks()
 
 	print "Uniq CRs in 7.6.2.a are: @uniq762a \nUniq CRs in 7.6.2.c are: @uniq762c \nUniq CRs in 7.6.3.a are: @uniq763a\n";
 	open  FILE, "+> $Bin/tertio_7.6_README.txt";
+	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
+	print FILE "#"x80;
 	getTasksnReadme(@uniq763a);
 	createReadme('7.6.3a');
 	getTasksnReadme(@uniq762c);
