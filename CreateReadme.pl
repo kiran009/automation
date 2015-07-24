@@ -127,21 +127,21 @@ sub listfolderTasks()
 	print FILE "#"x80;
 	undef @tasks;
 	open SYNOP,"+>$Bin/synopsis.txt";
-	open SUMM,"+> $Bin/summary_readme.txt";
-	open CRRESOLV, "+> $Bin/crresolv.txt";
+	open SUMM,"+>$Bin/summary_readme.txt";
+	open CRRESOLV, "+>$Bin/crresolv.txt";
 	open TASKINF,"+>$Bin/taskinfo.txt";
-	open PATCHBIN, "+> $Bin/patchbinarylist.txt";
+	open PATCHBIN, "+>$Bin/patchbinarylist.txt";
 	open FORMATTASKS,"+>$Bin/formattsks.txt";
 	getTasksnReadme(@uniq763a);
 	getTasksnReadme(@uniq762c);
 	getTasksnReadme(@uniq762a);
-	createReadme('7.6.3a,7.6.2c,7.6.2a');
 	close SUMM;
 	close SYNOP;
 	close CRRESOLV;
 	close TASKINF;
 	close PATCHBIN;
 	close FORMATTASKS;
+	createReadme('7.6.3a,7.6.2c,7.6.2a');
 	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n";
 	print FILE "ISSUES: None";
 	close FILE;
@@ -159,7 +159,10 @@ sub createReadme()
 
 	open OP,"<$Bin/formattsks.txt";
 	@formattsks=<OP>;
-	@fformattsks=map{"$_\n"} @formattsks;
+	my @uniqtasks= do { my %seen; grep { !$seen{$_}++ } @formattsks};
+	my @uniqtsks=grep(s/\s*$//g,@uniqtasks);
+	my @uniqtsks=grep /\S/,@uniqtsks;
+	@fformattsks=map{"$_\n"} @uniqtsks;
 	$formattedtsks=join(",",@fformattsks);
 	$formattedtsks =~ s/[\n\r]//g;
 	close OP;
@@ -178,12 +181,15 @@ sub createReadme()
 	open OP, "< $Bin/patchbinarylist.txt";
 	@binarylist=<OP>;
 	close OP;
+	print "Patch binary list is: @binarylist\n";
+	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @binarylist};
+	print "Uniq Binlist is: @uniqbinlist\n";
 
 	print FILE "\nFollowing details about the maintenance release: $folderinfo\n";
 	print FILE "#"x80;
 	print FILE "\nTASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
-	print FILE "@binarylist\n\n";
+	print FILE "@uniqbinlist\n\n";
 	print FILE "SUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary\n";
 	print FILE "#"x80;
 }
@@ -193,7 +199,6 @@ sub getTasksnReadme()
 	foreach $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
-		print "CRNumber is : $cr\n";
 		@task_numbers=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		push(@tasks,@task_numbers);
 		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
@@ -221,50 +226,46 @@ sub getTasksnReadme()
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		print SYNOP "CR$cr $synopsis\n";
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
-    	$patch_number=`$CCM query -u -f %patch_number`;
-    	$patch_readme=`$CCM query -u -f %patch_readme`;
-    	$patch_number=~ s/^\s+|\s+$//g;
-    	$patch_number =~ s/\s+/_/g;
-    	if(($patch_readme =~ /N\/A/) || (not defined $patch_readme))
-    	{
-    		print "The following CR: $cr doesn't have a README \n";
-    	}
-    	else
-    	{
-    		if(($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4596/) || ($cr =~ /4606/) || ($cr =~ /4609/))
+    		$patch_number=`$CCM query -u -f %patch_number`;
+    		$patch_readme=`$CCM query -u -f %patch_readme`;
+    		$patch_number=~ s/^\s+|\s+$//g;
+    		$patch_number =~ s/\s+/_/g;
+    		if(($patch_readme =~ /N\/A/) || (not defined $patch_readme))
     		{
-    			open OP1,"+> $Bin/$patch_number\_README.txt";
-    			print OP1 $patch_readme;
-    			close OP1;
-    			`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
-    			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
-    			print "PatchFiles information is : @PatchFiles \n";
-
-        		push(@patchbinarylist,@PatchFiles);
-        		$sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | grep -v 'ISSUES' | sed '/^\$/d'`;
-        		print SUMM "CR$cr - $sumreadme\n";
-        		print "Summary from README is: $sumreadme\n";
+    			print "The following CR: $cr doesn't have a README \n";
     		}
     		else
     		{
-       			open OP1,"+> $Bin/$patch_number\_README.txt";
-    			print OP1 $patch_readme;
-    			close OP1;
-    			`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
-    			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
-
-	        	push(@patchbinarylist,@PatchFiles);
-        		$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
-        		print SUMM "CR$cr - $sumreadme\n";
+    			if(($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4596/) || ($cr =~ /4606/) || ($cr =~ /4609/))
+    			{
+    				open OP1,"+> $Bin/$patch_number\_README.txt";
+    				print OP1 $patch_readme;
+    				close OP1;
+    				`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
+    				@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'`; 
+        			push(@patchbinarylist,@PatchFiles);
+        			$sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | grep -v 'ISSUES' | sed '/^\$/d'`;
+        			print SUMM "CR$cr - $sumreadme\n";
+    			}
+    			else
+    			{
+       				open OP1,"+> $Bin/$patch_number\_README.txt";
+    				print OP1 $patch_readme;
+    				close OP1;
+    				`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
+    				@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'| sed '/^\$/d'`;
+	       		 	push(@patchbinarylist,@PatchFiles);
+        			$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
+        			print SUMM "CR$cr - $sumreadme\n";
+    			}
     		}
-    	}
-	}
-	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
-	print PATCHBIN @uniqbinlist;
-	$tasklist=join(",",@tasks);
-	undef @formattsks;
-	@formattsks=join("\n", map { 'PROV_' . $_ } @tasks);
-	print FORMATTASKS @formattsks;
+		}
+		my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
+		print PATCHBIN @uniqbinlist;
+		$tasklist=join(",",@tasks);
+		undef @formattsks;
+		@formattsks=join("\n", map { 'PROV_' . $_ } @tasks);
+		print FORMATTASKS @formattsks;
 }
 sub start_ccm()
 {
