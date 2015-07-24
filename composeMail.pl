@@ -17,13 +17,11 @@ my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
 $year+=1900;
 my $dt="$mday $months[$mon] $year\n";
 my $dtformat="$year$months[$mon]$mday$hour$min";
-
 my $result=GetOptions("buildnumber=s"=>\$build_number);
 sub main()
 {
 	crtnsndMail();
 }
-
 sub crtnsndMail()
 {
 	open OP,"<$Bin/mrnumber.txt";
@@ -31,34 +29,31 @@ sub crtnsndMail()
 	close OP;
 	open OP,"<$Bin/formattsks.txt";
 	@formattsks=<OP>;
+	my @uniqtasks= do { my %seen; grep { !$seen{$_}++ } @formattsks};
+	my @uniqtsks=grep(s/\s*$//g,@uniqtasks);
+	my @uniqtsks=grep /\S/,@uniqtsks;
+	@fformattsks=map{"$_\n"} @uniqtsks;
 	$formattedtsks=join(",",@formattsks);
 	$formattedtsks =~ s/[\n\r]//g;
 	close OP;
 	open OP,"<$Bin/synopsis.txt";
 	@synopsis=<OP>;
 	close OP;
-#	open OP,"<$Bin/summary_readme.txt";
-#	@summary=<OP>;
-#	close OP;
 	open OP,"<$Bin/crresolv.txt";
 	@crresolv=<OP>;
 	close OP;
 	open OP,"<$Bin/taskinfo.txt";
 	@taskinfo=<OP>;
 	close OP;
-#	open OP, "< $Bin/patchbinarylist.txt";
-#	@binarylist=<OP>;
-#	close OP;
 	open OP, "<$Bin/location.txt";
 	@location=<OP>;
 	close OP;
-	
 	$mrnumber=~ s/^\s+|\s+$//g;
 	@location_explode=map{"$_<br/>"} @location;
 	open (my $FILE, "+> $Bin/releasenotes.html");
 	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
-	print $FILE "<table width=\"100%\" border=\"1\"<br/>"; 
-	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>"; 
+	print $FILE "<table width=\"100%\" border=\"1\"<br/>";
+	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>";
 	print $FILE "<tr><b><td>Release</td></b><td colspan=\'2\'>$mrnumber</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Number</td></b><td colspan=\'2\'>$build_number</td></tr><br/>";
 	print $FILE "<tr><b><td>Release Type</td></b><td colspan=\'2\'>Maintenance Release</td></tr><br/>";
@@ -95,7 +90,7 @@ sub crtnsndMail()
 		print $FILE "<tr><b><td>$task_number</td><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
 	}
 	print $FILE "</table><br/>";
-	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";	
+	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";
 	close $FILE;
 }
 main();
