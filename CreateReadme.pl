@@ -82,12 +82,9 @@ my $f_762c='1413';
 my $f_763a='1431';
 sub main()
 {
-		#createReadme();
 		start_ccm();
 		listfolderTasks();
 		ccm_stop();
-		#pkg();
-		#createMail();
 }
 sub listfolderTasks()
 {
@@ -128,12 +125,23 @@ sub listfolderTasks()
 	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
 	print FILE "#"x80;
+	undef @tasks;
+	open SYNOP,"+>$Bin/synopsis.txt";
+	open SUMM,"+> $Bin/summary_readme.txt";
+	open CRRESOLV, "+> $Bin/crresolv.txt";
+	open TASKINF,"+>$Bin/taskinfo.txt";
+	open PATCHBIN, "+> $Bin/patchbinarylist.txt";
+	open FORMATTASKS,"+>$Bin/formattsks.txt";
 	getTasksnReadme(@uniq763a);
-	createReadme('7.6.3a');
 	getTasksnReadme(@uniq762c);
-	createReadme('7.6.2c');
 	getTasksnReadme(@uniq762a);
-	createReadme('7.6.2a');
+	createReadme('7.6.3a,7.6.2c,7.6.2a');
+	close SUMM;
+	close SYNOP;
+	close CRRESOLV;
+	close TASKINF;
+	close PATCHBIN;
+	close FORMATTASKS;
 	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n";
 	print FILE "ISSUES: None";
 	close FILE;
@@ -141,9 +149,6 @@ sub listfolderTasks()
 
 sub createReadme()
 {
-	#open OP,"<$Bin/mrnumber.txt";
-	#$mrnumber=<OP>;
-	#close OP;
 	my ($folderinfo)=@_;
 	undef @formattsks;
 	undef @synopsis;
@@ -174,7 +179,6 @@ sub createReadme()
 	@binarylist=<OP>;
 	close OP;
 
-	#$mrnumber=~ s/^\s+|\s+$//g;
 	print FILE "\nFollowing details about the maintenance release: $folderinfo\n";
 	print FILE "#"x80;
 	print FILE "\nTASKS:$formattedtsks\n\n";
@@ -186,19 +190,12 @@ sub createReadme()
 sub getTasksnReadme()
 {
 	my @crs=@_;
-	undef @tasks;
-	open SYNOP,"+>$Bin/synopsis.txt";
-	open SUMM,"+> $Bin/summary_readme.txt";
-	open CRRESOLV, "+> $Bin/crresolv.txt";
-	open TASKINF,"+>$Bin/taskinfo.txt";
-
 	foreach $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
 		print "CRNumber is : $cr\n";
 		@task_numbers=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		push(@tasks,@task_numbers);
-		#get mrnumber, synopsis and other fields
 		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
 		($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
 		($requesttype)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%request_type"`;
@@ -212,7 +209,6 @@ sub getTasksnReadme()
 			($task_resolver)=`$CCM task -show info $task_number \-u \-format "%resolver"`;
 			$task_synopsis=~ s/^\s+|\s+$//g;
 			$task_resolver=~ s/^\s+|\s+$//g;
-			#print "TASKINFO:$task_synopsis TASK RESOLVER:$task_resolver\n";
 			print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 		}
 		$synopsis=~ s/^\s+|\s+$//g;
@@ -224,11 +220,6 @@ sub getTasksnReadme()
 		$priority=~ s/^\s+|\s+$//g;
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		print SYNOP "CR$cr $synopsis\n";
-		#$mr_number=~ s/^\s+|\s+$//g;
-		#open MR,"+> $Bin/mrnumber.txt";
-		#print MR "$mr_number";
-		#close MR;
-		#fetch readme
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
     	$patch_number=`$CCM query -u -f %patch_number`;
     	$patch_readme=`$CCM query -u -f %patch_readme`;
@@ -261,114 +252,20 @@ sub getTasksnReadme()
     			close OP1;
     			`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
     			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
-    			#print "PatchFiles information is : @PatchFiles \n";
 
 	        	push(@patchbinarylist,@PatchFiles);
         		$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
         		print SUMM "CR$cr - $sumreadme\n";
-        		#print "Summary from README is: $sumreadme\n";
     		}
     	}
 	}
 	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
-	open OP, "+> $Bin/patchbinarylist.txt";
-	print OP @uniqbinlist;
-	close OP;
-	close SUMM;
-	close SYNOP;
-	close CRRESOLV;
-	close TASKINF;
+	print PATCHBIN @uniqbinlist;
 	$tasklist=join(",",@tasks);
 	undef @formattsks;
 	@formattsks=join("\n", map { 'PROV_' . $_ } @tasks);
-	open OP,"+>$Bin/formattsks.txt";
-	print OP @formattsks;
-	close OP;
+	print FORMATTASKS @formattsks;
 }
-# sub createReadme()
-# {
-# 	open OP,"<$Bin/mrnumber.txt";
-# 	$mrnumber=<OP>;
-# 	close OP;
-# 	open OP,"<$Bin/formattsks.txt";
-# 	@formattsks=<OP>;
-# 	$formattedtsks=join(",",@formattsks);
-# 	$formattedtsks =~ s/[\n\r]//g;
-# 	close OP;
-# 	open OP,"<$Bin/synopsis.txt";
-# 	@synopsis=<OP>;
-# 	close OP;
-# 	open OP,"<$Bin/summary_readme.txt";
-# 	@summary=<OP>;
-# 	close OP;
-# 	open OP,"<$Bin/crresolv.txt";
-# 	@crresolv=<OP>;
-# 	close OP;
-# 	open OP,"<$Bin/taskinfo.txt";
-# 	@taskinfo=<OP>;
-# 	close OP;
-# 	open OP, "< $Bin/patchbinarylist.txt";
-# 	@binarylist=<OP>;
-# 	close OP;
-#
-# 	$mrnumber=~ s/^\s+|\s+$//g;
-# 	open  FILE, "+> $Bin/tertio_7.6_README.txt";
-# 	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
-# 	print FILE "Created: $dt\n\n";
-# 	print FILE "TASKS:$formattedtsks\n\n";
-# 	print FILE "FIXES:@synopsis\n\n";
-# 	print FILE "@binarylist\n\n";
-# 	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
-# 	close FILE;
-# }
-sub createMail()
-{
-	@location_explode=map{"$_<br/>"} @location;
-	open (my $FILE, "+> $Bin/releasenotes.html");
-	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
-	print $FILE "<table width=\"100%\" border=\"1\"<br/>";
-	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>";
-	print $FILE "<tr><b><td>Release</td></b><td colspan=\'2\'>$mrnumber</td></tr><br/>";
-	print $FILE "<tr><b><td>Build Number</td></b><td colspan=\'2\'>$build_number</td></tr><br/>";
-	print $FILE "<tr><b><td>Release Type</td></b><td colspan=\'2\'>Maintenance Release</td></tr><br/>";
-	print $FILE "<tr><b><td>Location</td></b><td colspan=\'2\'>@location_explode</td></tr><br/>";
-	print $FILE "<tr><b><td>Build Date</td></b><td colspan=\'2\'>$dtformat</td></tr><br/>";
-	print $FILE "<tr><b><td>Major changes in the new build</td></b><td colspan=\'2\'>BUG FIXES</td></tr><br/>";
-	print $FILE "<tr><b><td>TOME</td></b><td>3.0.0</td><td>BUILD19</td></tr><br/>";
-	print $FILE "<tr><b><td>Tertio ADK</td></b><td>-</td><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>CAF</td></b><td>-</td><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>Dashboard SDK</td></b><td>-</td><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>DDA Protocol Version</td></b><td>-</td><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>Menu Server Extension</td></b><td>-</td><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>SMS payload STK</td></b><td>-</td><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>RM CDK</td><td>-</td></b><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>PE CDK</td><td>-</td></b><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>Has the developer documentation been updated?</td></b><td colspan=\"2\">N/A</td></tr></table><br/>";
-	print $FILE "<b>Installation instructions: </b><br/>";
-	print $FILE "Same as previous Tertio Maintenance Release<br/><br/>";
-	print $FILE "<b>Additional information about the changes:</b>N/A<br /><b>The Resolved CRs are:</b><br/>";
-	print $FILE "<b><table width=\"100%\" border=\"1\">";
-	print $FILE "<tr><b><td>CR ID</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr><br/>";
-	foreach $cr(@crresolv)
-	{
-		($crid,$synopsis,$requesttype,$severity,$resolver,$priority)=split(/#/,$cr);
-		print $FILE "<tr><b><td>$crid</td><td>$synopsis</td><td>$requesttype</td><td>$severity</td><td>$resolver</td><td>$priority</td></tr>";
-	}
-	print $FILE "</table><br/>";
-	print $FILE "<b>The checked in tasks since the last build are:</b><br/>";
-	print $FILE "<b><table width=\"100%\" border=\"1\">";
-	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr>";
-	foreach $tsk(@taskinfo)
-	{
-		($task_number,$task_synopsis,$task_resolver)=split(/#/,$tsk);
-		print $FILE "<tr><b><td>$task_number</td><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
-	}
-	print $FILE "</table><br/>";
-	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";
-	close $FILE;
-}
-
-
 sub start_ccm()
 {
 	print "In Start CCM \n";
