@@ -27,7 +27,7 @@ if(!$coreproject)
 	print "You need to supply core projectname \n";
 	exit;
 }
-if(!$javaproject)
+if(!$javaprojectname)
 {
 	print "You need to supply java projectname \n";
 	exit;
