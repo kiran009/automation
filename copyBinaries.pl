@@ -73,7 +73,7 @@ sub copyBinaries()
 {
 	umask 002;
 	# Choose the platform project
-	$coreproject=~ s/^\s+|\s+$//g
+	$coreproject=~ s/^\s+|\s+$//g;
   if($coreproject =~ /linAS5/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";

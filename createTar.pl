@@ -78,7 +78,7 @@ sub createTar()
 	$mrnumber=<OP>;
 	close OP;
 	open LOCATION,">>$Bin/location.txt";
-	$coreproject=~ s/^\s+|\s+$//g
+	$coreproject=~ s/^\s+|\s+$//g;
   if($coreproject =~ /linAS5/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
