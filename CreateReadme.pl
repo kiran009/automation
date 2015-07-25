@@ -121,6 +121,9 @@ sub listfolderTasks()
 	@uniq763a = do { my %seen; grep { !$seen{$_}++ } @crs_763a};
 
 	print "Uniq CRs in 7.6.2.a are: @uniq762a \nUniq CRs in 7.6.2.c are: @uniq762c \nUniq CRs in 7.6.3.a are: @uniq763a\n";
+	open OP,"<$Bin/mrnumber.txt";
+	$mrnumber=<OP>;
+	close OP;
 	open  FILE, "+> $Bin/tertio_7.6_README.txt";
 	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
@@ -185,10 +188,11 @@ sub createReadme()
 	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @binarylist};
 	print "Uniq Binlist is: @uniqbinlist\n";
 
-	print FILE "\nFollowing details about the maintenance release: $folderinfo\n";
+	print FILE "\nFollowing details about the maintenance release: $mrnumber\n";
 	print FILE "#"x80;
 	print FILE "\nTASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
+	print FILE "AFFECTS: Tertio 7.6.0\n";
 	print FILE "@uniqbinlist\n\n";
 	print FILE "SUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary\n";
 	print FILE "#"x80;
