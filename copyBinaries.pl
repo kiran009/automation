@@ -161,5 +161,4 @@ sub copyBinaries()
 		print "Permission: $permission for file: $destdir/$filename \n";
   }
   }
-}
 main();
