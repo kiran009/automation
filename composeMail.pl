@@ -17,6 +17,7 @@ my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
 $year+=1900;
 my $dt="$mday $months[$mon] $year\n";
 my $dtformat="$year$months[$mon]$mday$hour$min";
+my $FILE;
 my $result=GetOptions("buildnumber=s"=>\$build_number);
 sub main()
 {
@@ -24,6 +25,9 @@ sub main()
 }
 sub crtnsndMail()
 {
+	open OP, "<$Bin/location.txt";
+	@location=<OP>;
+	close OP;
 	open OP,"<$Bin/mrnumber.txt";
 	$mrnumber=<OP>;
 	close OP;
@@ -36,21 +40,9 @@ sub crtnsndMail()
 	$formattedtsks=join(",",@formattsks);
 	$formattedtsks =~ s/[\n\r]//g;
 	close OP;
-	open OP,"<$Bin/synopsis.txt";
-	@synopsis=<OP>;
-	close OP;
-	open OP,"<$Bin/crresolv.txt";
-	@crresolv=<OP>;
-	close OP;
-	open OP,"<$Bin/taskinfo.txt";
-	@taskinfo=<OP>;
-	close OP;
-	open OP, "<$Bin/location.txt";
-	@location=<OP>;
-	close OP;
 	$mrnumber=~ s/^\s+|\s+$//g;
 	@location_explode=map{"$_<br/>"} @location;
-	open (my $FILE, "+> $Bin/releasenotes.html");
+	open ($FILE, "+> $Bin/releasenotes.html");
 	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
 	print $FILE "<table width=\"100%\" border=\"1\"<br/>";
 	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>";
@@ -75,22 +67,51 @@ sub crtnsndMail()
 	print $FILE "<b>Additional information about the changes:</b>N/A<br /><b>The Resolved CRs are:</b><br/>";
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
 	print $FILE "<tr><b><td>CR ID</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr><br/>";
+	crresolv('7.6.3');
+	crresolv('7.6.2');
+	print $FILE "</table><br/>";
+	print $FILE "<b>The checked in tasks since the last build are:</b><br/>";
+	print $FILE "<b><table width=\"100%\" border=\"1\">";
+	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr>";
+	taskinfo('7.6.3');
+	taskinfo('7.6.2');
+	print $FILE "</table><br/>";
+	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";
+	close $FILE;
+}
+sub crresolv()
+{
+	undef @taskinfo;
+	undef @crresolv;
+	undef @synopsis;
+	
+	my ($releasenumber)=@_;
+	open OP,"<$Bin/$releasenumber\_synopsis.txt";
+	@synopsis=<OP>;
+	close OP;
+	open OP,"<$Bin/$releasenumber\_crresolv.txt";
+	@crresolv=<OP>;
+	close OP;
+	print $FILE "<tr><b><td colspan='6'>$releasenumber</td></tr>";
 	foreach $cr(@crresolv)
 	{
 		($crid,$synopsis,$requesttype,$severity,$resolver,$priority)=split(/#/,$cr);
 		print $FILE "<tr><b><td>$crid</td><td>$synopsis</td><td>$requesttype</td><td>$severity</td><td>$resolver</td><td>$priority</td></tr>";
 	}
-	print $FILE "</table><br/>";
-	print $FILE "<b>The checked in tasks since the last build are:</b><br/>";
-	print $FILE "<b><table width=\"100%\" border=\"1\">";
-	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr>";
+}
+sub taskinfo()
+{
+	undef @taskinfo;
+	my ($releasenumber)=@_;
+	open OP,"<$Bin/$releasenumber\_taskinfo.txt";
+	@taskinfo=<OP>;
+	close OP;
+	print $FILE "<tr><b><td colspan='6'>$releasenumber</td></tr>";
 	foreach $tsk(@taskinfo)
 	{
 		($task_number,$task_synopsis,$task_resolver)=split(/#/,$tsk);
 		print $FILE "<tr><b><td>$task_number</td><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
 	}
-	print $FILE "</table><br/>";
-	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";
-	close $FILE;
+
 }
 main();
