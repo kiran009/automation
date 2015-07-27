@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.6 Build Script
+# Tertio 7.6 CreateReadme script
 use Cwd;
 use File::Path;
 use File::Find;
@@ -129,14 +129,28 @@ sub listfolderTasks()
 	print FILE "Created: $dt\n\n";
 	print FILE "#"x80;
 	undef @tasks;
-	open SYNOP,"+>$Bin/synopsis.txt";
-	open SUMM,"+>$Bin/summary_readme.txt";
-	open CRRESOLV, "+>$Bin/crresolv.txt";
-	open TASKINF,"+>$Bin/taskinfo.txt";
-	open PATCHBIN, "+>$Bin/patchbinarylist.txt";
-	open FORMATTASKS,"+>$Bin/formattsks.txt";
+	open SYNOP,"+>$Bin/7.6.3_synopsis.txt";
+	open SUMM,"+>$Bin/7.6.3_summary_readme.txt";
+	open CRRESOLV, "+>$Bin/7.6.3_crresolv.txt";
+	open TASKINF,"+>$Bin/7.6.3_taskinfo.txt";
+	open PATCHBIN, "+>$Bin/7.6.3_patchbinarylist.txt";
+	open FORMATTASKS,"+>$Bin/7.6.3_formattsks.txt";
 	getTasksnReadme(@uniq763a);
-	getTasksnReadme(@uniq762c);
+	close SUMM;
+	close SYNOP;
+	close CRRESOLV;
+	close TASKINF;
+	close PATCHBIN;
+	close FORMATTASKS;
+	open SYNOP,"+>$Bin/7.6.2_synopsis.txt";
+	open SUMM,"+>$Bin/7.6.2_summary_readme.txt";
+	open CRRESOLV, "+>$Bin/7.6.2_crresolv.txt";
+	open TASKINF,"+>$Bin/7.6.2_taskinfo.txt";
+	open PATCHBIN, "+>$Bin/7.6.2_patchbinarylist.txt";
+	open FORMATTASKS,"+>$Bin/7.6.2_formattsks.txt";
+	push(@uniq762a,@uniq762c);
+	#getTasksnReadme(@uniq762c);
+	#getTasksnReadme(@uniq762a);
 	getTasksnReadme(@uniq762a);
 	close SUMM;
 	close SYNOP;
@@ -144,23 +158,29 @@ sub listfolderTasks()
 	close TASKINF;
 	close PATCHBIN;
 	close FORMATTASKS;
-	createReadme('7.6.3a,7.6.2c,7.6.2a');
+	#createReadme('7.6.3a,7.6.2c,7.6.2a');
+	createReadme('7.6.3');
+	createReadme('7.6.2');
 	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n";
 	print FILE "ISSUES: None";
+	print FILE "\nFollowing details about the maintenance release: $mrnumber\n";
+	print FILE "#"x80;
 	close FILE;
 }
 
 sub createReadme()
 {
-	my ($folderinfo)=@_;
 	undef @formattsks;
+	undef @fformattsks;
 	undef @synopsis;
 	undef @summary;
 	undef @crresolv;
 	undef @taskinfo;
 	undef @binarylist;
-
-	open OP,"<$Bin/formattsks.txt";
+	undef @uniqbinlist;
+  my ($deliveryname)=@_;
+	$deliveryname=~ s/^\s+|\s+$//g;
+	open OP,"<$Bin/$deliveryname\_formattsks.txt";
 	@formattsks=<OP>;
 	my @uniqtasks= do { my %seen; grep { !$seen{$_}++ } @formattsks};
 	my @uniqtsks=grep(s/\s*$//g,@uniqtasks);
@@ -169,27 +189,24 @@ sub createReadme()
 	$formattedtsks=join(",",@fformattsks);
 	$formattedtsks =~ s/[\n\r]//g;
 	close OP;
-	open OP,"<$Bin/synopsis.txt";
+	open OP,"<$Bin/$deliveryname\_synopsis.txt";
 	@synopsis=<OP>;
 	close OP;
-	open OP,"<$Bin/summary_readme.txt";
+	open OP,"<$Bin/$deliveryname\_summary_readme.txt";
 	@summary=<OP>;
 	close OP;
-	open OP,"<$Bin/crresolv.txt";
+	open OP,"<$Bin/$deliveryname\_crresolv.txt";
 	@crresolv=<OP>;
 	close OP;
-	open OP,"<$Bin/taskinfo.txt";
+	open OP,"<$Bin/$deliveryname\_taskinfo.txt";
 	@taskinfo=<OP>;
 	close OP;
-	open OP, "< $Bin/patchbinarylist.txt";
+	open OP, "< $Bin/$deliveryname\_patchbinarylist.txt";
 	@binarylist=<OP>;
 	close OP;
 	print "Patch binary list is: @binarylist\n";
 	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @binarylist};
 	print "Uniq Binlist is: @uniqbinlist\n";
-
-	print FILE "\nFollowing details about the maintenance release: $mrnumber\n";
-	print FILE "#"x80;
 	print FILE "\nTASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
 	print FILE "AFFECTS: Tertio 7.6.0\n";
