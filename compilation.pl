@@ -50,16 +50,16 @@ my $workarea="$dbbmloc/$devprojectname";
 umask 002;
 # /* Global Environment Variables ******* /
 sub main()
-{	
+{
 		if($hostname !~ /pesthp2/)
-		{		
+		{
 			start_ccm();
 		}
 		compile();
 		if($hostname !~ /pesthp2/)
 		{
 			ccm_stop();
-		}		
+		}
 }
 
 sub compile()
@@ -73,7 +73,7 @@ sub compile()
 		chdir "$workarea/Provident_Dev";
 	}
 	umask 002;
-	`$gmake clean all 2>&1 1>$Bin/gmake_$devprojectname_$hostplatform.log`;			
+	`$gmake clean all 2>&1 1>$Bin/gmake_$devprojectname\_$hostplatform.log`;			
 }
 
 sub start_ccm()
