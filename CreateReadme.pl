@@ -164,7 +164,7 @@ sub listfolderTasks()
 	#createReadme('7.6.3a,7.6.2c,7.6.2a');
 	createReadme('7.6.3');
 	createReadme('7.6.2');
-	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n";
+	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n";
 	print FILE "ISSUES: None";
 	close FILE;
 }
@@ -212,14 +212,13 @@ sub createReadme()
 	print "Patch binary list is: @binarylist\n";
 	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @binarylist};
 	print "Uniq Binlist is: @uniqbinlist\n";
-	print FILE "\nRelease - $deliveryname\n";
 	print FILE "--";
+	print FILE "\nRelease - $deliveryname\n";
 	print FILE "\nTASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
 	print FILE "AFFECTS: Tertio 7.6.0\n";
 	print FILE "@uniqbinlist\n\n";
 	print FILE "SUMMARY OF CHANGES: $deliveryname\nThe following changes have been delivered in this Maintenance Release.\n@summary\n";
-	print FILE "#"x80;
 }
 sub getTasksnReadme()
 {
