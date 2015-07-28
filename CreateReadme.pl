@@ -164,7 +164,7 @@ sub listfolderTasks()
 	#createReadme('7.6.3a,7.6.2c,7.6.2a');
 	createReadme('7.6.3');
 	createReadme('7.6.2');
-	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n";
+	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\n";
 	print FILE "ISSUES: None";
 	close FILE;
 }
