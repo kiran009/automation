@@ -124,12 +124,13 @@ sub listfolderTasks()
 	open OP,"<$Bin/mrnumber.txt";
 	$mrnumber=<OP>;
 	close OP;
+	open BN,"+>$Bin/build_number.txt";
+	print BN $build_number;
+	close BN;
 	open  FILE, "+> $Bin/tertio_7.6_README.txt";
 	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
-	print FILE "#"x80;
-	print FILE "\nFollowing details about the maintenance release: $mrnumber\n";
-	print FILE "#"x80;
+	print FILE "PRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n";
 	undef @tasks;
 	open SYNOP,"+>$Bin/7.6.3_synopsis.txt";
 	open SUMM,"+>$Bin/7.6.3_summary_readme.txt";
@@ -163,7 +164,7 @@ sub listfolderTasks()
 	#createReadme('7.6.3a,7.6.2c,7.6.2a');
 	createReadme('7.6.3');
 	createReadme('7.6.2');
-	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n";
+	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n";
 	print FILE "ISSUES: None";
 	close FILE;
 }
@@ -182,7 +183,7 @@ sub createReadme()
 	undef @uniqtsks;
 	undef @formattedtsks;
 
-  	my ($deliveryname)=@_;
+  my ($deliveryname)=@_;
 	$deliveryname=~ s/^\s+|\s+$//g;
 	open OP,"<$Bin/$deliveryname\_formattsks.txt";
 	@formattsks=<OP>;
@@ -211,8 +212,8 @@ sub createReadme()
 	print "Patch binary list is: @binarylist\n";
 	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @binarylist};
 	print "Uniq Binlist is: @uniqbinlist\n";
-	print FILE "\n$deliveryname\n";
-	print FILE "#"x80;
+	print FILE "\nRelease - $deliveryname\n";
+	print FILE "--";
 	print FILE "\nTASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
 	print FILE "AFFECTS: Tertio 7.6.0\n";
@@ -257,31 +258,31 @@ sub getTasksnReadme()
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		print SYNOP "CR$cr $synopsis\n";
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
-    		$patch_number=`$CCM query -u -f %patch_number`;
-    		$patch_readme=`$CCM query -u -f %patch_readme`;
-    		$patch_number=~ s/^\s+|\s+$//g;
-    		$patch_number =~ s/\s+/_/g;
+  	$patch_number=`$CCM query -u -f %patch_number`;
+  	$patch_readme=`$CCM query -u -f %patch_readme`;
+  	$patch_number=~ s/^\s+|\s+$//g;
+  	$patch_number =~ s/\s+/_/g;
     if(($patch_readme =~ /N\/A/) || (not defined $patch_readme))
     {
     		print "The following CR: $cr doesn't have a README \n";
     }
     else
     {
-	if(($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4596/) || ($cr =~ /4606/) || ($cr =~ /4609/) || ($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4388/) || ($cr =~ /4491/) )
-    	{
-    		open OP1,"+> $Bin/$patch_number\_README.txt";
-    		print OP1 $patch_readme;
-    		close OP1;
-    		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
-    		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'`;
-    		push(@patchbinarylist,@PatchFiles);
-    		$sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | grep -v 'ISSUES' | sed '/^\$/d'`;
-    		print SUMM "CR$cr - $sumreadme\n";
-    	}
-    	else
-    	{
-     			open OP1,"+> $Bin/$patch_number\_README.txt";
+	 			if(($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4596/) || ($cr =~ /4606/) || ($cr =~ /4609/) || ($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4388/) || ($cr =~ /4491/) )
+    		{
+    			open OP1,"+> $Bin/$patch_number\_README.txt";
     			print OP1 $patch_readme;
+    			close OP1;
+    			`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
+    			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'`;
+    			push(@patchbinarylist,@PatchFiles);
+    			$sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | grep -v 'ISSUES' | sed '/^\$/d'`;
+    			print SUMM "CR$cr - $sumreadme\n";
+    		}
+    		else
+    		{
+     				open OP1,"+> $Bin/$patch_number\_README.txt";
+    				print OP1 $patch_readme;
     				close OP1;
     				`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
     				@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'| sed '/^\$/d'`;

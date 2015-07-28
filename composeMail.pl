@@ -18,13 +18,16 @@ $year+=1900;
 my $dt="$mday $months[$mon] $year\n";
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my $FILE;
-my $result=GetOptions("buildnumber=s"=>\$build_number);
+#my $result=GetOptions("buildnumber=s"=>\$build_number);
 sub main()
 {
 	crtnsndMail();
 }
 sub crtnsndMail()
 {
+	open BN,"<$Bin/build_number.txt";
+	$build_number=<BN>;
+	close BN;
 	open OP, "<$Bin/location.txt";
 	@location=<OP>;
 	close OP;
@@ -84,7 +87,7 @@ sub crresolv()
 	undef @taskinfo;
 	undef @crresolv;
 	undef @synopsis;
-	
+
 	my ($releasenumber)=@_;
 	open OP,"<$Bin/$releasenumber\_synopsis.txt";
 	@synopsis=<OP>;
