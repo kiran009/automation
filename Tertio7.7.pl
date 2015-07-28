@@ -34,7 +34,7 @@ if(!$folder)
 }
 if(!$crs)
 {
-	print "No extra CRs are provided for this build, proceeding with already added one's \n";	
+	print "No extra CRs are provided for this build, proceeding with already added one's \n";
 }
 my @PatchFiles;
 my @files;
@@ -73,30 +73,30 @@ print "The following list of CRs to the included in the patch:@crs\n";
 sub main()
 {
 	start_ccm();
-	getTasksnReadme();		
+	getTasksnReadme();
 	reconfigure_dev_proj_and_compile();
 	createReadme();
 	pkg();
 	createMail();
 	#send_email("Tertio $mr_number build is completed and available @ $destdir, logs are attached","/tmp/logs.zip");
 	#move_cr_status();
-	ccm_stop();	
+	ccm_stop();
 }
 
 
 sub getTasksnReadme()
-{	
+{
 	open SYNOP,"+>$Bin/synopsis.txt";
 	open SUMM,"+> $Bin/summary.txt";
 	open CRRESOLV, "+> $Bin/crresolv.txt";
 	open TASKINF,"+>$Bin/taskinfo.txt";
-	
+
 	foreach my $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
 		$task_number=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		$task_number=~ s/^\s+|\s+$//g;
-		push(@tasks,$task_number);		
+		push(@tasks,$task_number);
 		#get mrnumber, synopsis and summary
 		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
 		($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
@@ -114,7 +114,7 @@ sub getTasksnReadme()
 		$resolver=~ s/^\s+|\s+$//g;
 		$task_synopsis=~ s/^\s+|\s+$//g;
 		$task_resolver=~ s/^\s+|\s+$//g;
-		$priority=~ s/^\s+|\s+$//g;		
+		$priority=~ s/^\s+|\s+$//g;
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 		print SYNOP "CR$cr $synopsis\n";
@@ -128,7 +128,7 @@ sub getTasksnReadme()
     	$patch_number=`$CCM query -u -f %patch_number`;
     	$patch_readme=`$CCM query -u -f %patch_readme`;
     	$patch_number=~ s/^\s+|\s+$//g;
-    	
+
     	open README, "+> $Bin/summary_readme.txt";
     	if($patch_readme =~ /N\/A/)
     	{
@@ -139,21 +139,21 @@ sub getTasksnReadme()
        		open OP1,"+> $Bin/$patch_number\_README.txt";
     		print OP1 $patch_readme;
     		close OP1;
-    		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`; 
+    		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
     		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTS' | sed '/^\$/d'`;
     		#print "Binary file list is: @PatchFiles \n";
-        	#chomp(@PatchFiles);  
+        	#chomp(@PatchFiles);
         	push(@patchbinarylist,@PatchFiles);
         	@sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | sed '/^\$/d'`;
-        	print README "$cr#@sumreadme";    	
+        	print README "$cr#@sumreadme";
     	}
 	}
 	open OP, "+> $Bin/patchbinarylist.txt";
 	print OP @patchbinarylist;
 	close OP;
-	
+
 	close README;
-	
+
 	close SYNOP;
 	close SUMM;
 	close CRRESOLV;
@@ -163,7 +163,7 @@ sub getTasksnReadme()
 	@formattsks=join("\n", map { 'PROV_' . $_ } @tasks);
 	open OP,"+>$Bin/formattsks.txt";
 	print OP @formattsks;
-	close OP;	
+	close OP;
 }
 sub createReadme()
 {
@@ -188,10 +188,10 @@ sub createReadme()
 	open OP, "< $Bin/patchbinarylist.txt";
 	@binarylist=<OP>;
 	close OP;
-	
-	
+
+
 	$mrnumber=~ s/^\s+|\s+$//g;
-	
+
 	open  FILE, "+> $Bin/tertio-$mrnumber\_README.txt";
 	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
@@ -200,14 +200,14 @@ sub createReadme()
 	print FILE "AFFECTS:@binarylist";
 	print FILE "TO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\nPRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n\nSUMMARY OF CHANGES:\nThe following changes have been delivered in this Maintenance Release.\n@summary ISSUES: None\n";
 	close FILE;
-	
+
 }
 sub createMail()
 {
 	open (my $FILE, "+> $Bin/releasenotes.html");
 	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
-	print $FILE "<table width=\"100%\" border=\"1\"<br/>"; 
-	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>"; 
+	print $FILE "<table width=\"100%\" border=\"1\"<br/>";
+	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Tertio</td></tr><br/>";
 	print $FILE "<tr><b><td>Release</td></b><td colspan=\'2\'>$mrnumber</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Number</td></b><td colspan=\'2\'>$build_number</td></tr><br/>";
 	print $FILE "<tr><b><td>Release Type</td></b><td colspan=\'2\'>Maintenance Release</td></tr><br/>";
@@ -244,31 +244,31 @@ sub createMail()
 		print $FILE "<tr><b><td>$task_number</td><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
 	}
 	print $FILE "</table><br/>";
-	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";	
+	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";
 	close $FILE;
 }
 sub reconfigure_devproject()
-{	
+{
 	$ccmworkarea=`$CCM wa -show -recurse $devprojectname`;
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	$workarea=~ s/^\s+|\s+$//g;
 	$folder=~ s/^\s+|\s+$//g;
-	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>$Bin/task_addition_$devprojectname.log`;	
+	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>$Bin/task_addition_$devprojectname.log`;
 	umask 002;
 	$devprojectname=~ s/^\s+|\s+$//g;
-	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>$Bin/reconfigure_devproject_$devprojectname.log`;	
+	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>$Bin/reconfigure_devproject_$devprojectname.log`;
 }
 
 sub reconfigure_dev_proj_and_compile()
-{	
+{
 	$ccmworkarea=`$CCM wa -show -recurse $devprojectname`;
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	$workarea=~ s/^\s+|\s+$//g;
-	$folder=~ s/^\s+|\s+$//g;	
-	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>$Bin/task_addition_$devprojectname.log`;	
+	$folder=~ s/^\s+|\s+$//g;
+	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>$Bin/task_addition_$devprojectname.log`;
 	umask 002;
 	$devprojectname=~ s/^\s+|\s+$//g;
-	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>$Bin/reconfigure_devproject_$devprojectname.log`;	
+	`$CCM reconfigure -rs -r -p $devprojectname 2>&1 1>$Bin/reconfigure_devproject_$devprojectname.log`;
 	if($devprojectname =~ /Java/)
 	{
 		chdir "$workarea/Provident_Java";
@@ -277,22 +277,18 @@ sub reconfigure_dev_proj_and_compile()
 	{
 		chdir "$workarea/Provident_Dev";
 	}
-	`/usr/bin/gmake clean all 2>&1 1>/$Bin/gmake_$devprojectname.log`;			
+	`/usr/bin/gmake clean all 2>&1 1>/$Bin/gmake_$devprojectname.log`;
 }
-
-
-
-
 sub pkg()
 {
 	rmtree($destdir);
 	open OP, "< $binarylist";
 	@file_list=<OP>;
 	close OP;
-	my %deliveryhash;  
+	my %deliveryhash;
 	$delroot="$dbbmloc/$devprojectname/Provident_Dev/";
   		foreach $file(@file_list)
-  		{  	
+  		{
   			my @del=split(/\s+/,$file);
   			if($del[3] eq ".")
   			{
@@ -301,21 +297,21 @@ sub pkg()
   			else
   			{
   				$deliveryhash{"$delroot/$del[1]"}=$del[3];
-  			}  			  	
-  		}  		
-  		
+  			}
+  		}
+
 		foreach $key(keys %deliveryhash)
   		{
 	  		$dirname=dirname($deliveryhash{$key});
   			mkpath("$destdir/$dirname");
-  			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!"); 	
+  			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!");
   		}
   		chdir($destdir);
   		copy("$Bin/tertio-$mrnumber\_README.txt",$destdir);
-  	
+
   			$hostos="rhel6";
   			$hostplatform="RHEL6";
-  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostos\.tar; gzip tertio-$mrnumber-$hostos\.tar;`;  			
+  			`find ./ -type f | xargs tar cvf tertio-$mrnumber-$hostos\.tar; gzip tertio-$mrnumber-$hostos\.tar;`;
   			copy("tertio-$mrnumber-$hostos\.tar\.gz","/data/releases/tertio/7.7.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   			push(@location,"/data/releases/tertio/7.7.0/patches/$hostplatform/NotTested/tertio-$mrnumber-$hostos\_$dtformat\.tar\.gz");
   	  		`zip -r $Bin/logs.zip $Bin/reconfigure_devproject_*.log`;
