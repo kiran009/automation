@@ -22,7 +22,7 @@ if($hostname =~ /pesthp2/)
 {
 	$ENV{'PATH'}="/usr/contrib/bin:$ENV{'PATH'}";
 }
-my $result=GetOptions("coreproject=s"=>\$coreproject,"buildnumber=s"=>\$build_number);
+my $result=GetOptions("coreproject=s"=>\$coreproject);
 if(!$result)
 {
 	print "You must supply arguments to the script\n";
@@ -79,6 +79,9 @@ sub createTar()
 	close OP;
 	open LOCATION,">>$Bin/location.txt";
 	$coreproject=~ s/^\s+|\s+$//g;
+	open BN,"<$Bin/build_number.txt";
+	$build_number=<BN>;
+	close BN;
   if($coreproject =~ /linAS5/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
