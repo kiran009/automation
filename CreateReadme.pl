@@ -211,7 +211,7 @@ sub createReadme()
 	print "Patch binary list is: @binarylist\n";
 	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @binarylist};
 	print "Uniq Binlist is: @uniqbinlist\n";
-	print FILE "$deliveryname\n";
+	print FILE "\n$deliveryname\n";
 	print FILE "#"x80;
 	print FILE "\nTASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
