@@ -92,7 +92,7 @@ sub listfolderTasks()
 	@tasks_762a=`$CCM folder -show tasks '$f_762a' -u -f "%task_number"`;
 	@tasks_762c=`$CCM folder -show tasks '$f_762c' -u -f "%task_number"`;
 	@tasks_763a=`$CCM folder -show tasks '$f_763a' -u -f "%task_number"`;
-	@tasks_763b=`$CCM folder -show tasks '$f_763c' -u -f "%task_number"`;
+	@tasks_763b=`$CCM folder -show tasks '$f_763b' -u -f "%task_number"`;
 
 	print "Tasks in 7.6.2.a are => @tasks_762a \n\n";
 	print "Tasks in 7.6.2.c are => @tasks_762c \n\n";
@@ -144,12 +144,12 @@ sub listfolderTasks()
 	print FILE "PRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n";
 	undef @tasks;
 	open SYNOP,"+>$Bin/7.6.3_synopsis.txt";
-	open SUMM,"+>$Bin/7.6.3_summary_readme.txt";
+;	open SUMM,"+>$Bin/7.6.3_summary_readme.txt";
 	open CRRESOLV, "+>$Bin/7.6.3_crresolv.txt";
 	open TASKINF,"+>$Bin/7.6.3_taskinfo.txt";
 	open PATCHBIN, "+>$Bin/7.6.3_patchbinarylist.txt";
 	open FORMATTASKS,"+>$Bin/7.6.3_formattsks.txt";
-	push(@uniq763a,@uniq763c);
+	push(@uniq763a,@uniq763b);
 	getTasksnReadme(@uniq763a);
 	close SUMM;
 	close SYNOP;
