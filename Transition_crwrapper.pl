@@ -12,30 +12,33 @@ use lib "$Bin/../lib";
 use Sys::Hostname;
 
 #/************ Setting Environment Variables *******************/
-my $database="/data/ccmdb/provident/";
-my $dbbmloc="/data/ccmbm/provident/";
-my $binarylist="$Bin/fileplacement.fp";
-my $javabinarylist="$Bin/javabinaries.fp";
 my $hostname = hostname;
-my $hostplatform;
-my @crresolv;
-my $cr;
+my $crnumber;
+my $result=GetOptions("crlist=s"=>\$crlist);
+if(!$result)
+{
+	print "Please provide the CRs\n";
+	exit;
+}
+if(!$crlist)
+{
+	print "Please provide the CRlist\n";
+	exit;
+}
+@crlist=split(/,/,$crlist);
 sub main()
 {
 	transition_cr();
 }
 sub transition_cr()
 {
-	open OP,"<$Bin/crresolv.txt";
-	@crresolv=<OP>;
-	close OP;
-	foreach (@crresolv)
+	foreach (@crlist)
 	{
-		($crnumber)=split(/#/,$_);
+		($crnumber)=$_;
 		print "CR number is: $crnumber \n";
 		$crnumber =~ s/^\s+|\s+$//g;
 		my	@crtransition_log=`perl ModifyCRTransistion.pl $crnumber Patch_test`;
-		print "CR Transition log: @crtransition_log \n";		 
+		print "CR Transition log: @crtransition_log \n";
 	}
 }
 main();
