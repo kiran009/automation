@@ -44,8 +44,12 @@ sub main()
 
 sub fetchdevinfo()
 {
+		open TASKDETAIL, "+> $Bin/taskobjects.txt";
+		print TASKDETAIL "7.6.3";
 		fetchinfo('7.6.3');
+		print TASKDETAIL "7.6.2";
 		fetchinfo('7.6.2');
+		close TASKDETAIL;
 		#my @taskinfo=`$CCM rp -show all_tasks $devprojectname:project:1`;
 		#print "Task information of the project: @taskinfo\n";
 		#my @objectlist=`$CCM query "(is_member_of('$devprojectname'))"`;
@@ -59,8 +63,12 @@ sub fetchinfo()
 	close FETCH;
 	foreach(@tasklist)
 	{
-		my ($tasknumber,@temp)=split(/#/,$_); 
-		
+		my ($tasknumber,@temp)=split(/#/,$_);
+		my @objlist=`$CCM task -sh obj $tasknumber`;
+		print TASKDETAIL "Objects in TASK: $tasknumber are: @objlist \n";
+		print TASKDETAIL "************"
+	}
+}
 
 sub start_ccm()
 {
