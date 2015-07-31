@@ -14,7 +14,7 @@ use Sys::Hostname;
 #/************ Setting Environment Variables *******************/
 my $database="/data/ccmdb/provident/";
 my $dbbmloc="/data/ccmbm/provident/";
-my $mailto="kiran.daadhi\@evolving.com";
+my $mailto="kiran.daadhi\@evolving.com srikanth.bhaskar\@evolving.com";
 $ENV{'CCM_HOME'}="/opt/ccm71";
 $ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
 $CCM="$ENV{'CCM_HOME'}/bin/ccm";
@@ -40,7 +40,7 @@ sub main()
 		start_ccm();
 		fetchdevinfo();
 		ccm_stop();
-		`zip -r $devprojectname\.zip gmake_$devprojectname\*log`;
+		`zip -r $devprojectname\.zip gmake_$devprojectname\*log taskobjects.txt`;
 		send_email("Developer Information on project $devprojectname","$devprojectname\.zip");
 }
 sub send_email()
