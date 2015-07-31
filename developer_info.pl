@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.7 Build Script
+# Tertio 7.6 Developer information
 use Cwd;
 use File::Path;
 use File::Find;
@@ -14,7 +14,7 @@ use Sys::Hostname;
 #/************ Setting Environment Variables *******************/
 my $database="/data/ccmdb/provident/";
 my $dbbmloc="/data/ccmbm/provident/";
-
+my $mailto="kiran.daadhi\@evolving.com";
 $ENV{'CCM_HOME'}="/opt/ccm71";
 $ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
 $CCM="$ENV{'CCM_HOME'}/bin/ccm";
@@ -40,20 +40,23 @@ sub main()
 		start_ccm();
 		fetchdevinfo();
 		ccm_stop();
+		`zip -r $devprojectname\.zip gmake_$devprojectname\*log reconfigure_$devprojectname\*log`;
+		send_email('Developer Information on project $devprojectname','$devprojectname\.zip');
 }
-
+sub send_email()
+{
+	($subject,$attachment)=@_;
+	print "\$attachment value is: $attachment \n";
+	system("/usr/bin/mutt -s '$subject' $mailto -a $attachment < /dev/null");
+}
 sub fetchdevinfo()
 {
 		open TASKDETAIL, "+> $Bin/taskobjects.txt";
-		print TASKDETAIL "7.6.3\n";
+		print TASKDETAIL "7.6.3";
 		fetchinfo('7.6.3');
-		print TASKDETAIL "7.6.2\n";
+		print TASKDETAIL "7.6.2";
 		fetchinfo('7.6.2');
 		close TASKDETAIL;
-		#my @taskinfo=`$CCM rp -show all_tasks $devprojectname:project:1`;
-		#print "Task information of the project: @taskinfo\n";
-		#my @objectlist=`$CCM query "(is_member_of('$devprojectname'))"`;
-		#print "Object information: @objectlist\n";
 }
 sub fetchinfo()
 {
@@ -65,8 +68,8 @@ sub fetchinfo()
 	{
 		my ($tasknumber,@temp)=split(/#/,$_);
 		my @objlist=`$CCM task -sh obj $tasknumber`;
-		print TASKDETAIL "\nObjects in TASK: $tasknumber are: @objlist \n";
-		print TASKDETAIL "************\n";
+		print TASKDETAIL "Objects in TASK: $tasknumber are:\n @objlist \n";
+		print TASKDETAIL "************"
 	}
 }
 
