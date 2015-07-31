@@ -15,6 +15,10 @@ use Sys::Hostname;
 my $database="/data/ccmdb/provident/";
 my $dbbmloc="/data/ccmbm/provident/";
 
+$ENV{'CCM_HOME'}="/opt/ccm71";
+$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
+$CCM="$ENV{'CCM_HOME'}/bin/ccm";
+
 my $hostname = hostname;
 my $hostplatform;
 my $gmake;
