@@ -41,7 +41,7 @@ sub main()
 		fetchdevinfo();
 		ccm_stop();
 		`zip -r $devprojectname\.zip gmake_$devprojectname\*log`;
-		send_email('Developer Information on project $devprojectname','$devprojectname\.zip');
+		send_email("Developer Information on project $devprojectname","$devprojectname\.zip");
 }
 sub send_email()
 {
