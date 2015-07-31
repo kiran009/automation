@@ -44,11 +44,23 @@ sub main()
 
 sub fetchdevinfo()
 {
-		my @taskinfo=`$CCM rp -show all_tasks $devprojectname:project:1`;
-		print "Task information of the project: @taskinfo\n";
-		my @objectlist=`$CCM query "(is_member_of('$devprojectname'))"`;
-		print "Object information: @objectlist\n";
+		fetchinfo('7.6.3');
+		fetchinfo('7.6.2');
+		#my @taskinfo=`$CCM rp -show all_tasks $devprojectname:project:1`;
+		#print "Task information of the project: @taskinfo\n";
+		#my @objectlist=`$CCM query "(is_member_of('$devprojectname'))"`;
+		#print "Object information: @objectlist\n";
 }
+sub fetchinfo()
+{
+	my($release)=@_;
+	open FETCH,"<$release\_taskinfo.txt";
+	my @tasklist=<FETCH>;
+	close FETCH;
+	foreach(@tasklist)
+	{
+		my ($tasknumber,@temp)=split(/#/,$_); 
+		
 
 sub start_ccm()
 {
