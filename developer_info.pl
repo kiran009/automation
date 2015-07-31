@@ -45,9 +45,9 @@ sub main()
 sub fetchdevinfo()
 {
 		open TASKDETAIL, "+> $Bin/taskobjects.txt";
-		print TASKDETAIL "7.6.3";
+		print TASKDETAIL "7.6.3\n";
 		fetchinfo('7.6.3');
-		print TASKDETAIL "7.6.2";
+		print TASKDETAIL "7.6.2\n";
 		fetchinfo('7.6.2');
 		close TASKDETAIL;
 		#my @taskinfo=`$CCM rp -show all_tasks $devprojectname:project:1`;
@@ -65,8 +65,8 @@ sub fetchinfo()
 	{
 		my ($tasknumber,@temp)=split(/#/,$_);
 		my @objlist=`$CCM task -sh obj $tasknumber`;
-		print TASKDETAIL "Objects in TASK: $tasknumber are: @objlist \n";
-		print TASKDETAIL "************"
+		print TASKDETAIL "\nObjects in TASK: $tasknumber are: @objlist \n";
+		print TASKDETAIL "************\n";
 	}
 }
 
