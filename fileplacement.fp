@@ -14,6 +14,7 @@ SRC admin/readconfig DEST bin/readconfig PERM 0755
 SRC stg/stg DEST bin/stg PERM 0755
 SRC sto/sto DEST bin/sto PERM 0755
 SRC stp/stp DEST bin/stp PERM 0755
+SRC conf/tertio.mib DEST . PERM 0644
 SRC psdk/TclProvisioningAgent DEST bin/TclProvisioningAgent PERM 0755
 SRC iagent/TimeBasedScheduling DEST bin/TimeBasedScheduling PERM 0755
 SRC conf/descriptors/admin.properties DEST . PERM 0444
