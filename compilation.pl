@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.7 Build Script
+# DSA Build Script
 use Cwd;
 use File::Path;
 use File::Find;
@@ -52,41 +52,27 @@ if(!$db)
 $devprojectname=~ s/^\s+|\s+$//g;
 $db=~ s/^\s+|\s+$//g;
 my $database="/data/ccmdb/$db/";
-my $dbbmloc="/u/kkdaadhi/ccm_wa/$db/";
+#my $dbbmloc="/u/kkdaadhi/ccm_wa/$db/";
+my $dbbmloc="/data/ccmbm/$db/";
 my $workarea;
 if($database =~ /dsa/)
 {
-	$workarea="$dbbmloc/$devprojectname/DSA_FUR_Dev";
-}
-elsif($database =~ /provident/)
-{
-	$workarea="$dbbmloc/$devprojectname/Provident_Dev";
+	$workarea="$dbbmloc/$devprojectname/DSA_MS_Dev";
 }
 umask 002;
 # /* Global Environment Variables ******* /
 sub main()
 {
-		if($hostname !~ /pesthp2/)
-		{
-			start_ccm();
-		}
+		start_ccm();
 		compile();
-		if($hostname !~ /pesthp2/)
-		{
-			ccm_stop();
-		}
+		ccm_stop();
 }
 
 sub compile()
 {
 	chdir "$workarea";
 	umask 002;
-	`$gmake clobber all 2>&1 1>$Bin/gmake_$devprojectname\_$hostplatform.log`;
-	open OP, "< $Bin/gmake_$devprojectname\_$hostplatform.log";
-	my @op=<OP>;
-	close OP;
-	print @op;
-	#`$gmake clean all`;
+	`$gmake clean all 2>&1 1>$Bin/gmake_$devprojectname\_$hostplatform.log`;
 }
 
 sub start_ccm()

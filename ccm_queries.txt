@@ -28,18 +28,20 @@ ccm create -t project 'Provident_Dev-patch_linAS5_7.6.2' -c 'Project Provident_D
 ccm query "(is_member_of('TMNI_NI~i4.0_int:project:dennt#1')"
 
 
-ccm query -type task "is_associated_task_of('4610:problem:probtrac')" 
- 
+ccm query -type task "is_associated_task_of('4610:problem:probtrac')"
 
- 
+
+
  ccm query "is_child_cr_of(cvtype='problem' and problem_number='126')"
- 
+
  ccm query "has_child_cr(cvtype='problem' and problem_number='126')"
- 
+
  ccm query "is_associated_task_of(cvtype='problem' and problem_number='4601')"
- 
- 
- ccm query "is_associated_object_of(cvtype='problem' and problem_number='3975')"    
- 
- 
- ccm query "is_associated_object_of('10207:task:probtrac')"  
+
+
+ ccm query "is_associated_object_of(cvtype='problem' and problem_number='3975')"
+
+
+ ccm query "is_associated_object_of('10207:task:probtrac')"
+
+ccm task -sh obj <tasknumber>

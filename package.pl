@@ -66,15 +66,22 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
+<<<<<<< HEAD
 my $dsadest="/u/kkdaadhi/DSA_Dest";
 #my $dsadest="/data/releases/dsa/7.6.0/patches";
+=======
+my $tertiodest="/u/kkdaadhi/Tertio_Dest";
+#my $tertiodest="/data/releases/tertio/7.6.0/patches";
+>>>>>>> master
 # /* Global Environment Variables ******* /
+my $f_762a='1409';
+my $f_762c='1413';
+my $f_763a='1431';
 sub main()
 {
-		createReadme();
 		pkg();
-		#createMail();
 }
+<<<<<<< HEAD
 sub createReadme()
 {
 	open OP,"<$Bin/mrnumber.txt";
@@ -158,11 +165,15 @@ sub createMail()
 	close $FILE;
 }
 
+=======
+>>>>>>> master
 sub pkg()
 {
+	umask 002;
 	open LOCATION,">>$Bin/location.txt";
 	foreach $prj(@projectlist)
 	{
+<<<<<<< HEAD
 		rmtree($destdir);
 		open OP, "< $binarylist";
   		@file_list=<OP>;
@@ -248,6 +259,47 @@ sub pkg()
   		}
   		`tar -cvf $Bin/logs.tar $Bin/reconfigure_devproject_*.log`;
   		close LOCATION;
+=======
+  	if($prj =~ /linAS5/)
+  	{
+			$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
+  		chdir($destdir);
+  		copy("$Bin/tertio_7.6_README.txt",$destdir);
+  			$hostos="rhel5";
+  			$hostplatform="linAS5";
+  			`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostos-build$build_number\.tar;gzip tertio-$mrnumber-$hostos-build$build_number\.tar;`;
+  			print "tertio-$mrnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
+  			copy("tertio-$mrnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
+  			print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
+		}
+		elsif($prj =~ /sol10/)
+		{
+			$destdir="/u/kkdaadhi/Tertio_Deliverable/sol10";
+  		chdir($destdir);
+  		copy("$Bin/tertio_7.6_README.txt",$destdir);
+  			$hostplatform="sol10";
+  			`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  			print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  			print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+		}
+		elsif($prj =~ /hpiav3/)
+		{
+			$destdir="/u/kkdaadhi/Tertio_Deliverable/hpiav3";
+  		chdir($destdir);
+  		copy("$Bin/tertio_7.6_README.txt",$destdir);
+  			$hostplatform="hpiav3";
+  			`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; /usr/contrib/bin/gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  			print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  			copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  			print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+		}
+  	`tar -cvf $Bin/logs.tar $Bin/reconfigure_devproject_*.log`;
+  	close LOCATION;
+>>>>>>> master
   	}
 }
 main();

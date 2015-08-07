@@ -33,4 +33,28 @@ cd 7.7.0_build11
 tar -xf /data/ccmbm/provident/Provident_Delivery-RHEL6_7.7.0/Provident_Delivery/build/adk.tar
 mv tertio-adk-7.7.0/* ./
 rm -rf tertio-adk-7.7.0
+<<<<<<< HEAD
 Adding extra comment
+=======
+
+
+# DSA
+
+fur 4.0
+linux platform
+add folder
+add tasks
+
+Platforms:
+RHEL5
+
+1. Dev project
+2. Reconfigure
+3. cd $devproject/DSA_FUR_Dev
+4. gmake clean all
+
+1. Go to Delivery project
+2. Reconfigure
+3. Parse the fileplacement
+4. tar cvf <tar name> 
+>>>>>>> master
