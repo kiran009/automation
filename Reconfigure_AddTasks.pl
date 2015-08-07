@@ -189,6 +189,7 @@ sub getTasksnReadme()
 	print OP @formattsks;
 	close OP;
 }
+}
 
 sub reconfigure_devproject()
 {
