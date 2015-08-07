@@ -198,7 +198,7 @@ sub reconfigure_devproject()
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	$workarea=~ s/^\s+|\s+$//g;
 	$folder=~ s/^\s+|\s+$//g;
-	print "Folder name is: $folder \n";
+	print "Tasklist is: $tasklist and Foldername is: $folder\n";
 	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>$Bin/task_addition_$devprojectname.log`;
 	umask 002;
 	$devprojectname=~ s/^\s+|\s+$//g;
