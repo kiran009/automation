@@ -46,6 +46,7 @@ if(!$delprojectname)
 if(!$folder)
 {
 	print "No folder is mentioned to add the TASKS corresponding to the above CRs, proceeding with existing one's\n";
+	exit;
 }
 if(!$crs)
 {
@@ -197,6 +198,7 @@ sub reconfigure_devproject()
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	$workarea=~ s/^\s+|\s+$//g;
 	$folder=~ s/^\s+|\s+$//g;
+	print "Folder name is: $folder \n";
 	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>$Bin/task_addition_$devprojectname.log`;
 	umask 002;
 	$devprojectname=~ s/^\s+|\s+$//g;
