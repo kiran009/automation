@@ -106,8 +106,8 @@ sub getTasksnReadme()
 		foreach $task_number(@task_numbers)
 		{
 			$task_number=~ s/^\s+|\s+$//g;
-			print "TASKNUMBER is: @task_numbers \n";
-			push(@tasks,@task_numbers);
+			print "TASKNUMBER is: $task_number \n";
+			push(@tasks,$task_number);
 		}
 		#get mrnumber, synopsis and other fields
 		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
