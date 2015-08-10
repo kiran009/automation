@@ -67,12 +67,9 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
-my $tertiodest="/u/kkdaadhi/Tertio_Dest";
-#my $tertiodest="/data/releases/tertio/7.6.0/patches";
+#my $tertiodest="/u/kkdaadhi/Tertio_Dest";
+my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
-my $f_762a='1409';
-my $f_762c='1413';
-my $f_763a='1431';
 sub main()
 {
 		pkg();
