@@ -1,0 +1,2 @@
+-Dresume=false -DdryRun=true release:prepare
+-Dresume=false release:prepare release:perform

@@ -1,0 +1,129 @@
+Maintenance Release : Tertio 7.6.3 build 10
+
+Created: 27 Jul 2015
+
+
+################################################################################
+Following details about the maintenance release: 7.6.3
+################################################################################
+TASKS:PROV_10763,PROV_10794,PROV_10795,PROV_10837,PROV_10860,PROV_10868
+
+FIXES:CR4560 MAINIST00000007 - New windows started off screen
+ CR4589 UI Operation > System Uptime screen problem - ORA-00904 errors
+ CR4348 MAINPEG00000510 - SASDK not handling DB Exceptions.
+ CR3975 MSSA 1.3.1 : STG core dump when the Rapid SO timer expired
+ CR4569 Information required on EPT response hadling when EPT retried and duplicate
+ CR4651 Compilation flag needed to enable LEVEL 5 trace from application
+
+
+AFFECTS: Tertio 7.6.0
+$PROVHOME/lib/ProvUI.jar
+ $PROVHOME/etc/7.6.3_postinstall.ksh
+ $PROVHOME/etc/7.6.3_postuninstall.ksh 
+ $PROVHOME/etc/7.6.3_preinstall.ksh 
+ $PROVHOME/etc/7.6.3_preuninstall.ksh
+ $PROVHOME/lib/libsasdk.so 
+ $PROVHOME/lib/libsasdk.so.1
+ $PROVHOME/bin/stg
+ $PROVHOME/lib/libpsdk.so
+ $PROVHOME/lib/libpsdk.so.1
+ $PROVHOME/lib/libprovdb.so
+ $PROVHOME/lib/libprovdb.so.1
+
+
+SUMMARY OF CHANGES: 7.6.3
+The following changes have been delivered in this Maintenance Release.
+CR4560 - This patch fixes a new GUI window starting issue.
+ Prior to this patch the TSA GUI window  couldn’t be re-opened in the primary screen  when moved from the primary screen to secondary screen and closed, and the secondary screen was disconnected.
+ Now this is fixed.
+ 
+ CR4589 - This patch fixes System Uptime GUI issue.
+ Prior to this patch,  the System Uptime GUI couldn’t be loded and it was displaying ORA-00904 : invalid identifier exception , due to the invalid column name "comment" of  "UPTIME" table. Now this is fixed.
+ 
+ CR4348 - This patch fixes a problem where SASDK does not handle database exceptions. This has been fixed such that when an exception occurs while inserting the appkey values into the database, the exception is handled with an appropriate message.
+ 
+ CR3975 - This patch fixes an issue where STG re-spawns during the Rapid SO time out.
+ 
+ CR4569 - This patch provides additional fix to issue fixed in 7.6 patch 9923 by including the EPT response data in the EPT response read from the database.
+ 
+
+################################################################################
+TASKS:PROV_10533,PROV_10612,PROV_10724,PROV_10682,PROV_10722,PROV_10686,PROV_10690,PROV_10713,PROV_10721,PROV_10725,PROV_10726,PROV_10728,PROV_10737,PROV_10755,PROV_10771,PROV_10777,PROV_10778,PROV_10779
+
+FIXES:CR4291 OBTMBDS00000119 - STP is not sending the response to STO after killing STO.<OBTMBDS00000119>
+ CR4493 Req 238 Email and script alarms
+ CR4500 Patch Regression: Once CAF went down, All TSA DB operation fail
+ CR4505 MNETAC000000063 - Incorrect SC model used for an in-progress service order.
+ CR4521 VMAC00000000116 - Information required on why core file generated
+ CR4466 MTNNAC000000147 - STP stopped accepting new SOID after throwing SoTransaction::dbInsert, code -1: ORA-00001 error.
+ CR4388 VMAC00000000100 - PEG task re. TOME api call
+ CR4491 SIEMAC000000040 - CLI commans hanged - Too many open threads
+ CR4575 Resolving the Conflicts in tertio 7.6.0 for PAgentStatus.h
+ CR4179 SWISAC000000147 - Need to update Tertio Client Java WebStart JVM to 2 MB.
+ CR4596 Some config missing for req 649
+ CR4601 Source Links Repeatedly Bouncing on TSA 7.6 DA
+ CR4606 Req 649 should not be in 7.6
+ CR4609 VMAC00000000091 - Description on "Disconnect Retry Limit" parameter needs to be changed
+
+
+AFFECTS: Tertio 7.6.0
+$PROVHOME/bin/jip
+ $PROVHOME/lib/libprovdb.so
+ $PROVHOME/lib/libprovdb.so.1
+ $PROVHOME/bin/mwerrhandler
+ $PROVHOME/lib/libtome.so
+ $PROVHOME/lib/ProvAPI.jar
+ $PROVHOME/etc/ProvError
+ $PROVHOME/etc/10722_postinstall.ksh
+ $PROVHOME/etc/install
+ $PROVHOME/lib/ProvServer.jar
+ $PROVHOME/bin/stp
+ $PROVHOME/lib/libgpsutils.so
+ $PROVHOME/lib/libpsdk.so
+ $PROVHOME/lib/libpsdk.so.1
+ $PROVHOME/lib/libtome_mon.so
+ $PROVHOME/lib/libtome_as.so
+ $PROVHOME/lib/libtome_tcl.so
+ $PROVHOME/lib/libtome_ev.so
+ $PROVHOME/lib/libtomecpp.so
+ $PROVHOME/lib/libtomecppas.so
+
+
+SUMMARY OF CHANGES: 7.6.2
+The following changes have been delivered in this Maintenance Release.
+CR4291 - This patch fixes an issue, where  the SO responses from STP are not delivered to STO due to loss of connection.
+ It has been fixed such that , during housekeeping, the undelivered SO responses are recovered and sent to STO.
+ It also includes fix for MwLink error during Housekeeping.
+ Prior this fix, if Housekeeping was taking longer than the configured heartbeat timeout, links to JIP(which does Housekeeping) process is closed. This leads to Mwlink error messages.
+ 
+ CR4493 - This patch enhances Tertio to allow selected error messages to be send as alarms via email or script.
+ 
+ CR4500 - This patch fixes an issue in Tertio command line operation when CAF is down.
+ When using CAF authentication, Tertio command line operations fail if CAF is unavailable. 
+ Now, it is possible to stop the Tertio system if CAF is down.
+ 
+ CR4505 - This patch fixes an issue of Service Order failure due to Incorrect Service Composer model being used for an In-Progress Service Order.
+ Prior to this fix , the In-progress service order referred the latest generation in which service model was updated , instead of  the generation in which SO was submitted.
+ Now this is fixed.
+ 
+ CR4521 - This patch fixes an issue in Provisioning agents.
+ Prior to this patch, the TCL Provisioning agents respawn intermittently due to memory corruption of link between Agent and ERP processes, during Configuration re-read operation. Now this is fixed
+ 
+ CR4466 - This patch fixes an issue STP was not validating whether the SO was owned by another STP when Duplicate Key exception occurs.
+ 
+ CR4388 - This patch fixes the memory leak issue while reading the configuration item that is not available.
+ 
+ CR4491 - This patch fixes thread leak issue in ProvServer process.
+ Prior to this patch while executing SYSStatus command, if CCAdmin process was unresponsive, there would be a thread leak in ProvServers for every SYSStatus command request. 
+ Due to this the ProvServer was unable  to create new thread  and process any new CLI request. Now this is fixed.
+ 
+ CR4575 - This patch resolves the conflicts in tertio 7.6.0 for PAgentStatus.h file
+ 
+
+################################################################################
+TO INSTALL AND UNINSTALL:
+Refer Patch Release Notes.
+
+PRE-REQUISITE : 7.6.0
+SUPERSEDED : 7.6.2
+ISSUES: None

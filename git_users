@@ -1,0 +1,16 @@
+Facebook: Mercurial (some use GIT through a bridge;
+gmane.org
+according to Joshua Redstone GIT is fairly widely used as well)
+Yahoo!: SVN and Git
+Zynga: SVN and GIT
+Quora: Git
+Twitter: Git
+eBay: IBM Clear Case, Git
+Salesforce: Perforce and Git
+VMware: Perforce
+NetApp: Perforce
+SAP: Perforce
+Google: Perforce-like (with custom wrapper "g4"), git (Chrome, Android)
+Amazon: Perforce is the most widely used, although Git recently became the recommended source control system
+Apple: each team may choose which tool to use; SVN, Mercurial, GIT, and even CVS are used
+Microsoft: Perforce-like (Source Depot), Git, TFS

@@ -19,7 +19,7 @@ sub initPlugin
 sub Methods
 {
 	my @methods = ('originalValue', 'originalValueEmail');
-	
+
 	return @methods;
 }
 
@@ -33,7 +33,7 @@ sub Methods
 
 sub originalValue
 {
-	
+
 	# Parse input parameters
 	my $attr_name = shift;
 	my $no_match_val  = shift;
@@ -42,7 +42,7 @@ sub originalValue
 	# Load the current log
 	my $currentLog = $local_dict->{"transition_log"};
 	# Parse backwards in the log for the attribute
-	
+
 	my @log = split /\n/, $currentLog;
 
 	for (my $i = (scalar(@log) - 1); $i >= 0; $i-- )
@@ -54,8 +54,8 @@ sub originalValue
             last;
         }
 	}
-	
-	return $value;    
+
+	return $value;
 }
 
 sub originalValueEmail
@@ -77,4 +77,3 @@ sub originalValueEmail
 
 
 1;
-
