@@ -85,7 +85,7 @@ sub main()
 {
 		start_ccm();
 		getTasksnReadme();
-		reconfigure_devproject();
+		reconfigure_project();
 		ccm_stop();
 }
 sub getTasksnReadme()
@@ -179,7 +179,7 @@ sub reconfigure_project()
 	print "Tasklist is: $tasklist and Foldername is: $folder\n";
 	`$CCM folder -modify -add_task $tasklist $folder 2>&1 1>$Bin/task_addition_$projectname.log`;
 	umask 002;
-	$devprojectname=~ s/^\s+|\s+$//g;
+	$projectname=~ s/^\s+|\s+$//g;
 	`$CCM reconfigure -rs -r -p $projectname 2>&1 1>$Bin/reconfigure_$projectname.log`;
 }
 sub start_ccm()
