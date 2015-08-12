@@ -107,7 +107,7 @@ sub constructReadme()
 			print OP "PRE-REQUISITE PATCHES:\nPATCHES SUPERSEDED BY THIS PATCH:\n";
 			print OP "SUMMARY OF CHANGES AND AREAS AFFECTED:@consummary\nISSUES: None";
 			close OP;
-			`./updatePatchREADME.ksh XV DSA_$patchnumber\_README.txt`;
+			`./updatePatchREADME.ksh XV $patchnumber\_README.txt`;
 			#move("DSA_$patchnumber\_README.txt","$patchnumber\_README.txt");
 }
 sub getTasksnReadme()
