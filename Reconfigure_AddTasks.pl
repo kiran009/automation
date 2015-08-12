@@ -98,7 +98,7 @@ sub constructReadme()
 			open OP,"+> patchnumber.txt";
 			print OP $patch_number;
 			close OP;
-			open OP,"+>DSA_$patchnumber\_README.txt";
+			open OP,"+>$patchnumber\_README.txt";
 			print OP "CREATED:\n";
 			print OP "TASKS:$tasklist\n";
 			print OP "@confixes\n";
@@ -177,8 +177,8 @@ sub getTasksnReadme()
 		print OP @confixes;
 		close OP;
 		@sortedtasks = sort {$b <=> $a} @tasks;
-		@dsatasks=join("\n", map { 'DSA_' . $_ } @tasks);
-		$tasklist=join(",",@dsatasks);
+		#@dsatasks=join("\n", map { 'DSA_' . $_ } @tasks);
+		$tasklist=join(",",@sortedtasks);
 		($min, $patchnumber) = minmax @tasks;
 		print "$patchnumber is the patchnumber \n";
 		open OP,"+> $Bin/contasks.txt";
