@@ -47,10 +47,12 @@ if(!$folder)
 if(!$crs)
 {
 	print "No extra CRs are provided for this build, proceeding with already added one's \n";
+	exit;
 }
 if(!$db)
 {
 	print "Database is mandatory\n";
+	exit;
 }
 
 $db=~ s/^\s+|\s+$//g;

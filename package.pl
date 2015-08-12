@@ -17,10 +17,10 @@ my $hostplatform;
 my $result=GetOptions("delproject=s"=>\$delprojectname,"database=s"=>\$db);
 if(!$result)
 {
-	print "Please provide coreprojectname \n";
+	print "Please provide Delivery Projectname and Database \n";
 	exit;
 }
-if(!$delproject)
+if(!$delprojectname)
 {
 	print "You need to supply delivery project name \n";
 	exit;
