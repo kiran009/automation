@@ -96,7 +96,7 @@ sub constructReadme()
 {
 			$max=~ s/^\s+|\s+$//g;
 			open OP,"+> patchnumber.txt";
-			print OP $patch_number;
+			print OP $patchnumber;
 			close OP;
 			open OP,"+>$patchnumber\_README.txt";
 			print OP "CREATED:\n";
