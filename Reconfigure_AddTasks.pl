@@ -11,7 +11,7 @@ use FindBin qw($Bin);
 use lib "$Bin/../lib";
 use Sys::Hostname;
 use List::MoreUtils qw( minmax );
-my ($min, $max) = minmax @numbers;
+my ($min, $max);
 
 #/************ Setting Environment Variables *******************/
 $ENV{'CCM_HOME'}="/opt/ccm71";
@@ -78,6 +78,7 @@ my $cr;
 my %hash;
 my @consumreadme;
 my @task_numbers;
+my @uniqbinlist;
 @crs=split(/,/,$crs);
 print "The following list of CRs to the included in the patch:@crs\n";
 # /* Global Environment Variables ******* /
@@ -86,7 +87,21 @@ sub main()
 		start_ccm();
 		getTasksnReadme();
 		reconfigure_project();
+		constructReadme();
 		ccm_stop();
+}
+sub constructReadme()
+{
+			$max=~ s/^\s+|\s+$//g;
+			open OP,"+>$max\_README.txt";
+			print OP "CREATED:\n";
+			print OP "TASKS:$tasklist\n";
+			print OP "FIXES:@confixes\n";
+			print OP "AFFECTS:@uniqbinlist\n";
+			print OP "TO INSTALL AND UNINSTALL:\nRefer Patch Release Note\n";
+			print OP "PRE-REQUISITE PATCHES:\nPATCHES SUPERSEDED BY THIS PATCH:\n";
+			print OP "SUMMARY OF CHANGES AND AREAS AFFECTED:@consummary\nISSUES: None";
+			close OP;
 }
 sub getTasksnReadme()
 {
@@ -155,12 +170,12 @@ sub getTasksnReadme()
 		print OP @confixes;
 		close OP;
 		$tasklist=join(",",@tasks);
-		my ($min, $max) = minmax @tasks;
+		($min, $max) = minmax @tasks;
 		print "$max is the patchnumber \n";
 		open OP,"+> $Bin/contasks.txt";
 		print OP $tasklist;
 		close OP;
-		my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
+		@uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
 		open OP, "+> $Bin/patchbinarylist.txt";
 		print OP @uniqbinlist;
 		close OP;
