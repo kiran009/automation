@@ -11,7 +11,7 @@ use FindBin qw($Bin);
 use lib "$Bin/../lib";
 use Sys::Hostname;
 use List::MoreUtils qw( minmax );
-my ($min, $max);
+my ($min, $patchnumber);
 
 #/************ Setting Environment Variables *******************/
 $ENV{'CCM_HOME'}="/opt/ccm71";

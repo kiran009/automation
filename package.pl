@@ -80,7 +80,7 @@ sub pkg()
 	foreach $op(@op)
 	{
 		next if ($op=~ m/AFFECTS:/);
-  		$delroot="$dbbmloc/$delprojectname/DSA_MS_Delivery/";
+  	$delroot="$dbbmloc/$delprojectname/DSA_MS_Delivery/";
 		#$op =~ tr/\$MSHOME\///cd;
 		$op =~ s/\$MSHOME\///g;
 		$op=~ s/^\s+|\s+$//g;
@@ -101,7 +101,7 @@ sub pkg()
 	close OP;
   copy("$Bin/$patch_number\_README.txt",$destdir);
 	chdir($destdir);
-  if($devprojectname =~ /linAS5/)
+  if($delprojectname =~ /linAS5/)
   {
   	$hostos="rhel5";
   	$hostplatform="linAS5";
