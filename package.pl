@@ -62,7 +62,6 @@ my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
 my $dsadest="/u/kkdaadhi/DSAMS_Dest";
 #my $dsadest="/data/releases/dsa/7.6.0/patches";
-my $tertiodest="/u/kkdaadhi/DSAMS";
 #my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
 my %deliveryhash;
@@ -105,22 +104,17 @@ sub pkg()
   {
   	$hostos="rhel5";
   	$hostplatform="linAS5";
-		`chmod -R 0775 *; find * -type f -name "$patch_number\_README.txt" | xargs tar cvf ms-patch$patch_number\.tar; find * -type f  \\( ! -name "$patch_number\_README.txt" ! -name "*.tar" \\) | xargs tar uvf ms-patch\.tar;`;
-		#print "dsa-$mrnumber-$hostos-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
-		#copy("dsa-$mrnumber-$hostos-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-		#push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
-		#print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
+		`chmod -R 0775 *; find * -type f -name "$patch_number\_README.txt" | xargs tar cvf ms-patch$patch_number\.tar; find * -type f  \\( ! -name "$patch_number\_README.txt" ! -name "*.tar" \\) | xargs tar uvf ms-patch$patch_number\.tar;`;
+		copy("ms-patch$patch_number\.tar","$dsadest/$hostplatform/NotTested/") or die("Couldn't copy to destination $!");
+		print LOCATION "$dsadest/$hostplatform/NotTested/ms-patch$patch_number\.tar \n";
 	}
 	elsif($devprojectname =~ /sol10/)
 	{
 		$hostplatform="sol10";
-		`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; gzip dsa-$mrnumber-$hostplatform-build$build_number\.tar;`;
-		print "dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-		copy("dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-		push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
-		print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+		`chmod -R 0775 *; find * -type f -name "$patch_number\_README.txt" | xargs tar cvf ms-patch$patch_number\.tar; find * -type f  \\( ! -name "$patch_number\_README.txt" ! -name "*.tar" \\) | xargs tar uvf ms-patch$patch_number\.tar;`;
+		copy("ms-patch$patch_number\.tar","$dsadest/$hostplatform/NotTested/") or die("Couldn't copy to destination $!");
+		print LOCATION "$dsadest/$hostplatform/NotTested/ms-patch$patch_number\.tar \n";
 	}
-#  		`tar -cvf $Bin/logs.tar $Bin/reconfigure_devproject_*.log`;
-#  		close LOCATION;
+  		close LOCATION;
 }
 main();
