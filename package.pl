@@ -80,53 +80,43 @@ sub pkg()
 	foreach $op(@op)
 	{
 		next if ($op=~ m/AFFECTS:/);
-  	$delroot="$dbbmloc/$delprojectname/DSA_MS_Delivery/";
-		$location=$op =~ tr/\$MSHOME\///cd;
-		$deliveryhash{$delroot/$location}=$location;
+  		$delroot="$dbbmloc/$delprojectname/DSA_MS_Delivery/";
+		#$op =~ tr/\$MSHOME\///cd;
+		$op =~ s/\$MSHOME\///g;
+		$op=~ s/^\s+|\s+$//g;
+		print "OP is: $op\n";
+		$deliveryhash{"$delroot/$op"}=$op;
 	}
 	#DSA_MS_Delivery
-	#rmtree($destdir);
+	rmtree($destdir);
 	foreach $key(keys %deliveryhash)
+  	{
+		print "Key: $key Value: $deliveryhash{$key}";
+	  	$dirname=dirname($deliveryhash{$key});
+  		mkpath("$destdir/$dirname");
+  		copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!");
+  	}
+  #copy("$Bin/dsa_4.0_README.txt",$destdir);
+
+  		if($prj =~ /linAS5/)
   		{
-				print "Key: $key Value: $deliveryhash{$key}";
-	  		$dirname=dirname($deliveryhash{$key});
-  			mkpath("$destdir/$dirname");
-  			copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!");
+  			$hostos="rhel5";
+  			$hostplatform="linAS5";
+  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf dsa-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf dsa-$mrnumber-$hostos-build$build_number\.tar;gzip dsa-$mrnumber-$hostos-build$build_number\.tar;`;
+  			print "dsa-$mrnumber-$hostos-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
+  			copy("dsa-$mrnumber-$hostos-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
+  			print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
   		}
-  		#chdir($destdir);
-			# Read hash
-
-  #		copy("$Bin/dsa_4.0_README.txt",$destdir);
-
-  #		if($prj =~ /linAS5/)
-  #		{
-  #			$hostos="rhel5";
-  #			$hostplatform="linAS5";
-  #			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf dsa-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf dsa-$mrnumber-$hostos-build$build_number\.tar;gzip dsa-$mrnumber-$hostos-build$build_number\.tar;`;
-  #			print "dsa-$mrnumber-$hostos-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
-  #			copy("dsa-$mrnumber-$hostos-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  #			push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
-  #			print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
-#
-#  		}
-#  		elsif($prj =~ /hpiav3/)
-#  		{
-#  			$hostplatform="hpiav3";
-#  			`chmod -R 0775 *;  find * -type f -name "*README.txt" | xargs tar cvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; /usr/contrib/bin/gzip dsa-$mrnumber-$hostplatform-build$build_number\.tar;`;
-#  			print "dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-#  			copy("dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-#  			push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
-#  			print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
-#  		}
-#  		elsif($prj =~ /sol10/)
-#  		{
-#  			$hostplatform="sol10";
-#  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; gzip dsa-$mrnumber-$hostplatform-build$build_number\.tar;`;
-#  			print "dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-#  			copy("dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-#  			push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
-#  			print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
-#  		}
+  		elsif($prj =~ /sol10/)
+  		{
+  			$hostplatform="sol10";
+  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; gzip dsa-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  			print "dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  			copy("dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  			push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  			print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+  		}
 #  		`tar -cvf $Bin/logs.tar $Bin/reconfigure_devproject_*.log`;
 #  		close LOCATION;
 }

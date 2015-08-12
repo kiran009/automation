@@ -13,7 +13,7 @@ show_usage()
 {
    echo "Usage: $(basename $0) [XV] <filename> for enabling debug mode"
    echo " If you will give only <filename> disabling debug mode"
-   echo " V <filename>  is for enabling verbose"  
+   echo " V <filename>  is for enabling verbose"
    echo "VX <filename>  is for enabling verbose and debug mode ........"
 }
 
@@ -66,7 +66,7 @@ isObsolete()
 
 # It is searching for non-obsolete patches.
 # It will search all the tars in the specific patches directory.
-# And find out the existance of specific patches. 
+# And find out the existance of specific patches.
 isPatchExists()
 {
     patchID=$1
@@ -89,11 +89,11 @@ getAffectedFiles()
 	then
     		readme="$2/NotTested/$1_README.txt"
 	fi
-	
+
 
     # The AWK script locates the relevant section within the README, the grep
     # then picks out the filenames, the first sed removes the "$xxxxHOME/", and
-    # the other 2 sed commands remove any .so, .sl or .1 extension (to make the 
+    # the other 2 sed commands remove any .so, .sl or .1 extension (to make the
     # file list platform independent.
 awk "/AFFECTS/ { printcontent=1; } { if (printcontent == 1) { print \$0; } } /TO INSTALL/ { printcontent=0; }" $readme | grep "HOME" | sed "s?.*HOME/??" | sed "s/\.s[ol].*//" | sed "s/\.1.*//"
 
@@ -108,9 +108,9 @@ readme="$2/$1_README.txt"
 	if [ $? -ne 0 ]
 	then
     		readme="$2/NotTested/$1_README.txt"
-	fi	
+	fi
 dirName=`grep RELEASE_DIR "$readme"`
-if [ "$dirName" != "" ] 
+if [ "$dirName" != "" ]
 then
 return 1
 else
@@ -122,7 +122,7 @@ fi
 # It will pickup the readme files according to patchid.
 # Compare all the AffectedFiles with the current readme file's Affected list.
 # If the current readme file's Affected list contains all the AffectedFiles or
-# less than it then patchid of AffectedFiles is treated as superseded to the 
+# less than it then patchid of AffectedFiles is treated as superseded to the
 # patchid of readme file's Affected list.
 isSuperseds()
 {
@@ -137,8 +137,8 @@ isSuperseds()
     return 3;
     fi
     #fileList="`eval getAffectedFiles $patchID $PATCH_ROOT`"
-    
-   
+
+
     for file in $fileList
     do
     echo "entering into isSuperseds Comaparing"
@@ -231,7 +231,7 @@ fi
 if [ $# -eq 2 ]
 then
     if [ $1 = "X" ]
-    then 
+    then
         set -x
     fi
     if [ $1 = "V" ]
@@ -243,7 +243,7 @@ then
         set -x
         verbose=Y
     fi
-    FILE="$2" 
+    FILE="$2"
 fi
 
 if [ $# -eq 1 ]
@@ -325,15 +325,15 @@ if [ $ProductName = "Verification" ]; then
     PatchFileName="tsv-patch"
     ProductName="verification"
 else
-    if [ $ProductName = "FUR" ]; then
-        PatchFileName="fur-patch"
-        ProductName="dsa"
+    if [ $ProductName = "MS" ]; then
+        PatchFileName="ms-patch"
+        ProductName="dsams"
     else
         if [ $ProductName = "Tertio" ]; then
             if [ $ProductVersion != "5.2.0" ]; then
                 PatchFileName="tertio-patch"
-            else 
-                PatchFileName="provident-patch" 
+            else
+                PatchFileName="provident-patch"
             fi
             ProductName="tertio"
         fi
@@ -404,7 +404,7 @@ do
         verboseMessage "\t**** Empty Patch List "
     continue;
     fi
-    
+
     if [ $isSupersedPatch -eq 0 ]; then
         supersededList="$supersededList $patchId"
     else
