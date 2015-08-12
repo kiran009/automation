@@ -108,6 +108,24 @@ sub constructReadme()
 			print OP "SUMMARY OF CHANGES AND AREAS AFFECTED:@consummary\nISSUES: None";
 			close OP;
 			`./updatePatchREADME.ksh XV $patchnumber\_README.txt`;
+			open OP,"< $patchnumber\_README.txt";
+			my @op=<OP>;
+			close OP;
+			open MODREADME,"+> $patchnumber\_MODREADME.txt";
+			foreach $op(@op)
+			{
+				print MODREADME $op;
+				# TASKS:10216,10201,10118,9994
+				if($op =~ /TASKS/)
+				{
+					($task,$tasknumbers)=split(/:/,$op);
+					@tasknmbrarray=split(/,/,$tasknumbers);
+					@dsatasks=join("\n", map { 'DSA_' . $_ } @tasknmbrarray);
+					$tasklist=join(",",@dsatasks);
+					print MODREADME "$task:$tasklist\n";
+				}
+			}
+			close MODREADME;
 			#move("DSA_$patchnumber\_README.txt","$patchnumber\_README.txt");
 }
 sub getTasksnReadme()
