@@ -108,7 +108,7 @@ sub pkg()
 		copy("ms-patch$patch_number\.tar","$dsadest/$hostplatform/NotTested/") or die("Couldn't copy to destination $!");
 		print LOCATION "$dsadest/$hostplatform/NotTested/ms-patch$patch_number\.tar \n";
 	}
-	elsif($devprojectname =~ /sol10/)
+	elsif($delprojectname =~ /sol10/)
 	{
 		$hostplatform="sol10";
 		`chmod -R 0775 *; find * -type f -name "$patch_number\_README.txt" | xargs tar cvf ms-patch$patch_number\.tar; find * -type f  \\( ! -name "$patch_number\_README.txt" ! -name "*.tar" \\) | xargs tar uvf ms-patch$patch_number\.tar;`;
