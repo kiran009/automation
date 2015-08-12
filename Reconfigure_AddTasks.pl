@@ -95,11 +95,14 @@ sub main()
 sub constructReadme()
 {
 			$max=~ s/^\s+|\s+$//g;
+			open OP,"+> patchnumber.txt";
+			print OP $patch_number;
+			close OP;
 			open OP,"+>DSA_$patchnumber\_README.txt";
 			print OP "CREATED:\n";
 			print OP "TASKS:$tasklist\n";
-			print OP "FIXES:@confixes\n";
-			print OP "AFFECTS:@uniqbinlist\n";
+			print OP "@confixes\n";
+			print OP "@uniqbinlist\n";
 			print OP "TO INSTALL AND UNINSTALL:\nRefer Patch Release Note\n";
 			print OP "PRE-REQUISITE PATCHES:\nPATCHES SUPERSEDED BY THIS PATCH:\n";
 			print OP "SUMMARY OF CHANGES AND AREAS AFFECTED:@consummary\nISSUES: None";

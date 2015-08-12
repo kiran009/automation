@@ -90,33 +90,36 @@ sub pkg()
 	#DSA_MS_Delivery
 	rmtree($destdir);
 	foreach $key(keys %deliveryhash)
-  	{
+  {
 		print "Key: $key Value: $deliveryhash{$key}";
-	  	$dirname=dirname($deliveryhash{$key});
-  		mkpath("$destdir/$dirname");
-  		copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!");
-  	}
-  #copy("$Bin/dsa_4.0_README.txt",$destdir);
-
-  		if($prj =~ /linAS5/)
-  		{
-  			$hostos="rhel5";
-  			$hostplatform="linAS5";
-  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf dsa-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf dsa-$mrnumber-$hostos-build$build_number\.tar;gzip dsa-$mrnumber-$hostos-build$build_number\.tar;`;
-  			print "dsa-$mrnumber-$hostos-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
-  			copy("dsa-$mrnumber-$hostos-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  			push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
-  			print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
-  		}
-  		elsif($prj =~ /sol10/)
-  		{
-  			$hostplatform="sol10";
-  			`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; gzip dsa-$mrnumber-$hostplatform-build$build_number\.tar;`;
-  			print "dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-  			copy("dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  			push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
-  			print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
-  		}
+	  $dirname=dirname($deliveryhash{$key});
+  	mkpath("$destdir/$dirname");
+  	copy("$key","$destdir/$deliveryhash{$key}") or die("Couldn't able to copy the file $!");
+  }
+	open OP,"< patchnumber.txt";
+	my $patch_number=<OP>;
+	close OP;
+  copy("$Bin/$patch_number\_README.txt",$destdir);
+	chdir($destdir);
+  if($devprojectname =~ /linAS5/)
+  {
+  	$hostos="rhel5";
+  	$hostplatform="linAS5";
+		`chmod -R 0775 *; find * -type f -name "$patch_number\_README.txt" | xargs tar cvf ms-patch$patch_number\.tar; find * -type f  \\( ! -name "$patch_number\_README.txt" ! -name "*.tar" \\) | xargs tar uvf ms-patch\.tar;`;
+		#print "dsa-$mrnumber-$hostos-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
+		#copy("dsa-$mrnumber-$hostos-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+		#push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
+		#print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
+	}
+	elsif($devprojectname =~ /sol10/)
+	{
+		$hostplatform="sol10";
+		`chmod -R 0775 *; find * -type f -name "*README.txt" | xargs tar cvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf dsa-$mrnumber-$hostplatform-build$build_number\.tar; gzip dsa-$mrnumber-$hostplatform-build$build_number\.tar;`;
+		print "dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+		copy("dsa-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+		push(@location,"$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+		print LOCATION "$dsadest/$hostplatform/NotTested/dsa-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+	}
 #  		`tar -cvf $Bin/logs.tar $Bin/reconfigure_devproject_*.log`;
 #  		close LOCATION;
 }
