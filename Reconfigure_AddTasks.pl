@@ -93,7 +93,7 @@ sub main()
 sub constructReadme()
 {
 			$max=~ s/^\s+|\s+$//g;
-			open OP,"+>$max\_README.txt";
+			open OP,"+>DSA_$patchnumber\_README.txt";
 			print OP "CREATED:\n";
 			print OP "TASKS:$tasklist\n";
 			print OP "FIXES:@confixes\n";
@@ -102,6 +102,8 @@ sub constructReadme()
 			print OP "PRE-REQUISITE PATCHES:\nPATCHES SUPERSEDED BY THIS PATCH:\n";
 			print OP "SUMMARY OF CHANGES AND AREAS AFFECTED:@consummary\nISSUES: None";
 			close OP;
+			`./updatePatchREADME.ksh XV DSA_$patchnumber\_README.txt`;
+			#move("DSA_$patchnumber\_README.txt","$patchnumber\_README.txt");
 }
 sub getTasksnReadme()
 {
@@ -169,9 +171,11 @@ sub getTasksnReadme()
 		open OP,"+> $Bin/confixes.txt";
 		print OP @confixes;
 		close OP;
-		$tasklist=join(",",@tasks);
-		($min, $max) = minmax @tasks;
-		print "$max is the patchnumber \n";
+		@sortedtasks = sort {$b <=> $a} @tasks;
+		@dsatasks=join("\n", map { 'DSA_' . $_ } @tasks);
+		$tasklist=join(",",@dsatasks);
+		($min, $patchnumber) = minmax @tasks;
+		print "$patchnumber is the patchnumber \n";
 		open OP,"+> $Bin/contasks.txt";
 		print OP $tasklist;
 		close OP;
