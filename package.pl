@@ -79,6 +79,7 @@ sub pkg()
 	foreach $op(@op)
 	{
 		next if ($op=~ m/AFFECTS:/);
+		next if ($op=~ /^\s*$/);
   	$delroot="$dbbmloc/$delprojectname/DSA_MS_Delivery/";
 		#$op =~ tr/\$MSHOME\///cd;
 		$op =~ s/\$MSHOME\///g;
