@@ -115,6 +115,14 @@ sub pkg()
 		copy("ms-patch$patch_number\.tar","$dsadest/$hostplatform/NotTested/") or die("Couldn't copy to destination $!");
 		print LOCATION "$dsadest/$hostplatform/NotTested/ms-patch$patch_number\.tar \n";
 	}
+  elsif($delprojectname =~ /RHEL6/)
+  {
+  	$hostos="rhel6";
+  	$hostplatform="rhel6";
+		`chmod -R 0775 *; find * -type f -name "$patch_number\_README.txt" | xargs tar cvf ms-patch$patch_number\.tar; find * -type f  \\( ! -name "$patch_number\_README.txt" ! -name "*.tar" \\) | xargs tar uvf ms-patch$patch_number\.tar;`;
+		copy("ms-patch$patch_number\.tar","$dsadest/$hostplatform/NotTested/") or die("Couldn't copy to destination $!");
+		print LOCATION "$dsadest/$hostplatform/NotTested/ms-patch$patch_number\.tar \n";
+	}
   		close LOCATION;
 }
 main();

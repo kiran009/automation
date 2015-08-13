@@ -194,6 +194,7 @@ sub getTasksnReadme()
   		print OP1 $patch_readme;
   		close OP1;
   		`dos2unix $Bin/$problem_number\_README.txt 2>&1 1>/dev/null`;
+			`perl -pi -e's/\015\012/\012/g' $Bin/$problem_number\_README.txt 2>&1 1>/dev/null`;
   		@fixes=`sed -n '/FIXES:/,/AFFECTS/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
 			push(@confixes,@fixes);
   		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
