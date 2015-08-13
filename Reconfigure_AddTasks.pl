@@ -195,11 +195,11 @@ sub getTasksnReadme()
   		close OP1;
   		`dos2unix $Bin/$problem_number\_README.txt 2>&1 1>/dev/null`;
 			`perl -pi -e's/\015\012/\012/g' $Bin/$problem_number\_README.txt 2>&1 1>/dev/null`;
-  		@fixes=`sed -n '/FIXES:/,/AFFECTS/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
+  		@fixes=`sed -n '/FIXES:/,/AFFECTS/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | sed '/^M/d'`;
 			push(@confixes,@fixes);
-  		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
+  		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | sed '/^M/d'`;
     	push(@patchbinarylist,@PatchFiles);
-    	@summary=`sed -n '/AFFECTED:/,/ISSUES/ p' $problem_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED:' | grep -v 'ISSUES' | sed '/^\$/d'`;
+    	@summary=`sed -n '/AFFECTED:/,/ISSUES/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^M/d' | grep -v 'AFFECTED:' | grep -v 'ISSUES' | sed '/^\$/d'`;
     	push(@consummary,@summary);
 		}
 	}
