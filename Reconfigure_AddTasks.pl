@@ -178,6 +178,11 @@ sub getTasksnReadme()
   	$patch_readme=`$CCM query -u -f %patch_readme`;
 
 		print "Patch Readme is: $patch_readme \n";
+		if($patch_readme =~ /void/)
+		{
+			print "README issue \n";
+			exit;
+		}
 
   	if($patch_readme =~ /N\/A/)
   	{
