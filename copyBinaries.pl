@@ -62,8 +62,8 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
-#my $tertiodest="/u/kkdaadhi/Tertio_Dest";
-my $tertiodest="/data/releases/tertio/7.6.0/patches";
+my $tertiodest="/u/kkdaadhi/Tertio_Dest";
+#my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
 sub main()
 {
@@ -85,6 +85,10 @@ sub copyBinaries()
 	elsif($coreproject =~ /hpiav3/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpiav3";
+	}
+	elsif($coreproject =~ /RHEL6/)
+	{
+		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
 	}
 	rmtree($destdir);
 	open OP, "< $binarylist";
