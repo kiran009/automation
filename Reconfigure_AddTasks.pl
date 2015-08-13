@@ -123,6 +123,8 @@ sub constructReadme()
 					@sortedtasks=sort {$b <=> $a} @tasknmbrarray;
 					@dsatasks=join("\n", map { 'DSA_' . $_ } @sortedtasks);
 					$tasklist=join(",",@dsatasks);
+					$tasklist =~ s/\r\n/,/g;
+					$tasklist =~ s/,$//; # get rid of last comma
 					print "$tasklist\n";
 					print MODREADME "$task:$tasklist\n";
 				}
