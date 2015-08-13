@@ -101,7 +101,8 @@ sub constructReadme()
 			open OP,"+>$patchnumber\_README.txt";
 			print OP "CREATED:\n";
 			print OP "TASKS:$tasklist\n";
-			print OP "@confixes\n";
+			s/FIXES:// for @confixes;
+			print OP "FIXES:@confixes\n";
 			print OP "@uniqbinlist\n";
 			print OP "TO INSTALL AND UNINSTALL:\nRefer Patch Release Note\n";
 			print OP "PRE-REQUISITE PATCHES:\nPATCHES SUPERSEDED BY THIS PATCH:\n";
@@ -114,15 +115,19 @@ sub constructReadme()
 			open MODREADME,"+> $patchnumber\_MODREADME.txt";
 			foreach $op(@op)
 			{
-				print MODREADME $op;
 				# TASKS:10216,10201,10118,9994
 				if($op =~ /TASKS/)
 				{
 					($task,$tasknumbers)=split(/:/,$op);
 					@tasknmbrarray=split(/,/,$tasknumbers);
-					@dsatasks=join("\n", map { 'DSA_' . $_ } @tasknmbrarray);
+					@sortedtasks=sort {$b <=> $a} @tasknmbrarray;
+					@dsatasks=join("\n", map { 'DSA_' . $_ } @sortedtasks);
 					$tasklist=join(",",@dsatasks);
+					print "$tasklist\n";
 					print MODREADME "$task:$tasklist\n";
+				}
+				else{
+				print MODREADME $op;
 				}
 			}
 			close MODREADME;
