@@ -14,8 +14,6 @@ use Sys::Hostname;
 #/************ Setting Environment Variables *******************/
 my $database="/data/ccmdb/provident/";
 my $dbbmloc="/data/ccmbm/provident/";
-my $binarylist="$Bin/fileplacement.fp";
-my $javabinarylist="$Bin/javabinaries.fp";
 my $hostname = hostname;
 my $hostplatform;
 if($hostname =~ /pesthp2/)

@@ -13,8 +13,10 @@ use Sys::Hostname;
 #/************ Setting Environment Variables *******************/
 my $database="/data/ccmdb/provident/";
 my $dbbmloc="/data/ccmbm/provident/";
-my $binarylist="$Bin/fileplacement.fp";
-my $javabinarylist="$Bin/javabinaries.fp";
+my $binarylist;
+#="$Bin/fileplacement.fp";
+my $javabinarylist;
+#="$Bin/javabinaries.fp";
 my $hostplatform;
 my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number);
 if(!$result)
@@ -77,18 +79,26 @@ sub copyBinaries()
   if($coreproject =~ /linAS5/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
+		$binarylist="$Bin/fileplacement.fp";
+		$javabinarylist="$Bin/javabinaries.fp";
 	}
 	elsif($coreproject =~ /sol10/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol10";
+		$binarylist="$Bin/fileplacement.fp";
+		$javabinarylist="$Bin/javabinaries.fp";
 	}
 	elsif($coreproject =~ /hpiav3/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpiav3";
+		$binarylist="$Bin/fileplacement.fp";
+		$javabinarylist="$Bin/javabinaries.fp";
 	}
 	elsif($coreproject =~ /RHEL6/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
+		$binarylist="$Bin/fileplacement_7.7.fp";
+		$javabinarylist="$Bin/javabinaries_7.7.fp";
 	}
 	rmtree($destdir);
 	open OP, "< $binarylist";
@@ -160,7 +170,8 @@ sub copyBinaries()
 		$filename=~ s/^\s+|\s+$//g;
 		$permission=~ s/^\s+|\s+$//g;
   	mkpath("$destdir/$dirname");
-		copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
+		#copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
+		copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $key $!");
 		chmod(oct($permission),"$destdir/$filename") or die("Couldn't able to set the permission $!");
 		print "Permission: $permission for file: $destdir/$filename \n";
   }
