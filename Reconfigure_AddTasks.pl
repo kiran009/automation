@@ -135,7 +135,7 @@ sub constructReadme()
 				}
 			}
 			close MODREADME;
-			#move("DSA_$patchnumber\_README.txt","$patchnumber\_README.txt");
+			move("$patchnumber\_MODREADME.txt","$patchnumber\_README.txt");
 }
 sub getTasksnReadme()
 {
