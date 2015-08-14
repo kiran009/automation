@@ -76,7 +76,7 @@ sub main()
 }
 sub listfolderTasks()
 {
-	@tasks_771a=`$CCM folder -show tasks '$f_762a' -u -f "%task_number"`;
+	@tasks_771a=`$CCM folder -show tasks '$f_771a' -u -f "%task_number"`;
 	print "Tasks in 7.7.1.a are => @tasks_771a \n\n";
 	foreach $task(@tasks_771a)
 	{
