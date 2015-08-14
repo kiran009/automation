@@ -54,7 +54,7 @@ sub crtnsndMail()
 	print $FILE "<tr><b><td>Location</td></b><td colspan=\'2\'>@location_explode</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Date</td></b><td colspan=\'2\'>$dtformat</td></tr><br/>";
 	print $FILE "<tr><b><td>Major changes in the new build</td></b><td colspan=\'2\'>BUG FIXES</td></tr><br/>";
-	print $FILE "<tr><b><td>TOME</td></b><td>3.0.0</td><td>BUILD19</td></tr><br/>";
+	print $FILE "<tr><b><td>TOME</td></b><td>3.0.0</td><td>-</td></tr><br/>";
 	print $FILE "<tr><b><td>Tertio ADK</td></b><td>-</td><td>-</td></tr><br/>";
 	print $FILE "<tr><b><td>CAF</td></b><td>-</td><td>-</td></tr><br/>";
 	print $FILE "<tr><b><td>Dashboard SDK</td></b><td>-</td><td>-</td></tr><br/>";
