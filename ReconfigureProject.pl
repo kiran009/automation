@@ -77,6 +77,8 @@ sub getTasksnReadme()
 	open CRRESOLV, "+> $Bin/crresolv.txt";
 	open TASKINF,"+>$Bin/taskinfo.txt";
 
+	open COREFP, "+> $Bin/fileplacement.fp";
+	open JAVAFP, "+> $Bin/javabinaries.fp";
 	foreach $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
@@ -92,7 +94,7 @@ sub getTasksnReadme()
 		($resolver)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%resolver"`;
 		($task_synopsis)=`$CCM task -show info $task_number -u -format "%task_synopsis"`;
 		($task_resolver)=`$CCM task -show info $task_number -u -format "%resolver"`;
-		($deliverable_list)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%deliverable_list"`;
+		@deliverable_list=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%deliverable_list"`;
 		$synopsis=~ s/^\s+|\s+$//g;
 		$requesttype=~ s/^\s+|\s+$//g;
 		$severity=~ s/^\s+|\s+$//g;
@@ -103,10 +105,19 @@ sub getTasksnReadme()
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 		print SYNOP "CR$cr $synopsis\n";
-		$deliverable_list=~ s/^\s+|\s+$//g;
-		open OP, "+> $Bin/fileplacement.fp";
-		print OP $deliverable_list;
-		close OP;
+		foreach $deliverable_list(@deliverable_list)
+		{
+			$deliverable_list=~ s/^\s+|\s+$//g;
+			if($deliverable_list =~ /jar/)
+			{
+					print JAVAFP "$deliverable_list\n";
+			}
+			else
+			{
+					print COREFP "$deliverable_list\n";
+			}
+
+		}
 		#fetch readme
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
     $patch_number=`$CCM query -u -f %patch_number`;
@@ -132,6 +143,8 @@ sub getTasksnReadme()
         print SUMM "CR$cr - $sumreadme\n";
     	}
 	}
+	close COREFP;
+	close JAVAFP;
 	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
 	open OP, "+> $Bin/patchbinarylist.txt";
 	print OP @uniqbinlist;

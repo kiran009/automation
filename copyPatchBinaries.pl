@@ -154,22 +154,22 @@ sub copyBinaries()
   		}
   	}
   	}
-  # open OP, "< $javabinarylist";
-  # @file_list=<OP>;
-  # close OP;
-  # $delroot="$dbbmloc/$javaprojectname/Provident_Java/";
-  # foreach $file(@file_list)
-  # {
-  # 	my @del=split(/\s+/,$file);
-  # 	if($del[3] eq ".")
-  # 	{
- # 			$deliveryhash{"$delroot/$del[1]"}="$del[1],$del[5]";
-	# 	}
-  # 	else
-  # 	{
-	# 		$deliveryhash{"$delroot/$del[1]"}="$del[3],$del[5]";
-  # 	}
-  # }
+   open OP, "< $javabinarylist";
+   @file_list=<OP>;
+   close OP;
+   $delroot="$dbbmloc/$javaprojectname/Provident_Java/";
+   foreach $file(@file_list)
+   {
+   	my @del=split(/\s+/,$file);
+   	if($del[3] eq ".")
+   	{
+ 			$deliveryhash{"$delroot/$del[1]"}="$del[1],$del[5]";
+ 		}
+  else
+   	{
+	 		$deliveryhash{"$delroot/$del[1]"}="$del[3],$del[5]";
+   	}
+   }
 	# Read the hash and copy the binaries
 	foreach $key(keys %deliveryhash)
   {

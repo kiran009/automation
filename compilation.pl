@@ -33,6 +33,8 @@ elsif($hostname =~ /pedsun2/)
 {	$hostplatform="sol10";$gmake='/usr/bin/gmake';}
 elsif($hostname =~ /pesthp2/)
 {	$hostplatform="hpiav3";$gmake='/usr/local/bin/gmake';}
+elsif($hostname =~ /pedhp1/)
+{	$hostplatform="hpiav3";$gmake='/usr/local/bin/gmake';}
 
 $result=GetOptions("devproject=s"=>\$devprojectname);
 if(!$result)
@@ -73,7 +75,7 @@ sub compile()
 		chdir "$workarea/Provident_Dev";
 	}
 	umask 002;
-	`$gmake clean all 2>&1 1>$Bin/gmake_$devprojectname\_$hostplatform.log`;			
+	`$gmake clean all 2>&1 1>$Bin/gmake_$devprojectname\_$hostplatform.log`;
 }
 
 sub start_ccm()
