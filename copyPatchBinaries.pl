@@ -4,7 +4,7 @@ use Cwd;
 use File::Path;
 use File::Find;
 use File::Basename;
-use Switch;
+#use Switch;
 use Getopt::Long;
 use File::Copy;
 use FindBin qw($Bin);
