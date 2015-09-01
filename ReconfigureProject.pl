@@ -138,7 +138,7 @@ sub getTasksnReadme()
     		close OP1;
     		`dos2unix $Bin/README.txt 2>&1 1>/dev/null`;
 				`$Bin/updatePatchREADME.ksh $Bin/README.txt 2>&1 1>/dev/null`;
-				copy("PROV_\$patch_number\_README.txt","$patch_number\_README.txt");
+				copy("PROV_$patch_number\_README.txt","$patch_number\_README.txt");
     		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' README.txt  | sed '\$ d' | sed '/^\$/d'`;
         push(@patchbinarylist,@PatchFiles);
         $sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
