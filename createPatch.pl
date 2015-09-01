@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.6 createTarfile script
+# Tertio 7.X createTarfile script
 use Cwd;
 use File::Path;
 use File::Find;
@@ -75,6 +75,7 @@ sub createTar()
 	close OP;
 	open LOCATION,">>$Bin/location.txt";
 	$coreproject=~ s/^\s+|\s+$//g;
+	$patchnumber=~ s/^\s+|\s+$//g;
 	open BN,"<$Bin/build_number.txt";
 	$build_number=<BN>;
 	close BN;
@@ -82,7 +83,7 @@ sub createTar()
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
   	chdir($destdir);
-  	copy("$Bin/tertio_7.6_README.txt",$destdir);
+  	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostos="rhel5";
   	$hostplatform="linAS5";
   	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostos-build$build_number\.tar;gzip tertio-$mrnumber-$hostos-build$build_number\.tar;`;
@@ -95,7 +96,7 @@ sub createTar()
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpiav3";
   	chdir($destdir);
-  	copy("$Bin/tertio_7.6_README.txt",$destdir);
+  	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostplatform="hpiav3";
   	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
@@ -107,9 +108,10 @@ sub createTar()
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS3";
   	chdir($destdir);
-  	#copy("$Bin/tertio_7.6_README.txt",$destdir);
+  	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostos="rhel3";
   	$hostplatform="linAS3";
+  	#`find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;gzip tertio-$patchnumber-$hostos-build$build_number\.tar;`;
   	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;gzip tertio-$patchnumber-$hostos-build$build_number\.tar;`;
   	print "tertio-$patchnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
   	copy("tertio-$patchnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
@@ -120,9 +122,9 @@ sub createTar()
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol9";
   	chdir($destdir);
-  	#copy("$Bin/tertio_7.6_README.txt",$destdir);
+  	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostplatform="sol9";
-  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;gzip tertio-$patchnumber-$hostos-build$build_number\.tar;`;
+  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostplatform-build$build_number\.tar;find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;gzip tertio-$patchnumber-$hostos-build$build_number\.tar;`;
   	print "tertio-$patchnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
   	copy("tertio-$patchnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
@@ -132,9 +134,9 @@ sub createTar()
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpia";
   	chdir($destdir);
-  	#copy("$Bin/tertio_7.6_README.txt",$destdir);
+  	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostplatform="hpia";
-  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;gzip tertio-$patchnumber-$hostos-build$build_number\.tar;`;
+  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostplatform-build$build_number\.tar;find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;gzip tertio-$patchnumber-$hostos-build$build_number\.tar;`;
   	print "tertio-$patchnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
   	copy("tertio-$patchnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
@@ -144,7 +146,7 @@ sub createTar()
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol10";
   	chdir($destdir);
-  	copy("$Bin/tertio_7.6_README.txt",$destdir);
+  	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostplatform="sol10";
   	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
@@ -157,7 +159,7 @@ sub createTar()
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
   	chdir($destdir);
-  	copy("$Bin/tertio_7.6_README.txt",$destdir);
+  	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostplatform="rhel6";
   	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
