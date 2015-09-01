@@ -133,13 +133,15 @@ sub getTasksnReadme()
     }
     else
     {
-    		open OP1,"+> $Bin/$patch_number\_README.txt";
+    		open OP1,"+> $Bin/README.txt";
     		print OP1 $patch_readme;
     		close OP1;
-    		`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
-    		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
+    		`dos2unix $Bin/README.txt 2>&1 1>/dev/null`;
+				`$Bin/updatePatchREADME.ksh $Bin/README.txt 2>&1 1>/dev/null`;
+				copy("PROV_\$patch_number\_README.txt","$patch_number\_README.txt");
+    		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' README.txt  | sed '\$ d' | sed '/^\$/d'`;
         push(@patchbinarylist,@PatchFiles);
-        $sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
+        $sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
         print SUMM "CR$cr - $sumreadme\n";
     	}
 	}
