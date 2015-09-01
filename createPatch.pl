@@ -123,24 +123,24 @@ sub createTar()
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol9";
   	chdir($destdir);
   	copy("$Bin/$patchnumber\_README.txt",$destdir);
-  	$hostos="sol9";
-  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostos-build$build_number\.tar;find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;gzip tertio-$patchnumber-$hostos-build$build_number\.tar;`;
-  	print "tertio-$patchnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
-  	copy("tertio-$patchnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
+  	$hostplatform="sol9";
+  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostplatform-build$build_number\.tar;find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostplatform-build$build_number\.tar;gzip tertio-$patchnumber-$hostplatform-build$build_number\.tar;`;
+  	print "tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	copy("tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz \n";
 	}
   elsif($coreproject =~ /hpia/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpia";
   	chdir($destdir);
   	copy("$Bin/$patchnumber\_README.txt",$destdir);
-  	$hostos="hpia";
-  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostos-build$build_number\.tar;find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;gzip tertio-$patchnumber-$hostos-build$build_number\.tar;`;
-  	print "tertio-$patchnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
-  	copy("tertio-$patchnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
+  	$hostplatform="hpia";
+  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostplatform-build$build_number\.tar;find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostplatform-build$build_number\.tar;gzip tertio-$patchnumber-$hostplatform-build$build_number\.tar;`;
+  	print "tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	copy("tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz \n";
 	}
 	elsif($coreproject =~ /sol10/)
 	{
