@@ -18,7 +18,7 @@ if($hostname =~ /pesthp2/)
 {
 	$ENV{'PATH'}="/usr/contrib/bin:$ENV{'PATH'}";
 }
-my $result=GetOptions("coreproject=s"=>\$coreproject);
+my $result=GetOptions("coreproject=s"=>\$coreproject,"tertiodest=s"=>\$tertiodest);
 if(!$result)
 {
 	print "You must supply arguments to the script\n";
@@ -27,6 +27,11 @@ if(!$result)
 if(!$coreproject)
 {
 	print "You need to supply core project name \n";
+	exit;
+}
+if(!$tertiodest)
+{
+	print "You need to supply tertio destination name \n";
 	exit;
 }
 my @PatchFiles;
@@ -60,7 +65,7 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
-my $tertiodest="/u/kkdaadhi/Tertio_Dest";
+#my $tertiodest="/u/kkdaadhi/Tertio_Dest";
 #my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
 sub main()
