@@ -82,8 +82,8 @@ sub getTasksnReadme()
 		($severity)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%severity"`;
 		($priority)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%priority"`;
 		($resolver)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%resolver"`;
-		($task_synopsis)=`$CCM task -show info $task_number -u -format "%task_synopsis"`;
-		($task_resolver)=`$CCM task -show info $task_number -u -format "%resolver"`;
+		# ($task_synopsis)=`$CCM task -show info $task_number -u -format "%task_synopsis"`;
+		# ($task_resolver)=`$CCM task -show info $task_number -u -format "%resolver"`;
 		@deliverable_list=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%deliverable_list"`;
 		$synopsis=~ s/^\s+|\s+$//g;
 		$requesttype=~ s/^\s+|\s+$//g;
