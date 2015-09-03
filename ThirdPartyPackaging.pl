@@ -10,7 +10,7 @@ use File::Copy;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 use Sys::Hostname;
-my $result=GetOptions("platform=s"=>\$platform,"ftpdir=s"=>\$destdir);
+my $result=GetOptions("platform=s"=>\$platform,"ftpdir=s"=>\$ftpdir);
 if(!$result)
 {
 	print "Please provide devprojectname \n";
@@ -78,7 +78,7 @@ sub createTar()
   	#copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostos="rhel5";
   	$hostplatform="linAS5";
-  	`find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;`;
+  	`find * -type f  \\( ! -name "*README.txt" ! -name "*:.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;`;
   	#`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;`;
   	print "tertio-$patchnumber-$hostos-build$build_number\.tar => $ftpdir/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
   	copy("tertio-$patchnumber-$hostos-build$build_number\.tar\.gz","$ftpdir/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
