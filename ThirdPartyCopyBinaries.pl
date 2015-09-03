@@ -18,13 +18,13 @@ use Sys::Hostname;
 # my $database="/data/ccmdb/provident/";
 # my $dbbmloc="/data/ccmbm/provident/";
 # $result=GetOptions("crs=s"=>\$crs);
-# my $result=GetOptions("coreproject=s"=>\$coreproject);
+# my $result=GetOptions("platform=s"=>\$platform);
 # if(!$result)
 # {
 # 	print "Please provide devprojectname \n";
 # 	exit;
 # }
-# if(!$coreproject)
+# if(!$platform)
 # {
 # 	print "You need to supply core project name \n";
 # 	exit;
@@ -60,12 +60,12 @@ my @consumreadme;
 # print "The following list of CRs to the included in the patch:@crs\n";
 my $hostname = hostname;
 my %machinehash=('pedhp2'=>hpia, 'pedlinux5'=>linAS5, 'pesthp2'=>hpiav3, 'pedlinux1'=>linAS3, 'pedsun3'=>sol9, 'pedsun2'=>sol10);
-my $coreproject;
+my $platform;
 # /* Global Environment Variables ******* /
 sub main()
 {
-	  $coreproject=$machinehash{$hostname};
-		print $coreproject;
+	  $platform=$machinehash{$hostname};
+		print $platform;
 		copyBinaries();
 		# createTar();
 }
@@ -74,33 +74,33 @@ sub copyBinaries()
 {
 	umask 002;
 	# Choose the platform project
-	$coreproject=~ s/^\s+|\s+$//g;
+	$platform=~ s/^\s+|\s+$//g;
 	$binarylist="$Bin/fileplacement.fp";
-  if($coreproject =~ /linAS5/)
+  if($platform =~ /linAS5/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
 	}
-  elsif($coreproject =~ /linAS3/)
+  elsif($platform =~ /linAS3/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS3";
 	}
-	elsif($coreproject =~ /sol10/)
+	elsif($platform =~ /sol10/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol10";
 	}
-	elsif($coreproject =~ /sol9/)
+	elsif($platform =~ /sol9/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol9";
 	}
-	elsif($coreproject =~ /hpiav3/)
+	elsif($platform =~ /hpiav3/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpiav3";
 	}
-	elsif($coreproject =~ /hpia/)
+	elsif($platform =~ /hpia/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpia";
 	}
-	elsif($coreproject =~ /RHEL6/)
+	elsif($platform =~ /RHEL6/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
 	}
@@ -110,7 +110,7 @@ sub copyBinaries()
   close OP;
   my %deliveryhash;
 	# Select the basedirectory of the project and construct the delivery hash
-  $delroot="$dbbmloc/$coreproject/Provident_Dev/";
+  # $delroot="$dbbmloc/$platform/Provident_Dev/";
   foreach $file(@file_list)
   {
   	if($file =~ /TOMESRC/)
@@ -189,12 +189,12 @@ sub copyBinaries()
 # 	$patchnumber=<OP>;
 # 	close OP;
 # 	open LOCATION,">>$Bin/location.txt";
-# 	$coreproject=~ s/^\s+|\s+$//g;
+# 	$platform=~ s/^\s+|\s+$//g;
 # 	$patchnumber=~ s/^\s+|\s+$//g;
 # 	open BN,"<$Bin/build_number.txt";
 # 	$build_number=<BN>;
 # 	close BN;
-#   if($coreproject =~ /linAS5/)
+#   if($platform =~ /linAS5/)
 #   {
 # 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
 #   	chdir($destdir);
@@ -207,7 +207,7 @@ sub copyBinaries()
 #   	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
 #   	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
 # 	}
-# 	elsif($coreproject =~ /hpiav3/)
+# 	elsif($platform =~ /hpiav3/)
 # 	{
 # 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpiav3";
 #   	chdir($destdir);
@@ -219,7 +219,7 @@ sub copyBinaries()
 #   	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
 #   	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
 # 	}
-#   elsif($coreproject =~ /linAS3/)
+#   elsif($platform =~ /linAS3/)
 #   {
 # 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS3";
 #   	chdir($destdir);
@@ -233,7 +233,7 @@ sub copyBinaries()
 #   	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
 #   	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
 # 	}
-#   elsif($coreproject =~ /sol9/)
+#   elsif($platform =~ /sol9/)
 #   {
 # 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol9";
 #   	chdir($destdir);
@@ -245,7 +245,7 @@ sub copyBinaries()
 #   	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
 #   	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
 # 	}
-#   elsif($coreproject =~ /hpia/)
+#   elsif($platform =~ /hpia/)
 #   {
 # 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpia";
 #   	chdir($destdir);
@@ -257,7 +257,7 @@ sub copyBinaries()
 #   	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
 #   	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
 # 	}
-# 	elsif($coreproject =~ /sol10/)
+# 	elsif($platform =~ /sol10/)
 # 	{
 # 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol10";
 #   	chdir($destdir);
@@ -270,7 +270,7 @@ sub copyBinaries()
 #   	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
 #   	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
 # 	}
-# 	elsif($coreproject =~ /RHEL6/)
+# 	elsif($platform =~ /RHEL6/)
 # 	{
 # 		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
 #   	chdir($destdir);
