@@ -18,7 +18,7 @@ use Sys::Hostname;
 # my $database="/data/ccmdb/provident/";
 # my $dbbmloc="/data/ccmbm/provident/";
 # $result=GetOptions("crs=s"=>\$crs);
-my $result=GetOptions("platform=s"=>\$platform,"tertiodest=s"=>\$tertiodest);
+my $result=GetOptions("platform=s"=>\$platform,"destdir=s"=>\$destdir);
 if(!$result)
 {
 	print "Please provide devprojectname \n";
@@ -30,7 +30,7 @@ if(!$platform)
 	print "You need to supply the platform where packaging happens \n";
 	exit;
 }
-if(!$tertiodest)
+if(!$destdir)
 {
 	print "You need to supply tertio destination directory \n";
 	exit;
@@ -95,10 +95,10 @@ sub createTar()
   	$hostos="rhel5";
   	$hostplatform="linAS5";
   	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;`;
-  	print "tertio-$patchnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
-  	copy("tertio-$patchnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
+  	print "tertio-$patchnumber-$hostos-build$build_number\.tar\.gz => $destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
+  	copy("tertio-$patchnumber-$hostos-build$build_number\.tar\.gz","$destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  	push(@location,"$destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
+  	print LOCATION "$destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
 	}
 	elsif($platform =~ /hpiav3/)
 	{
@@ -107,10 +107,10 @@ sub createTar()
   	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostplatform="hpiav3";
   	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostplatform-build$build_number\.tar; gzip tertio-$patchnumber-$hostplatform-build$build_number\.tar;`;
-  	print "tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-  	copy("tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+  	print "tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz => $destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	copy("tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz","$destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  	push(@location,"$destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  	print LOCATION "$destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
 	}
   elsif($platform =~ /linAS3/)
   {
@@ -121,10 +121,10 @@ sub createTar()
   	$hostplatform="linAS3";
   	#`find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;gzip tertio-$patchnumber-$hostos-build$build_number\.tar;`;
   	`find * -type f -name "*README.txt" | xargs tar cvf tertio-patch$patchnumber\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-patch$patchnumber\.tar;`;
-  	print "tertio-patch$patchnumber\.tar => $tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
-  	copy("tertio-patch$patchnumber\.tar","$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
+  	print "tertio-patch$patchnumber\.tar => $destdir/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
+  	copy("tertio-patch$patchnumber\.tar","$destdir/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
+  	push(@location,"$destdir/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
+  	print LOCATION "$destdir/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
 	}
   elsif($platform =~ /sol9/)
   {
@@ -133,10 +133,10 @@ sub createTar()
   	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostplatform="sol9";
   	`find * -type f -name "*README.txt" | xargs tar cvf tertio-patch$patchnumber\.tar;find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-patch$patchnumber\.tar;`;
-  	print "tertio-patch$patchnumber\.tar => $tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
-  	copy("tertio-patch$patchnumber\.tar","$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
+  	print "tertio-patch$patchnumber\.tar => $destdir/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
+  	copy("tertio-patch$patchnumber\.tar","$destdir/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
+  	push(@location,"$destdir/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
+  	print LOCATION "$destdir/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
 	}
   elsif($platform =~ /hpia/)
   {
@@ -145,10 +145,10 @@ sub createTar()
   	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostplatform="hpia";
   	`find * -type f -name "*README.txt" | xargs tar cvf tertio-patch$patchnumber\.tar;find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-patch$patchnumber\.tar;`;
-  	print "tertio-patch$patchnumber\.tar => $tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
-  	copy("tertio-patch$patchnumber\.tar","$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
+  	print "tertio-patch$patchnumber\.tar => $destdir/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
+  	copy("tertio-patch$patchnumber\.tar","$destdir/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
+  	push(@location,"$destdir/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
+  	print LOCATION "$destdir/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
 	}
 	elsif($platform =~ /sol10/)
 	{
@@ -157,11 +157,11 @@ sub createTar()
   	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostplatform="sol10";
   	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostplatform-build$build_number\.tar;`;
-  	print "tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-  	copy("tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  	print "tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz => $destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	copy("tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz","$destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
 		#dummy comment.
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+  	push(@location,"$destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  	print LOCATION "$destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
 	}
 	elsif($platform =~ /RHEL6/)
 	{
@@ -170,10 +170,10 @@ sub createTar()
   	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostplatform="rhel6";
   	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$patchnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostplatform-build$build_number\.tar;`;
-  	print "tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-  	copy("tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+  	print "tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz => $destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	copy("tertio-$patchnumber-$hostplatform-build$build_number\.tar\.gz","$destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  	push(@location,"$destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  	print LOCATION "$destdir/$hostplatform/NotTested/tertio-$patchnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
 	}
   close LOCATION;
 }
