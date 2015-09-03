@@ -18,12 +18,23 @@ use Sys::Hostname;
 # my $database="/data/ccmdb/provident/";
 # my $dbbmloc="/data/ccmbm/provident/";
 # $result=GetOptions("crs=s"=>\$crs);
-# if(!$result)
-# {
-# 	print "Please provide devprojectname \n";
-# 	exit;
-# }
+my $result=GetOptions("coreproject=s"=>\$coreproject,"tertiodest=s"=>\$tertiodest);
+if(!$result)
+{
+	print "Please provide devprojectname \n";
+	exit;
+}
 # if(!$crs)
+if(!$coreproject)
+{
+	print "You need to supply core project name \n";
+	exit;
+}
+if(!$tertiodest)
+{
+	print "You need to supply tertio destination directory \n";
+	exit;
+}
 # {
 # 	print "No extra CRs are provided for this build, proceeding with already added one's \n";
 # }
@@ -58,123 +69,11 @@ my $coreproject;
 # /* Global Environment Variables ******* /
 sub main()
 {
-	  $coreproject=$machinehash{$hostname};
-		print $coreproject;
-		copyBinaries();
+	  # $coreproject=$machinehash{$hostname};
+		# print $coreproject;
+		# copyBinaries();
 		createTar();
 }
-
-sub copyBinaries()
-{
-	umask 002;
-	# Choose the platform project
-	$coreproject=~ s/^\s+|\s+$//g;
-	$binarylist="$Bin/fileplacement.fp";
-  if($coreproject =~ /linAS5/)
-  {
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
-	}
-  elsif($coreproject =~ /linAS3/)
-  {
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS3";
-	}
-	elsif($coreproject =~ /sol10/)
-	{
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol10";
-	}
-	elsif($coreproject =~ /sol9/)
-	{
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol9";
-	}
-	elsif($coreproject =~ /hpiav3/)
-	{
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpiav3";
-	}
-	elsif($coreproject =~ /hpia/)
-	{
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpia";
-	}
-	elsif($coreproject =~ /RHEL6/)
-	{
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
-	}
-	rmtree($destdir);
-	open OP, "< $binarylist";
-  @file_list=<OP>;
-  close OP;
-  my %deliveryhash;
-	# Select the basedirectory of the project and construct the delivery hash
-  $delroot="$dbbmloc/$coreproject/Provident_Dev/";
-  foreach $file(@file_list)
-  {
-  	if($file =~ /TOMESRC/)
-  	{
-  		my @del=split(/\s+/,$file);
-  		if($del[3] eq ".")
-  		{
-  			$deliveryhash{$del[1]}="$del[1],$del[5]";
-  		}
-  		else
-  		{
-  			$deliveryhash{$del[1]}="$del[3],$del[5]";
-  		}
-  	}
-  	elsif($file =~ /DASHBOARDSRC/)
-  	{
-  		my @del=split(/\s+/,$file);
-  		if($del[3] eq ".")
-  		{
-  			$deliveryhash{$del[1]}="$del[1],$del[5]";
-  		}
-  		else
-  		{
-  			$deliveryhash{$del[1]}="$del[3],$del[5]";
-  		}
-  	}
-  	else
-  	{
-			print "Invalid file for this kind of packaging \n";
-  		# my @del=split(/\s+/,$file);
-  		# if($del[3] eq ".")
-  		# {
-			# 	$deliveryhash{"$delroot/$del[1]"}="$del[1],$del[5]";
-  		# }
-  		# else
-  		# {
-  		# 	$deliveryhash{"$delroot/$del[1]"}="$del[3],$del[5]";
-  		# }
-  	}
-  	}
-  #  open OP, "< $javabinarylist";
-  #  @file_list=<OP>;
-  #  close OP;
-  #  $delroot="$dbbmloc/$javaprojectname/Provident_Java/";
-  #  foreach $file(@file_list)
-  #  {
-  #  	my @del=split(/\s+/,$file);
-  #  	if($del[3] eq ".")
-  #  	{
- # 			$deliveryhash{"$delroot/$del[1]"}="$del[1],$del[5]";
- # 		}
-  # else
-  #  	{
-	#  		$deliveryhash{"$delroot/$del[1]"}="$del[3],$del[5]";
-  #  	}
-  #  }
-	# Read the hash and copy the binaries
-	foreach $key(keys %deliveryhash)
-  {
-		$dirname=dirname($deliveryhash{$key});
-		($filename,$permission)=split(/,/,$deliveryhash{$key});
-		$filename=~ s/^\s+|\s+$//g;
-		$permission=~ s/^\s+|\s+$//g;
-  	mkpath("$destdir/$dirname");
-		#copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
-		copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $key $!");
-		chmod(oct($permission),"$destdir/$filename") or die("Couldn't able to set the permission $!");
-		print "Permission: $permission for file: $destdir/$filename \n";
-  }
-  }
 
 sub createTar()
 {
@@ -278,4 +177,117 @@ sub createTar()
 	}
   close LOCATION;
 }
+# sub copyBinaries()
+# {
+# 	umask 002;
+# 	# Choose the platform project
+# 	$coreproject=~ s/^\s+|\s+$//g;
+# 	$binarylist="$Bin/fileplacement.fp";
+#   if($coreproject =~ /linAS5/)
+#   {
+# 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
+# 	}
+#   elsif($coreproject =~ /linAS3/)
+#   {
+# 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS3";
+# 	}
+# 	elsif($coreproject =~ /sol10/)
+# 	{
+# 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol10";
+# 	}
+# 	elsif($coreproject =~ /sol9/)
+# 	{
+# 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol9";
+# 	}
+# 	elsif($coreproject =~ /hpiav3/)
+# 	{
+# 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpiav3";
+# 	}
+# 	elsif($coreproject =~ /hpia/)
+# 	{
+# 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpia";
+# 	}
+# 	elsif($coreproject =~ /RHEL6/)
+# 	{
+# 		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
+# 	}
+# 	rmtree($destdir);
+# 	open OP, "< $binarylist";
+#   @file_list=<OP>;
+#   close OP;
+#   my %deliveryhash;
+# 	# Select the basedirectory of the project and construct the delivery hash
+#   $delroot="$dbbmloc/$coreproject/Provident_Dev/";
+#   foreach $file(@file_list)
+#   {
+#   	if($file =~ /TOMESRC/)
+#   	{
+#   		my @del=split(/\s+/,$file);
+#   		if($del[3] eq ".")
+#   		{
+#   			$deliveryhash{$del[1]}="$del[1],$del[5]";
+#   		}
+#   		else
+#   		{
+#   			$deliveryhash{$del[1]}="$del[3],$del[5]";
+#   		}
+#   	}
+#   	elsif($file =~ /DASHBOARDSRC/)
+#   	{
+#   		my @del=split(/\s+/,$file);
+#   		if($del[3] eq ".")
+#   		{
+#   			$deliveryhash{$del[1]}="$del[1],$del[5]";
+#   		}
+#   		else
+#   		{
+#   			$deliveryhash{$del[1]}="$del[3],$del[5]";
+#   		}
+#   	}
+#   	else
+#   	{
+# 			print "Invalid file for this kind of packaging \n";
+#   		# my @del=split(/\s+/,$file);
+#   		# if($del[3] eq ".")
+#   		# {
+# 			# 	$deliveryhash{"$delroot/$del[1]"}="$del[1],$del[5]";
+#   		# }
+#   		# else
+#   		# {
+#   		# 	$deliveryhash{"$delroot/$del[1]"}="$del[3],$del[5]";
+#   		# }
+#   	}
+#   	}
+#   #  open OP, "< $javabinarylist";
+#   #  @file_list=<OP>;
+#   #  close OP;
+#   #  $delroot="$dbbmloc/$javaprojectname/Provident_Java/";
+#   #  foreach $file(@file_list)
+#   #  {
+#   #  	my @del=split(/\s+/,$file);
+#   #  	if($del[3] eq ".")
+#   #  	{
+#  # 			$deliveryhash{"$delroot/$del[1]"}="$del[1],$del[5]";
+#  # 		}
+#   # else
+#   #  	{
+# 	#  		$deliveryhash{"$delroot/$del[1]"}="$del[3],$del[5]";
+#   #  	}
+#   #  }
+# 	# Read the hash and copy the binaries
+# 	foreach $key(keys %deliveryhash)
+#   {
+# 		$dirname=dirname($deliveryhash{$key});
+# 		($filename,$permission)=split(/,/,$deliveryhash{$key});
+# 		$filename=~ s/^\s+|\s+$//g;
+# 		$permission=~ s/^\s+|\s+$//g;
+#   	mkpath("$destdir/$dirname");
+# 		#copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
+# 		copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $key $!");
+# 		chmod(oct($permission),"$destdir/$filename") or die("Couldn't able to set the permission $!");
+# 		print "Permission: $permission for file: $destdir/$filename \n";
+#   }
+#   }
+
+
 main();
