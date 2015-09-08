@@ -10,7 +10,7 @@ use File::Copy;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 use Sys::Hostname;
-use List::MoreUtils qw( minmax );
+use List::MoreUtils qw( minmax uniq );
 my ($min, $patchnumber);
 
 #/************ Setting Environment Variables *******************/
@@ -211,8 +211,9 @@ sub getTasksnReadme()
 		print OP @confixes;
 		close OP;
 		@sortedtasks = sort {$b <=> $a} @tasks;
+		@uniqtasks = uniq @sortedtasks;
 		#@dsatasks=join("\n", map { 'DSA_' . $_ } @tasks);
-		$tasklist=join(",",@sortedtasks);
+		$tasklist=join(",",@uniqtasks);
 		($min, $patchnumber) = minmax @tasks;
 		print "$patchnumber is the patchnumber \n";
 		open OP,"+> $Bin/contasks.txt";
