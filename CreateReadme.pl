@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.6 CreateReadme script
+# DSA MR CreateReadme script
 use Cwd;
 use File::Path;
 use File::Find;
@@ -12,24 +12,13 @@ use lib "$Bin/../lib";
 use Sys::Hostname;
 
 #/************ Setting Environment Variables *******************/
-my $database="/data/ccmdb/provident/";
-my $dbbmloc="/data/ccmbm/provident/";
-my $binarylist="$Bin/fileplacement.fp";
-my $javabinarylist="$Bin/javabinaries.fp";
 my $hostname = hostname;
 my $hostplatform;
-if($hostname =~ /pesthp2/)
-{
-	$ENV{'PATH'}="/usr/contrib/bin:$ENV{'PATH'}";
-}
-if($hostname !~ /pesthp2/)
-{
-	# On HPUX, CCM client doesn't exist, ignore setting this environment there
-	$ENV{'CCM_HOME'}="/opt/ccm71";
-	$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
-	$CCM="$ENV{'CCM_HOME'}/bin/ccm";
-}
-my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number);
+# On HPUX, CCM client doesn't exist, ignore setting this environment there
+$ENV{'CCM_HOME'}="/opt/ccm71";
+$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
+$CCM="$ENV{'CCM_HOME'}/bin/ccm";
+my $result=GetOptions("coreproject=s"=>\$coreproject,"database=s"=>\$db,"buildnumber=s"=>\$build_number);
 if(!$result)
 {
 	print "Please provide coreprojectname \n";
@@ -40,6 +29,14 @@ if(!$coreproject)
 	print "You need to supply core project name \n";
 	exit;
 }
+if(!$db)
+{
+	print "You need to supply database name \n";
+	exit;
+}
+$db=~ s/^\s+|\s+$//g;
+my $database="/data/ccmdb/$db";
+my $dbbmloc="/data/ccmbm/$db";
 push(@projectlist,$coreproject);
 my @PatchFiles;
 my @files;
@@ -56,10 +53,7 @@ my @op;
 my @file_list;
 my $mrnumber;
 my @location_explode;
-#my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
-#my $mailto='kiran.daadhi@evolving.com';
 my %hash;
-$destdir="/u/kkdaadhi/Tertio_Deliverable";
 my $readmeIssue;
 @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 my @days = qw(Sun Mon Tue Wed Thu Fri Sat Sun);
@@ -74,13 +68,9 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
-my $tertiodest="/u/kkdaadhi/Tertio_Dest";
-#my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
-my $f_762a='1409';
-my $f_762c='1413';
-my $f_763a='1431';
-my $f_763b='1436';
+my $f_401='952';
+my $f_402='969';
 sub main()
 {
 		start_ccm();
@@ -89,93 +79,86 @@ sub main()
 }
 sub listfolderTasks()
 {
-	@tasks_762a=`$CCM folder -show tasks '$f_762a' -u -f "%task_number"`;
-	@tasks_762c=`$CCM folder -show tasks '$f_762c' -u -f "%task_number"`;
-	@tasks_763a=`$CCM folder -show tasks '$f_763a' -u -f "%task_number"`;
-	@tasks_763b=`$CCM folder -show tasks '$f_763b' -u -f "%task_number"`;
+	@tasks_401=`$CCM folder -show tasks '$f_401' -u -f "%task_number"`;
+	@tasks_402=`$CCM folder -show tasks '$f_402' -u -f "%task_number"`;
 
-	print "Tasks in 7.6.2.a are => @tasks_762a \n\n";
-	print "Tasks in 7.6.2.c are => @tasks_762c \n\n";
-	print "Tasks in 7.6.3.a are => @tasks_763a \n\n";
-	print "Tasks in 7.6.3.b are => @tasks_763b \n\n";
-	foreach $task(@tasks_762a)
+	print "Tasks in 4.0.1 are => @tasks_401 \n\n";
+	print "Tasks in 4.0.2 are => @tasks_402 \n\n";
+	foreach $task(@tasks_401)
 	{
 		$task=~ s/^\s+|\s+$//g;
 		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
 		print "CR corresponding to task $task is: $crinfo\n";
-		push(@crs_762a,$crinfo);
+		push(@crs_401,$crinfo);
 	}
-	@uniq762a = do { my %seen; grep { !$seen{$_}++ } @crs_762a};
-	foreach $task(@tasks_762c)
-	{
-		$task=~ s/^\s+|\s+$//g;
-		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
+	@uniq401 = do { my %seen; grep { !$seen{$_}++ } @crs_401};
+	foreach $task(@tasks_402)
+	{ $task=~ s/^\s+|\s+$//g; $crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
 		print "CR corresponding to task $task is: $crinfo\n";
-		push(@crs_762c,$crinfo);
+		push(@crs_402,$crinfo);
 	}
-	@uniq762c = do { my %seen; grep { !$seen{$_}++ } @crs_762c};
-	foreach $task(@tasks_763a)
-	{
-		$task=~ s/^\s+|\s+$//g;
-		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
-		print "CR corresponding to task $task is: $crinfo\n";
-		push(@crs_763a,$crinfo);
-	}
-	@uniq763a = do { my %seen; grep { !$seen{$_}++ } @crs_763a};
-	foreach $task(@tasks_763b)
-	{
-		$task=~ s/^\s+|\s+$//g;
-		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
-		print "CR corresponding to task $task is: $crinfo\n";
-		push(@crs_763b,$crinfo);
-	}
-	@uniq763b = do { my %seen; grep { !$seen{$_}++ } @crs_763b};
+	@uniq402 = do { my %seen; grep { !$seen{$_}++ } @crs_402};
+	# foreach $task(@tasks_763a)
+	# {
+	# 	$task=~ s/^\s+|\s+$//g;
+	# 	$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
+	# 	print "CR corresponding to task $task is: $crinfo\n";
+	# 	push(@crs_763a,$crinfo);
+	# }
+	# @uniq763a = do { my %seen; grep { !$seen{$_}++ } @crs_763a};
+	# foreach $task(@tasks_763b)
+	# {
+	# 	$task=~ s/^\s+|\s+$//g;
+	# 	$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
+	# 	print "CR corresponding to task $task is: $crinfo\n";
+	# 	push(@crs_763b,$crinfo);
+	# }
+	# @uniq763b = do { my %seen; grep { !$seen{$_}++ } @crs_763b};
 
-	print "Uniq CRs in 7.6.2.a are: @uniq762a \nUniq CRs in 7.6.2.c are: @uniq762c \nUniq CRs in 7.6.3.a are: @uniq763a\nUniq CRs in 7.6.3.a are: @uniq763b";
+	print "Uniq CRs in 401 are: @uniq401 \nUniq CRs in 402 are: @uniq402 \n";
 	open OP,"<$Bin/mrnumber.txt";
 	$mrnumber=<OP>;
 	close OP;
 	open BN,"+>$Bin/build_number.txt";
 	print BN $build_number;
 	close BN;
-	open  FILE, "+> $Bin/tertio_7.6_README.txt";
+	open  FILE, "+> $Bin/dsa_README.txt";
 	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
-	print FILE "PRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n";
+	print FILE "PRE-REQUISITE : 4.0.0\nSUPERSEDED : 4.0.1\n";
 	undef @tasks;
-	open SYNOP,"+>$Bin/7.6.3_synopsis.txt";
-;	open SUMM,"+>$Bin/7.6.3_summary_readme.txt";
-	open CRRESOLV, "+>$Bin/7.6.3_crresolv.txt";
-	open TASKINF,"+>$Bin/7.6.3_taskinfo.txt";
-	open PATCHBIN, "+>$Bin/7.6.3_patchbinarylist.txt";
-	open FORMATTASKS,"+>$Bin/7.6.3_formattsks.txt";
-	push(@uniq763a,@uniq763b);
-	getTasksnReadme(@uniq763a);
+	open SYNOP,"+>$Bin/4.0.2_synopsis.txt";
+	open SUMM,"+>$Bin/4.0.2_summary_readme.txt";
+	open CRRESOLV, "+>$Bin/4.0.2_crresolv.txt";
+	open TASKINF,"+>$Bin/4.0.2_taskinfo.txt";
+	open PATCHBIN, "+>$Bin/4.0.2_patchbinarylist.txt";
+	open FORMATTASKS,"+>$Bin/4.0.2_formattsks.txt";
+	getTasksnReadme(@uniq402);
 	close SUMM;
 	close SYNOP;
 	close CRRESOLV;
 	close TASKINF;
 	close PATCHBIN;
 	close FORMATTASKS;
-	open SYNOP,"+>$Bin/7.6.2_synopsis.txt";
-	open SUMM,"+>$Bin/7.6.2_summary_readme.txt";
-	open CRRESOLV, "+>$Bin/7.6.2_crresolv.txt";
-	open TASKINF,"+>$Bin/7.6.2_taskinfo.txt";
-	open PATCHBIN, "+>$Bin/7.6.2_patchbinarylist.txt";
-	open FORMATTASKS,"+>$Bin/7.6.2_formattsks.txt";
-	push(@uniq762a,@uniq762c);
+	open SYNOP,"+>$Bin/4.0.1_synopsis.txt";
+	open SUMM,"+>$Bin/4.0.1_summary_readme.txt";
+	open CRRESOLV, "+>$Bin/4.0.1_crresolv.txt";
+	open TASKINF,"+>$Bin/4.0.1_taskinfo.txt";
+	open PATCHBIN, "+>$Bin/4.0.1_patchbinarylist.txt";
+	open FORMATTASKS,"+>$Bin/4.0.1_formattsks.txt";
+	#push(@uniq401,@uniq762c);
 	#getTasksnReadme(@uniq762c);
-	#getTasksnReadme(@uniq762a);
-	getTasksnReadme(@uniq762a);
+	#getTasksnReadme(@uniq401);
+	getTasksnReadme(@uniq401);
 	close SUMM;
 	close SYNOP;
 	close CRRESOLV;
 	close TASKINF;
 	close PATCHBIN;
 	close FORMATTASKS;
-	#createReadme('7.6.3a,7.6.2c,7.6.2a');
-	createReadme('7.6.3');
-	createReadme('7.6.2');
+	#createReadme('7.6.3a,4.0.1c,4.0.1a');
+	createReadme('4.0.2');
+	createReadme('4.0.1');
 	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\n";
 	print FILE "ISSUES: None";
 	close FILE;
@@ -306,7 +289,7 @@ sub getTasksnReadme()
 		my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
 		print PATCHBIN @uniqbinlist;
 		$tasklist=join(",",@tasks);
-		@formattsks=join("\n", map { 'PROV_' . $_ } @tasks);
+		@formattsks=join("\n", map { 'DSA_' . $_ } @tasks);
 		print FORMATTASKS @formattsks;
 }
 sub start_ccm()
