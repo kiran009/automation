@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.7 Build Script
+# Tertio Build Script
 use Cwd;
 use File::Path;
 use File::Find;
@@ -27,6 +27,8 @@ if($hostname !~ /pesthp2/)
 }
 if($hostname =~ /pedlinux5/)
 {	$hostplatform="linas5"; $gmake='/usr/bin/gmake';}
+if($hostname =~ /pedlinux2/)
+{	$hostplatform="linas4"; $gmake='/usr/bin/gmake';}
 elsif($hostname =~ /pedlinux6/)
 {	$hostplatform="rhel6";$gmake='/usr/bin/gmake';}
 elsif($hostname =~ /pedsun2/)
@@ -35,6 +37,8 @@ elsif($hostname =~ /pesthp2/)
 {	$hostplatform="hpiav3";$gmake='/usr/local/bin/gmake';}
 elsif($hostname =~ /pedhp1/)
 {	$hostplatform="hpiav3";$gmake='/usr/local/bin/gmake';}
+elsif($hostname =~ /pedhp2/)
+{	$hostplatform="hpia";$gmake='/usr/local/bin/gmake';}
 
 $result=GetOptions("devproject=s"=>\$devprojectname);
 if(!$result)
@@ -53,12 +57,12 @@ umask 002;
 # /* Global Environment Variables ******* /
 sub main()
 {
-		if($hostname !~ /pesthp2/)
+		if(($hostname !~ /pesthp2/) || ($hostname !~ /pedhp2/) || ($hostname !~ /pedhp1/))
 		{
 			start_ccm();
 		}
 		compile();
-		if($hostname !~ /pesthp2/)
+		if(($hostname !~ /pesthp2/) || ($hostname !~ /pedhp2/) || ($hostname !~ /pedhp1/))
 		{
 			ccm_stop();
 		}
