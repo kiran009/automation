@@ -55,7 +55,15 @@ my $database="/data/ccmdb/$db/";
 #my $dbbmloc="/u/kkdaadhi/ccm_wa/$db/";
 my $dbbmloc="/data/ccmbm/$db/";
 my $workarea;
-if($database =~ /dsa/)
+# if($database =~ /dsa/)
+# {
+# 	$workarea="$dbbmloc/$devprojectname/DSA_MS_Dev";
+# }
+if($devprojectname =~ /FUR/)
+{
+	$workarea="$dbbmloc/$devprojectname/DSA_FUR_Dev";
+}
+elsif($devprojectname =~ /MS/)
 {
 	$workarea="$dbbmloc/$devprojectname/DSA_MS_Dev";
 }

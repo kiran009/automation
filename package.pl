@@ -14,7 +14,7 @@ use Sys::Hostname;
 #/************ Setting Environment Variables *******************/
 my $hostname = hostname;
 my $hostplatform;
-my $result=GetOptions("delproject=s"=>\$delprojectname,"database=s"=>\$db);
+my $result=GetOptions("delproject=s"=>\$delprojectname,"database=s"=>\$db,"dsadest=s"=>\$dsadest);
 if(!$result)
 {
 	print "Please provide Delivery Projectname and Database \n";
@@ -23,6 +23,16 @@ if(!$result)
 if(!$delprojectname)
 {
 	print "You need to supply delivery project name \n";
+	exit;
+}
+if(!$db)
+{
+	print "You need to supply database name \n";
+	exit;
+}
+if(!$dsadest)
+{
+	print "You need to have dsadestination directory \n";
 	exit;
 }
 $delprojectname=~ s/^\s+|\s+$//g;
@@ -60,11 +70,12 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
-my $dsadest="/u/kkdaadhi/DSAMS_Dest";
+#my $dsadest="/u/kkdaadhi/DSAMS_Dest";
 #my $dsadest="/data/releases/dsa/7.6.0/patches";
 #my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
 my %deliveryhash;
+my $patchprefix;
 sub main()
 {
 		pkg();
@@ -80,9 +91,19 @@ sub pkg()
 	{
 		next if ($op=~ m/AFFECTS:/);
 		next if ($op=~ /^\s*$/);
-  	$delroot="$dbbmloc/$delprojectname/DSA_MS_Delivery/";
+		if($delprojectname =~ /MS/)
+		{
+  		$delroot="$dbbmloc/$delprojectname/DSA_MS_Delivery/";
+			$op =~ s/\$MSHOME\///g;
+			$patchprefix="ms-patch";
+		}
+		elsif($delprojectname =~ /FUR/)
+		{
+  		$delroot="$dbbmloc/$delprojectname/DSA_FUR_Delivery/";
+			$op =~ s/\$FURHOME\///g;
+			$patchprefix="fur-patch";
+		}
 		#$op =~ tr/\$MSHOME\///cd;
-		$op =~ s/\$MSHOME\///g;
 		$op=~ s/^\s+|\s+$//g;
 		print "OP is: $op\n";
 		$deliveryhash{"$delroot/$op"}=$op;
@@ -105,24 +126,24 @@ sub pkg()
   {
   	$hostos="rhel5";
   	$hostplatform="linAS5";
-		`chmod -R 0775 *; find * -type f -name "$patch_number\_README.txt" | xargs tar cvf ms-patch$patch_number\.tar; find * -type f  \\( ! -name "$patch_number\_README.txt" ! -name "*.tar" \\) | xargs tar uvf ms-patch$patch_number\.tar;`;
-		copy("ms-patch$patch_number\.tar","$dsadest/$hostplatform/NotTested/") or die("Couldn't copy to destination $!");
-		print LOCATION "$dsadest/$hostplatform/NotTested/ms-patch$patch_number\.tar \n";
+		`chmod -R 0775 *; find * -type f -name "$patch_number\_README.txt" | xargs tar cvf $patchprefix$patch_number\.tar; find * -type f  \\( ! -name "$patch_number\_README.txt" ! -name "*.tar" \\) | xargs tar uvf $patchprefix$patch_number\.tar;`;
+		copy("$patchprefix$patch_number\.tar","$dsadest/$hostplatform/NotTested/") or die("Couldn't copy to destination $!");
+		print LOCATION "$dsadest/$hostplatform/NotTested/$patchprefix$patch_number\.tar \n";
 	}
 	elsif($delprojectname =~ /sol10/)
 	{
 		$hostplatform="sol10";
-		`chmod -R 0775 *; find * -type f -name "$patch_number\_README.txt" | xargs tar cvf ms-patch$patch_number\.tar; find * -type f  \\( ! -name "$patch_number\_README.txt" ! -name "*.tar" \\) | xargs tar uvf ms-patch$patch_number\.tar;`;
-		copy("ms-patch$patch_number\.tar","$dsadest/$hostplatform/NotTested/") or die("Couldn't copy to destination $!");
-		print LOCATION "$dsadest/$hostplatform/NotTested/ms-patch$patch_number\.tar \n";
+		`chmod -R 0775 *; find * -type f -name "$patch_number\_README.txt" | xargs tar cvf $patchprefix$patch_number\.tar; find * -type f  \\( ! -name "$patch_number\_README.txt" ! -name "*.tar" \\) | xargs tar uvf $patchprefix$patch_number\.tar;`;
+		copy("$patchprefix$patch_number\.tar","$dsadest/$hostplatform/NotTested/") or die("Couldn't copy to destination $!");
+		print LOCATION "$dsadest/$hostplatform/NotTested/$patchprefix$patch_number\.tar \n";
 	}
   elsif($delprojectname =~ /RHEL6/)
   {
   	$hostos="rhel6";
   	$hostplatform="rhel6";
-		`chmod -R 0775 *; find * -type f -name "$patch_number\_README.txt" | xargs tar cvf ms-patch$patch_number\.tar; find * -type f  \\( ! -name "$patch_number\_README.txt" ! -name "*.tar" \\) | xargs tar uvf ms-patch$patch_number\.tar;`;
-		copy("ms-patch$patch_number\.tar","$dsadest/$hostplatform/NotTested/") or die("Couldn't copy to destination $!");
-		print LOCATION "$dsadest/$hostplatform/NotTested/ms-patch$patch_number\.tar \n";
+		`chmod -R 0775 *; find * -type f -name "$patch_number\_README.txt" | xargs tar cvf $patchprefix$patch_number\.tar; find * -type f  \\( ! -name "$patch_number\_README.txt" ! -name "*.tar" \\) | xargs tar uvf $patchprefix$patch_number\.tar;`;
+		copy("$patchprefix$patch_number\.tar","$dsadest/$hostplatform/NotTested/") or die("Couldn't copy to destination $!");
+		print LOCATION "$dsadest/$hostplatform/NotTested/$patchprefix$patch_number\.tar \n";
 	}
   		close LOCATION;
 }
