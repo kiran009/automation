@@ -88,6 +88,10 @@ sub copyBinaries()
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS3";
 	}
+  elsif($coreproject =~ /linAS4/)
+  {
+		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS4";
+	}
 	elsif($coreproject =~ /sol10/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol10";
