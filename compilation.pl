@@ -80,7 +80,7 @@ sub compile()
 {
 	chdir "$workarea";
 	umask 002;
-	`$gmake clean all 2>&1 1>$Bin/gmake_$devprojectname\_$hostplatform.log`;
+	`$gmake clobber all 2>&1 1>$Bin/gmake_$devprojectname\_$hostplatform.log`;
 }
 
 sub start_ccm()
