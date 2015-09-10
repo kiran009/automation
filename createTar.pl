@@ -82,6 +82,7 @@ sub createTar()
 	close OP;
 	open LOCATION,">>$Bin/location.txt";
 	$coreproject=~ s/^\s+|\s+$//g;
+	$mrnumber=~ s/^\s+|\s+$//g;
 	open BN,"<$Bin/build_number.txt";
 	$build_number=<BN>;
 	close BN;
@@ -90,7 +91,7 @@ sub createTar()
 		# 	$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
 		$destdir="/u/kkdaadhi/DSAMS_Deliverable/linAS5";
   	chdir($destdir);
-  	copy("$Bin/README.txt",$destdir);
+  	copy("$Bin/dsa_README.txt",$destdir);
   	$hostos="rhel5";
   	$hostplatform="linAS5";
   	`find * -type f -name "*README.txt" | xargs tar cvf fur-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf fur-$mrnumber-$hostos-build$build_number\.tar;gzip fur-$mrnumber-$hostos-build$build_number\.tar;`;
