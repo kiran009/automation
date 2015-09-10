@@ -191,8 +191,8 @@ sub createReadme()
 	undef @uniqtsks;
 	undef @formattedtsks;
 
-  my ($deliveryname)=@_;
-	$deliveryname=~ s/^\s+|\s+$//g;
+  # my ($deliveryname)=@_;
+	# $deliveryname=~ s/^\s+|\s+$//g;
 	open OP,"<$Bin/con_formattsks.txt";
 	@formattsks=<OP>;
 	my @uniqtasks= do { my %seen; grep { !$seen{$_}++ } @formattsks};
