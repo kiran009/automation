@@ -87,62 +87,62 @@ print "The following list of CRs to the included in the patch:@crs\n";
 sub main()
 {
 		start_ccm();
-		# getTasksnReadme();
+		getTasksnReadme();
 		reconfigure_project();
 		# constructReadme();
 		ccm_stop();
 }
-sub constructReadme()
-{
-			$max=~ s/^\s+|\s+$//g;
-			open OP,"+> patchnumber.txt";
-			print OP $patchnumber;
-			close OP;
-			open OP,"+>$patchnumber\_README.txt";
-			print OP "CREATED:\n";
-			print OP "TASKS:$tasklist\n";
-			s/FIXES:// for @confixes;
-			print OP "FIXES:@confixes\n";
-			print OP "@uniqbinlist\n";
-			print OP "TO INSTALL AND UNINSTALL:\nRefer Patch Release Note\n";
-			print OP "PRE-REQUISITE PATCHES:\nPATCHES SUPERSEDED BY THIS PATCH:\n";
-			print OP "SUMMARY OF CHANGES AND AREAS AFFECTED:@consummary\nISSUES: None";
-			close OP;
-			`./updatePatchREADME.ksh XV $patchnumber\_README.txt`;
-			open OP,"< $patchnumber\_README.txt";
-			my @op=<OP>;
-			close OP;
-			open MODREADME,"+> $patchnumber\_MODREADME.txt";
-			foreach $op(@op)
-			{
-				# TASKS:10216,10201,10118,9994
-				if($op =~ /TASKS/)
-				{
-					($task,$tasknumbers)=split(/:/,$op);
-					@tasknmbrarray=split(/,/,$tasknumbers);
-					@sortedtasks=sort {$b <=> $a} @tasknmbrarray;
-					@dsatasks=join("\n", map { 'DSA_' . $_ } @sortedtasks);
-					$tasklist=join(",",@dsatasks);
-					print "Tasklist prior replace: $tasklist\n";
-					$tasklist =~ s/\r\n/,/g;
-					$tasklist =~ s/\n/,/g;
-					$tasklist =~ s/,$//; # get rid of last comma
-					print "Tasklist after modification: $tasklist\n";
-					print MODREADME "$task:$tasklist\n";
-				}
-				else{
-				print MODREADME $op;
-				}
-			}
-			close MODREADME;
-			move("$patchnumber\_MODREADME.txt","$patchnumber\_README.txt");
-}
+# sub constructReadme()
+# {
+# 			$max=~ s/^\s+|\s+$//g;
+# 			open OP,"+> patchnumber.txt";
+# 			print OP $patchnumber;
+# 			close OP;
+# 			open OP,"+>$patchnumber\_README.txt";
+# 			print OP "CREATED:\n";
+# 			print OP "TASKS:$tasklist\n";
+# 			s/FIXES:// for @confixes;
+# 			print OP "FIXES:@confixes\n";
+# 			print OP "@uniqbinlist\n";
+# 			print OP "TO INSTALL AND UNINSTALL:\nRefer Patch Release Note\n";
+# 			print OP "PRE-REQUISITE PATCHES:\nPATCHES SUPERSEDED BY THIS PATCH:\n";
+# 			print OP "SUMMARY OF CHANGES AND AREAS AFFECTED:@consummary\nISSUES: None";
+# 			close OP;
+# 			`./updatePatchREADME.ksh XV $patchnumber\_README.txt`;
+# 			open OP,"< $patchnumber\_README.txt";
+# 			my @op=<OP>;
+# 			close OP;
+# 			open MODREADME,"+> $patchnumber\_MODREADME.txt";
+# 			foreach $op(@op)
+# 			{
+# 				# TASKS:10216,10201,10118,9994
+# 				if($op =~ /TASKS/)
+# 				{
+# 					($task,$tasknumbers)=split(/:/,$op);
+# 					@tasknmbrarray=split(/,/,$tasknumbers);
+# 					@sortedtasks=sort {$b <=> $a} @tasknmbrarray;
+# 					@dsatasks=join("\n", map { 'DSA_' . $_ } @sortedtasks);
+# 					$tasklist=join(",",@dsatasks);
+# 					print "Tasklist prior replace: $tasklist\n";
+# 					$tasklist =~ s/\r\n/,/g;
+# 					$tasklist =~ s/\n/,/g;
+# 					$tasklist =~ s/,$//; # get rid of last comma
+# 					print "Tasklist after modification: $tasklist\n";
+# 					print MODREADME "$task:$tasklist\n";
+# 				}
+# 				else{
+# 				print MODREADME $op;
+# 				}
+# 			}
+# 			close MODREADME;
+# 			move("$patchnumber\_MODREADME.txt","$patchnumber\_README.txt");
+# }
 sub getTasksnReadme()
 {
-	open SYNOP,"+>$Bin/synopsis.txt";
-	open SUMM,"+> $Bin/summary_readme.txt";
-	open CRRESOLV, "+> $Bin/crresolv.txt";
-	open TASKINF,"+>$Bin/taskinfo.txt";
+	# open SYNOP,"+>$Bin/synopsis.txt";
+	# open SUMM,"+> $Bin/summary_readme.txt";
+	# open CRRESOLV, "+> $Bin/crresolv.txt";
+	# open TASKINF,"+>$Bin/taskinfo.txt";
 	foreach $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
@@ -154,81 +154,80 @@ sub getTasksnReadme()
 			print "TASKNUMBER is: $task_number \n";
 			push(@tasks,$task_number);
 		}
-		($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
-		($problem_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_number"`;
-		($requesttype)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%request_type"`;
-		($severity)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%severity"`;
-		($priority)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%priority"`;
-		($resolver)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%resolver"`;
-		$synopsis=~ s/^\s+|\s+$//g;
-		$problem_number=~ s/^\s+|\s+$//g;
-		$requesttype=~ s/^\s+|\s+$//g;
-		$severity=~ s/^\s+|\s+$//g;
-		$resolver=~ s/^\s+|\s+$//g;
-		$task_synopsis=~ s/^\s+|\s+$//g;
-		$task_resolver=~ s/^\s+|\s+$//g;
-		$priority=~ s/^\s+|\s+$//g;
-		print "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
-		print "$task_number#$task_synopsis#$task_resolver#$synopsis\n";
-		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
-		print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
-		print SYNOP "CR$cr $synopsis\n";
-		#fetch readme
-		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
-  	$patch_readme=`$CCM query -u -f %patch_readme`;
-
-		print "Patch Readme is: $patch_readme \n";
-		if($patch_readme =~ /void/)
-		{
-			print "README issue \n";
-			exit;
-		}
-
-  	if($patch_readme =~ /N\/A/)
-  	{
-  		print "The following CR: $cr doesn't have a README \n";
-  	}
-  	else
-  	{
-   		open OP1,"+> $Bin/$problem_number\_README.txt";
-  		print OP1 $patch_readme;
-  		close OP1;
-  		#`dos2unix $Bin/$problem_number\_README.txt 2>&1 1>/dev/null`;
-			#`perl -pi -e's/\015\012/\012/g' $Bin/$problem_number\_README.txt 2>&1 1>/dev/null`;
-			`sed -i 's/^M//g' $Bin/$problem_number\_README.txt 2>&1 1>/dev/null`;
-  		@fixes=`sed -n '/FIXES:/,/AFFECTS/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | sed '/^M/d'`;
-			push(@confixes,@fixes);
-  		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | sed '/^M/d'`;
-    	push(@patchbinarylist,@PatchFiles);
-    	@summary=`sed -n '/AFFECTED:/,/ISSUES/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^M/d' | grep -v 'AFFECTED:' | grep -v 'ISSUES' | sed '/^\$/d'`;
-    	push(@consummary,@summary);
-		}
-	}
-		open OP,"+> $Bin/consummary.txt";
-		print OP @consummary;
-		close OP;
-		open OP,"+> $Bin/confixes.txt";
-		print OP @confixes;
-		close OP;
+	# 	($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
+	# 	($problem_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_number"`;
+	# 	($requesttype)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%request_type"`;
+	# 	($severity)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%severity"`;
+	# 	($priority)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%priority"`;
+	# 	($resolver)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%resolver"`;
+	# 	$synopsis=~ s/^\s+|\s+$//g;
+	# 	$problem_number=~ s/^\s+|\s+$//g;
+	# 	$requesttype=~ s/^\s+|\s+$//g;
+	# 	$severity=~ s/^\s+|\s+$//g;
+	# 	$resolver=~ s/^\s+|\s+$//g;
+	# 	$task_synopsis=~ s/^\s+|\s+$//g;
+	# 	$task_resolver=~ s/^\s+|\s+$//g;
+	# 	$priority=~ s/^\s+|\s+$//g;
+	# 	print "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
+	# 	print "$task_number#$task_synopsis#$task_resolver#$synopsis\n";
+	# 	print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
+	# 	print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
+	# 	print SYNOP "CR$cr $synopsis\n";
+	# 	#fetch readme
+	# 	`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
+  # 	$patch_readme=`$CCM query -u -f %patch_readme`;
+	#
+	# 	print "Patch Readme is: $patch_readme \n";
+	# 	if($patch_readme =~ /void/)
+	# 	{
+	# 		print "README issue \n";
+	# 		exit;
+	# 	}
+	#
+  # 	if($patch_readme =~ /N\/A/)
+  # 	{
+  # 		print "The following CR: $cr doesn't have a README \n";
+  # 	}
+  # 	else
+  # 	{
+  #  		open OP1,"+> $Bin/$problem_number\_README.txt";
+  # 		print OP1 $patch_readme;
+  # 		close OP1;
+  # 		#`dos2unix $Bin/$problem_number\_README.txt 2>&1 1>/dev/null`;
+	# 		#`perl -pi -e's/\015\012/\012/g' $Bin/$problem_number\_README.txt 2>&1 1>/dev/null`;
+	# 		`sed -i 's/^M//g' $Bin/$problem_number\_README.txt 2>&1 1>/dev/null`;
+  # 		@fixes=`sed -n '/FIXES:/,/AFFECTS/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | sed '/^M/d'`;
+	# 		push(@confixes,@fixes);
+  # 		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | sed '/^M/d'`;
+  #   	push(@patchbinarylist,@PatchFiles);
+  #   	@summary=`sed -n '/AFFECTED:/,/ISSUES/ p' $problem_number\_README.txt  | sed '\$ d' | sed '/^M/d' | grep -v 'AFFECTED:' | grep -v 'ISSUES' | sed '/^\$/d'`;
+  #   	push(@consummary,@summary);
+	# 	}
+	# }
+	# 	open OP,"+> $Bin/consummary.txt";
+	# 	print OP @consummary;
+	# 	close OP;
+	# 	open OP,"+> $Bin/confixes.txt";
+	# 	print OP @confixes;
+	# 	close OP;
 		@sortedtasks = sort {$b <=> $a} @tasks;
 		@uniqtasks = uniq @sortedtasks;
 		#@dsatasks=join("\n", map { 'DSA_' . $_ } @tasks);
 		$tasklist=join(",",@uniqtasks);
-		($min, $patchnumber) = minmax @tasks;
-		print "$patchnumber is the patchnumber \n";
-		open OP,"+> $Bin/contasks.txt";
-		print OP $tasklist;
-		close OP;
-		@uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
-		open OP, "+> $Bin/patchbinarylist.txt";
-		print OP @uniqbinlist;
-		close OP;
-		close SUMM;
-		close SYNOP;
-		close CRRESOLV;
-		close TASKINF;
+		# ($min, $patchnumber) = minmax @tasks;
+		# print "$patchnumber is the patchnumber \n";
+		# open OP,"+> $Bin/contasks.txt";
+		# print OP $tasklist;
+		# close OP;
+		# @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
+		# open OP, "+> $Bin/patchbinarylist.txt";
+		# print OP @uniqbinlist;
+		# close OP;
+		# close SUMM;
+		# close SYNOP;
+		# close CRRESOLV;
+		# close TASKINF;
 }
-
 sub reconfigure_project()
 {
 	$ccmworkarea=`$CCM wa -show -recurse $projectname`;
