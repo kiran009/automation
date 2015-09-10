@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.6 send E-mail Script
+# DSA send E-mail Script
 use Cwd;
 use File::Path;
 use File::Find;
@@ -71,13 +71,13 @@ sub crtnsndMail()
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
 	print $FILE "<tr><b><td>CR ID</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr><br/>";
 	crresolv('7.6.3');
-	crresolv('7.6.2');
+	# crresolv('7.6.2');
 	print $FILE "</table><br/>";
 	print $FILE "<b>The checked in tasks since the last build are:</b><br/>";
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
 	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr>";
 	taskinfo('7.6.3');
-	taskinfo('7.6.2');
+	# taskinfo('7.6.2');
 	print $FILE "</table><br/>";
 	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";
 	close $FILE;
