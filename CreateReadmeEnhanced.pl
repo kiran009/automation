@@ -275,28 +275,28 @@ sub getTasksnReadme()
     }
     else
     {
-	 			if(($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4596/) || ($cr =~ /4606/) || ($cr =~ /4609/) || ($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4388/) || ($cr =~ /4491/) )
-    		{
-    			open OP1,"+> $Bin/$patch_number\_README.txt";
-    			print OP1 $patch_readme;
-    			close OP1;
-    			`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
-    			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'`;
-    			push(@patchbinarylist,@PatchFiles);
-    			$sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | grep -v 'ISSUES' | sed '/^\$/d'`;
-    			print SUMM "CR$cr - $sumreadme\n";
-    		}
-    		else
-    		{
-     				open OP1,"+> $Bin/$patch_number\_README.txt";
+				# 	if(($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4596/) || ($cr =~ /4606/) || ($cr =~ /4609/) || ($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4388/) || ($cr =~ /4491/) )
+    		# {
+    		# 	open OP1,"+> $Bin/$patch_number\_README.txt";
+    		# 	print OP1 $patch_readme;
+    		# 	close OP1;
+    		# 	`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
+    		# 	@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'`;
+    		# 	push(@patchbinarylist,@PatchFiles);
+    		# 	$sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | grep -v 'ISSUES' | sed '/^\$/d'`;
+    		# 	print SUMM "CR$cr - $sumreadme\n";
+    		# }
+    		# else
+    		# {
+     				open OP1,"+> $Bin/$cr\_README.txt";
     				print OP1 $patch_readme;
     				close OP1;
-    				`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
-    				@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'| sed '/^\$/d'`;
+    				`dos2unix $Bin/$cr\_README.txt 2>&1 1>/dev/null`;
+    				@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $cr\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'| sed '/^\$/d'`;
 	     		 	push(@patchbinarylist,@PatchFiles);
-      			$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
+      			$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $cr\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
       			print SUMM "CR$cr - $sumreadme\n";
-    			}
+    			# }
     		}
 		}
 		my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
