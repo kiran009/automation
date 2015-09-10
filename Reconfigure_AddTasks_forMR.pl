@@ -254,5 +254,7 @@ sub ccm_stop()
 	print "In Stop CCM \n";
 	open(ccm_addr,"$ENV{'CCM_HOME'}/bin/ccm stop |");
 	close(ccm_addr);
+	# Nullify the location.txt file
+	`> $Bin/location.txt`;
 }
 main();
