@@ -154,6 +154,7 @@ sub getTasksnReadme()
 			print "TASKNUMBER is: $task_number \n";
 			push(@tasks,$task_number);
 		}
+	}
 	# 	($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
 	# 	($problem_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_number"`;
 	# 	($requesttype)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%request_type"`;
