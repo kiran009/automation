@@ -265,10 +265,14 @@ sub getTasksnReadme()
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		print SYNOP "CR$cr $synopsis\n";
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
-  	$patch_number=`$CCM query -u -f %patch_number`;
+  	# $patch_number=`$CCM query -u -f %patch_number`;
   	$patch_readme=`$CCM query -u -f %patch_readme`;
-  	$patch_number=~ s/^\s+|\s+$//g;
-  	$patch_number =~ s/\s+/_/g;
+  	# $patch_number=~ s/^\s+|\s+$//g;
+  	# $patch_number =~ s/\s+/_/g;
+		$mr_number=~ s/^\s+|\s+$//g;
+		open MR,"+> $Bin/mrnumber.txt";
+		print MR "$mr_number";
+		close MR;
     if(($patch_readme =~ /N\/A/) || (not defined $patch_readme))
     {
     		print "The following CR: $cr doesn't have a README \n";
