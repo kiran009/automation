@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.6 Build Script
+# DSA Transition Script
 use Cwd;
 use File::Path;
 use File::Find;
