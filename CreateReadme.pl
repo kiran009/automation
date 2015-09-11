@@ -18,13 +18,13 @@ my $hostplatform;
 # {
 # 	$ENV{'PATH'}="/usr/contrib/bin:$ENV{'PATH'}";
 # }
-# if($hostname !~ /pesthp2/)
-# {
-# 	# On HPUX, CCM client doesn't exist, ignore setting this environment there
-# 	$ENV{'CCM_HOME'}="/opt/ccm71";
-# 	$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
-# 	$CCM="$ENV{'CCM_HOME'}/bin/ccm";
-# }
+ if($hostname !~ /pesthp2/)
+ {
+ 	# On HPUX, CCM client doesn't exist, ignore setting this environment there
+ 	$ENV{'CCM_HOME'}="/opt/ccm71";
+ 	$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
+ 	$CCM="$ENV{'CCM_HOME'}/bin/ccm";
+ }
 my $result=GetOptions("database=s"=>\$db,"buildnumber=s"=>\$build_number);
 if(!$result)
 {
@@ -70,7 +70,7 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
-my $tertiodest="/u/kkdaadhi/Tertio_Dest";
+# my $tertiodest="/u/kkdaadhi/Tertio_Dest";
 #my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
 my $f_411='970';
@@ -215,7 +215,7 @@ sub createReadme()
 	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @binarylist};
 	print "Uniq Binlist is: @uniqbinlist\n";
 	print FILE "--";
-	print FILE "\nRelease - $mr_number\n";
+	print FILE "\nRelease - $deliveryname\n";
 	print FILE "\nTASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
 	print FILE "AFFECTS: FUR 4.1.0\n";
