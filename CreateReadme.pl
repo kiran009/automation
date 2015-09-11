@@ -104,24 +104,6 @@ sub listfolderTasks()
 		push(@crs_412,$crinfo);
 	}
 	@uniq412 = do { my %seen; grep { !$seen{$_}++ } @crs_412};
-	# foreach $task(@tasks_763a)
-	# {
-	# 	$task=~ s/^\s+|\s+$//g;
-	# 	$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
-	# 	print "CR corresponding to task $task is: $crinfo\n";
-	# 	push(@crs_763a,$crinfo);
-	# }
-	# @uniq763a = do { my %seen; grep { !$seen{$_}++ } @crs_763a};
-	# foreach $task(@tasks_763b)
-	# {
-	# 	$task=~ s/^\s+|\s+$//g;
-	# 	$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
-	# 	print "CR corresponding to task $task is: $crinfo\n";
-	# 	push(@crs_763b,$crinfo);
-	# }
-	# @uniq763b = do { my %seen; grep { !$seen{$_}++ } @crs_763b};
-
-	print "Uniq CRs in 4.1.1 are: @uniq411 \nUniq CRs in 4.1.2 are: @uniq412";
 	open OP,"<$Bin/mrnumber.txt";
 	$mrnumber=<OP>;
 	close OP;
@@ -140,6 +122,9 @@ sub listfolderTasks()
 	open PATCHBIN, "+>$Bin/4.1.2_patchbinarylist.txt";
 	open FORMATTASKS,"+>$Bin/4.1.2_formattsks.txt";
 	#push(@uniq763a,@uniq763b);
+	open FOLDER,"+>$Bin/4.1.2_folder.txt";
+	print FOLDER $f_412;
+	close FOLDER;
 	getTasksnReadme(@uniq412);
 	close SUMM;
 	close SYNOP;
@@ -153,6 +138,9 @@ sub listfolderTasks()
 	open TASKINF,"+>$Bin/4.1.1_taskinfo.txt";
 	open PATCHBIN, "+>$Bin/4.1.1_patchbinarylist.txt";
 	open FORMATTASKS,"+>$Bin/4.1.1_formattsks.txt";
+	open FOLDER,"+>$Bin/4.1.1_folder.txt";
+	print FOLDER $f_411;
+	close FOLDER;
 	#push(@uniq762a,@uniq762c);
 	#getTasksnReadme(@uniq762c);
 	#getTasksnReadme(@uniq762a);
@@ -256,7 +244,7 @@ sub getTasksnReadme()
 			($task_resolver)=`$CCM task -show info $task_number \-u \-format "%resolver"`;
 			$task_synopsis=~ s/^\s+|\s+$//g;
 			$task_resolver=~ s/^\s+|\s+$//g;
-			print TASKINF "$task_numbe^$task_synopsis^$task_resolver\n";
+			print TASKINF "$task_number\^$task_synopsis\^$task_resolver\n";
 		}
 		$synopsis=~ s/^\s+|\s+$//g;
 		$requesttype=~ s/^\s+|\s+$//g;
@@ -265,7 +253,7 @@ sub getTasksnReadme()
 		$task_synopsis=~ s/^\s+|\s+$//g;
 		$task_resolver=~ s/^\s+|\s+$//g;
 		$priority=~ s/^\s+|\s+$//g;
-		print CRRESOLV "$cr^$synopsis^$requesttype^$severity^$resolver^$priority\n";
+		print CRRESOLV "$cr\^$synopsis\^$requesttype\^$severity\^$resolver\^$priority\n";
 		print SYNOP "CR$cr $synopsis\n";
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
   	$patch_number=`$CCM query -u -f %patch_number`;
@@ -278,15 +266,15 @@ sub getTasksnReadme()
     }
     else
     {
-	 					open OP1,"+> $Bin/$cr_README.txt";
-    				print OP1 $patch_readme;
-    				close OP1;
-    				`dos2unix $Bin/$cr_README.txt 2>&1 1>/dev/null`;
-    				@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $cr_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'| sed '/^\$/d'`;
-	     		 	push(@patchbinarylist,@PatchFiles);
-      			$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $cr_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
-      			print SUMM "CR$cr - $sumreadme\n";
-    	}
+	 	open OP1,"+> $Bin/$cr_README.txt";
+    		print OP1 $patch_readme;
+    		close OP1;
+    		`dos2unix $Bin/$cr_README.txt 2>&1 1>/dev/null`;
+    		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $cr_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'| sed '/^\$/d'`;
+	     	push(@patchbinarylist,@PatchFiles);
+      		$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $cr_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
+      		print SUMM "CR$cr - $sumreadme\n";
+    }
 		}
 		my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
 		print PATCHBIN @uniqbinlist;

@@ -98,10 +98,13 @@ sub crresolv()
 	open OP,"<$Bin/$releasenumber\_crresolv.txt";
 	@crresolv=<OP>;
 	close OP;
-	print $FILE "<tr><b><td colspan='6'>$releasenumber</td></tr>";
+	open OP, "<$Bin/$releasenumber\_folder.txt";
+	$foldernumber=<OP>;
+	close OP;
+	print $FILE "<tr><b><td colspan='6'>$releasenumber - $foldernumber</td></tr>";
 	foreach $cr(@crresolv)
 	{
-		($crid,$synopsis,$requesttype,$severity,$resolver,$priority)=split(/^/,$cr);
+		($crid,$synopsis,$requesttype,$severity,$resolver,$priority)=split(/\^/,$cr);
 		print $FILE "<tr><b><td>$crid</td><td>$synopsis</td><td>$requesttype</td><td>$severity</td><td>$resolver</td><td>$priority</td></tr>";
 	}
 }
@@ -115,7 +118,7 @@ sub taskinfo()
 	print $FILE "<tr><b><td colspan='6'>$releasenumber</td></tr>";
 	foreach $tsk(@taskinfo)
 	{
-		($task_number,$task_synopsis,$task_resolver)=split(/^/,$tsk);
+		($task_number,$task_synopsis,$task_resolver)=split(/\^/,$tsk);
 		print $FILE "<tr><b><td>$task_number</td><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
 	}
 }
