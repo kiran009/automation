@@ -73,7 +73,7 @@ my 	@location;
 my $tertiodest="/u/kkdaadhi/Tertio_Dest";
 #my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
-my $f_411='1409';
+my $f_411='970';
 my $f_412='960';
 sub main()
 {
@@ -256,7 +256,7 @@ sub getTasksnReadme()
 			($task_resolver)=`$CCM task -show info $task_number \-u \-format "%resolver"`;
 			$task_synopsis=~ s/^\s+|\s+$//g;
 			$task_resolver=~ s/^\s+|\s+$//g;
-			print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
+			print TASKINF "$task_number@$task_synopsis@$task_resolver\n";
 		}
 		$synopsis=~ s/^\s+|\s+$//g;
 		$requesttype=~ s/^\s+|\s+$//g;
@@ -265,7 +265,7 @@ sub getTasksnReadme()
 		$task_synopsis=~ s/^\s+|\s+$//g;
 		$task_resolver=~ s/^\s+|\s+$//g;
 		$priority=~ s/^\s+|\s+$//g;
-		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
+		print CRRESOLV "$cr@$synopsis@$requesttype@$severity@$resolver@$priority\n";
 		print SYNOP "CR$cr $synopsis\n";
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
   	$patch_number=`$CCM query -u -f %patch_number`;
@@ -278,20 +278,7 @@ sub getTasksnReadme()
     }
     else
     {
-	 			if(($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4596/) || ($cr =~ /4606/) || ($cr =~ /4609/) || ($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4388/) || ($cr =~ /4491/) )
-    		{
-    			open OP1,"+> $Bin/$cr_README.txt";
-    			print OP1 $patch_readme;
-    			close OP1;
-    			`dos2unix $Bin/$cr_README.txt 2>&1 1>/dev/null`;
-    			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $cr_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'`;
-    			push(@patchbinarylist,@PatchFiles);
-    			$sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $cr_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | grep -v 'ISSUES' | sed '/^\$/d'`;
-    			print SUMM "CR$cr - $sumreadme\n";
-    		}
-    		else
-    		{
-     				open OP1,"+> $Bin/$cr_README.txt";
+	 					open OP1,"+> $Bin/$cr_README.txt";
     				print OP1 $patch_readme;
     				close OP1;
     				`dos2unix $Bin/$cr_README.txt 2>&1 1>/dev/null`;
@@ -299,8 +286,7 @@ sub getTasksnReadme()
 	     		 	push(@patchbinarylist,@PatchFiles);
       			$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $cr_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
       			print SUMM "CR$cr - $sumreadme\n";
-    			}
-    		}
+    	}
 		}
 		my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
 		print PATCHBIN @uniqbinlist;
