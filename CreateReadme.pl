@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# DSA MR CreateReadme script
+# DSA CreateReadme script
 use Cwd;
 use File::Path;
 use File::Find;
@@ -14,19 +14,21 @@ use Sys::Hostname;
 #/************ Setting Environment Variables *******************/
 my $hostname = hostname;
 my $hostplatform;
-# On HPUX, CCM client doesn't exist, ignore setting this environment there
-$ENV{'CCM_HOME'}="/opt/ccm71";
-$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
-$CCM="$ENV{'CCM_HOME'}/bin/ccm";
-my $result=GetOptions("coreproject=s"=>\$coreproject,"database=s"=>\$db,"buildnumber=s"=>\$build_number);
+# if($hostname =~ /pesthp2/)
+# {
+# 	$ENV{'PATH'}="/usr/contrib/bin:$ENV{'PATH'}";
+# }
+# if($hostname !~ /pesthp2/)
+# {
+# 	# On HPUX, CCM client doesn't exist, ignore setting this environment there
+# 	$ENV{'CCM_HOME'}="/opt/ccm71";
+# 	$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
+# 	$CCM="$ENV{'CCM_HOME'}/bin/ccm";
+# }
+my $result=GetOptions("database=s"=>\$db,"buildnumber=s"=>\$build_number);
 if(!$result)
 {
 	print "Please provide coreprojectname \n";
-	exit;
-}
-if(!$coreproject)
-{
-	print "You need to supply core project name \n";
 	exit;
 }
 if(!$db)
@@ -34,10 +36,8 @@ if(!$db)
 	print "You need to supply database name \n";
 	exit;
 }
-$db=~ s/^\s+|\s+$//g;
 my $database="/data/ccmdb/$db";
 my $dbbmloc="/data/ccmbm/$db";
-push(@projectlist,$coreproject);
 my @PatchFiles;
 my @files;
 my $patch_number;
@@ -53,6 +53,8 @@ my @op;
 my @file_list;
 my $mrnumber;
 my @location_explode;
+#my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
+#my $mailto='kiran.daadhi@evolving.com';
 my %hash;
 my $readmeIssue;
 @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
@@ -68,9 +70,11 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
+my $tertiodest="/u/kkdaadhi/Tertio_Dest";
+#my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
-my $f_401='952';
-my $f_402='969';
+my $f_411='1409';
+my $f_412='960';
 sub main()
 {
 		start_ccm();
@@ -79,25 +83,27 @@ sub main()
 }
 sub listfolderTasks()
 {
-	@tasks_401=`$CCM folder -show tasks '$f_401' -u -f "%task_number"`;
-	@tasks_402=`$CCM folder -show tasks '$f_402' -u -f "%task_number"`;
+	@tasks_411=`$CCM folder -show tasks '$f_411' -u -f "%task_number"`;
+	@tasks_412=`$CCM folder -show tasks '$f_412' -u -f "%task_number"`;
 
-	print "Tasks in 4.0.1 are => @tasks_401 \n\n";
-	print "Tasks in 4.0.2 are => @tasks_402 \n\n";
-	foreach $task(@tasks_401)
+	print "Tasks in 4.1.1 are => @tasks_411 \n\n";
+	print "Tasks in 4.1.2 are => @tasks_412 \n\n";
+	foreach $task(@tasks_411)
 	{
 		$task=~ s/^\s+|\s+$//g;
 		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
 		print "CR corresponding to task $task is: $crinfo\n";
-		push(@crs_401,$crinfo);
+		push(@crs_411,$crinfo);
 	}
-	@uniq401 = do { my %seen; grep { !$seen{$_}++ } @crs_401};
-	foreach $task(@tasks_402)
-	{ $task=~ s/^\s+|\s+$//g; $crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
+	@uniq411 = do { my %seen; grep { !$seen{$_}++ } @crs_411};
+	foreach $task(@tasks_412)
+	{
+		$task=~ s/^\s+|\s+$//g;
+		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
 		print "CR corresponding to task $task is: $crinfo\n";
-		push(@crs_402,$crinfo);
+		push(@crs_412,$crinfo);
 	}
-	@uniq402 = do { my %seen; grep { !$seen{$_}++ } @crs_402};
+	@uniq412 = do { my %seen; grep { !$seen{$_}++ } @crs_412};
 	# foreach $task(@tasks_763a)
 	# {
 	# 	$task=~ s/^\s+|\s+$//g;
@@ -115,50 +121,51 @@ sub listfolderTasks()
 	# }
 	# @uniq763b = do { my %seen; grep { !$seen{$_}++ } @crs_763b};
 
-	print "Uniq CRs in 401 are: @uniq401 \nUniq CRs in 402 are: @uniq402 \n";
+	print "Uniq CRs in 4.1.1 are: @uniq411 \nUniq CRs in 4.1.2 are: @uniq412";
 	open OP,"<$Bin/mrnumber.txt";
 	$mrnumber=<OP>;
 	close OP;
 	open BN,"+>$Bin/build_number.txt";
 	print BN $build_number;
 	close BN;
-	open  FILE, "+> $Bin/dsa_README.txt";
-	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
+	open  FILE, "+> $Bin/FUR_4.1.0_README.txt";
+	print FILE "Maintenance Release : DSA $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
-	print FILE "PRE-REQUISITE : 4.0.0\nSUPERSEDED : 4.0.1\n";
+	print FILE "PRE-REQUISITE : 4.1.0\nSUPERSEDED : 4.1.1\n";
 	undef @tasks;
-	open SYNOP,"+>$Bin/4.0.2_synopsis.txt";
-	open SUMM,"+>$Bin/4.0.2_summary_readme.txt";
-	open CRRESOLV, "+>$Bin/4.0.2_crresolv.txt";
-	open TASKINF,"+>$Bin/4.0.2_taskinfo.txt";
-	open PATCHBIN, "+>$Bin/4.0.2_patchbinarylist.txt";
-	open FORMATTASKS,"+>$Bin/4.0.2_formattsks.txt";
-	getTasksnReadme(@uniq402);
+	open SYNOP,"+>$Bin/4.1.2_synopsis.txt";
+	open SUMM,"+>$Bin/4.1.2_summary_readme.txt";
+	open CRRESOLV, "+>$Bin/4.1.2_crresolv.txt";
+	open TASKINF,"+>$Bin/4.1.2_taskinfo.txt";
+	open PATCHBIN, "+>$Bin/4.1.2_patchbinarylist.txt";
+	open FORMATTASKS,"+>$Bin/4.1.2_formattsks.txt";
+	#push(@uniq763a,@uniq763b);
+	getTasksnReadme(@uniq412);
 	close SUMM;
 	close SYNOP;
 	close CRRESOLV;
 	close TASKINF;
 	close PATCHBIN;
 	close FORMATTASKS;
-	open SYNOP,"+>$Bin/4.0.1_synopsis.txt";
-	open SUMM,"+>$Bin/4.0.1_summary_readme.txt";
-	open CRRESOLV, "+>$Bin/4.0.1_crresolv.txt";
-	open TASKINF,"+>$Bin/4.0.1_taskinfo.txt";
-	open PATCHBIN, "+>$Bin/4.0.1_patchbinarylist.txt";
-	open FORMATTASKS,"+>$Bin/4.0.1_formattsks.txt";
-	#push(@uniq401,@uniq762c);
+	open SYNOP,"+>$Bin/4.1.1_synopsis.txt";
+	open SUMM,"+>$Bin/4.1.1_summary_readme.txt";
+	open CRRESOLV, "+>$Bin/4.1.1_crresolv.txt";
+	open TASKINF,"+>$Bin/4.1.1_taskinfo.txt";
+	open PATCHBIN, "+>$Bin/4.1.1_patchbinarylist.txt";
+	open FORMATTASKS,"+>$Bin/4.1.1_formattsks.txt";
+	#push(@uniq762a,@uniq762c);
 	#getTasksnReadme(@uniq762c);
-	#getTasksnReadme(@uniq401);
-	getTasksnReadme(@uniq401);
+	#getTasksnReadme(@uniq762a);
+	getTasksnReadme(@uniq411);
 	close SUMM;
 	close SYNOP;
 	close CRRESOLV;
 	close TASKINF;
 	close PATCHBIN;
 	close FORMATTASKS;
-	#createReadme('7.6.3a,4.0.1c,4.0.1a');
-	createReadme('4.0.2');
-	createReadme('4.0.1');
+	#createReadme('4.1.2a,4.1.1c,4.1.1a');
+	createReadme('4.1.2');
+	createReadme('4.1.1');
 	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\n";
 	print FILE "ISSUES: None";
 	close FILE;
@@ -208,13 +215,22 @@ sub createReadme()
 	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @binarylist};
 	print "Uniq Binlist is: @uniqbinlist\n";
 	print FILE "--";
-	print FILE "\nRelease - $deliveryname\n";
+	print FILE "\nRelease - $mr_number\n";
 	print FILE "\nTASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
-	print FILE "AFFECTS: Tertio 7.6.0\n";
+	print FILE "AFFECTS: FUR 4.1.0\n";
 	print FILE "@uniqbinlist\n\n";
 	print FILE "SUMMARY OF CHANGES: $deliveryname\nThe following changes have been delivered in this Maintenance Release.\n@summary\n";
 }
+# 	print "Uniq Binlist is: @uniqbinlist\n";
+# 	print FILE "--";
+# 	print FILE "\nRelease - $deliveryname\n";
+# 	print FILE "\nTASKS:$formattedtsks\n\n";
+# 	print FILE "FIXES:@synopsis\n\n";
+# 	print FILE "AFFECTS: Tertio 7.6.0\n";
+# 	print FILE "@uniqbinlist\n\n";
+# 	print FILE "SUMMARY OF CHANGES: $deliveryname\nThe following changes have been delivered in this Maintenance Release.\n@summary\n";
+# }
 sub getTasksnReadme()
 {
 	undef @patchbinarylist;
@@ -264,24 +280,24 @@ sub getTasksnReadme()
     {
 	 			if(($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4596/) || ($cr =~ /4606/) || ($cr =~ /4609/) || ($cr =~ /4291/) || ($cr =~ /4493/) || ($cr =~ /4500/) || ($cr =~ /4505/) || ($cr =~ /4388/) || ($cr =~ /4491/) )
     		{
-    			open OP1,"+> $Bin/$patch_number\_README.txt";
+    			open OP1,"+> $Bin/$cr_README.txt";
     			print OP1 $patch_readme;
     			close OP1;
-    			`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
-    			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'`;
+    			`dos2unix $Bin/$cr_README.txt 2>&1 1>/dev/null`;
+    			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $cr_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'`;
     			push(@patchbinarylist,@PatchFiles);
-    			$sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | grep -v 'ISSUES' | sed '/^\$/d'`;
+    			$sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $cr_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | grep -v 'ISSUES' | sed '/^\$/d'`;
     			print SUMM "CR$cr - $sumreadme\n";
     		}
     		else
     		{
-     				open OP1,"+> $Bin/$patch_number\_README.txt";
+     				open OP1,"+> $Bin/$cr_README.txt";
     				print OP1 $patch_readme;
     				close OP1;
-    				`dos2unix $Bin/$patch_number\_README.txt 2>&1 1>/dev/null`;
-    				@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $patch_number\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'| sed '/^\$/d'`;
+    				`dos2unix $Bin/$cr_README.txt 2>&1 1>/dev/null`;
+    				@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $cr_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'| sed '/^\$/d'`;
 	     		 	push(@patchbinarylist,@PatchFiles);
-      			$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $patch_number\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
+      			$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $cr_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
       			print SUMM "CR$cr - $sumreadme\n";
     			}
     		}
