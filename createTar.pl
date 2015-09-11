@@ -94,7 +94,7 @@ sub createTar()
   	copy("$Bin/FUR_4.1.0_README.txt",$destdir);
   	$hostos="rhel5";
   	$hostplatform="linAS5";
-  	`find * -type f -name "*README.txt" | xargs tar cvf ltefur-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf fur-$mrnumber-$hostos-build$build_number\.tar;gzip fur-$mrnumber-$hostos-build$build_number\.tar;`;
+  	`find * -type f -name "*README.txt" | xargs tar cvf ltefur-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf ltefur-$mrnumber-$hostos-build$build_number\.tar;gzip ltefur-$mrnumber-$hostos-build$build_number\.tar;`;
   	print "ltefur-$mrnumber-$hostos-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/ltefur-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
   	copy("ltefur-$mrnumber-$hostos-build$build_number\.tar\.gz","$destination/$hostplatform/NotTested/ltefur-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   	push(@location,"$destination/$hostplatform/NotTested/ltefur-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
