@@ -256,7 +256,7 @@ sub getTasksnReadme()
 			($task_resolver)=`$CCM task -show info $task_number \-u \-format "%resolver"`;
 			$task_synopsis=~ s/^\s+|\s+$//g;
 			$task_resolver=~ s/^\s+|\s+$//g;
-			print TASKINF "$task_number@$task_synopsis@$task_resolver\n";
+			print TASKINF "$task_numbe^$task_synopsis^$task_resolver\n";
 		}
 		$synopsis=~ s/^\s+|\s+$//g;
 		$requesttype=~ s/^\s+|\s+$//g;
@@ -265,7 +265,7 @@ sub getTasksnReadme()
 		$task_synopsis=~ s/^\s+|\s+$//g;
 		$task_resolver=~ s/^\s+|\s+$//g;
 		$priority=~ s/^\s+|\s+$//g;
-		print CRRESOLV "$cr@$synopsis@$requesttype@$severity@$resolver@$priority\n";
+		print CRRESOLV "$cr^$synopsis^$requesttype^$severity^$resolver^$priority\n";
 		print SYNOP "CR$cr $synopsis\n";
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
   	$patch_number=`$CCM query -u -f %patch_number`;
