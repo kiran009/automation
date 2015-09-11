@@ -71,13 +71,15 @@ sub crtnsndMail()
 	print $FILE "<b>Additional information about the changes:</b>N/A<br /><b>The Resolved CRs are:</b><br/>";
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
 	print $FILE "<tr><b><td>CR ID</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr><br/>";
-	crresolv();
+	crresolv('4.1.2');
+	crresolv('4.1.1');
 	# crresolv('7.6.2');
 	print $FILE "</table><br/>";
 	print $FILE "<b>The checked in tasks since the last build are:</b><br/>";
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
 	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr>";
-	taskinfo();
+	taskinfo('4.1.2');
+	taskinfo('4.1.1');
 	# taskinfo('7.6.2');
 	print $FILE "</table><br/>";
 	print $FILE "<b>Note:</b> To install LTE FUR $mrnumber, please use the latest PatchManager<br/></body></html>";
@@ -89,10 +91,11 @@ sub crresolv()
 	undef @crresolv;
 	undef @synopsis;
 
-	open OP,"<$Bin/con_synopsis.txt";
+	my ($releasenumber)=@_;
+	open OP,"<$Bin/$releasenumber\_synopsis.txt";
 	@synopsis=<OP>;
 	close OP;
-	open OP,"<$Bin/con_crresolv.txt";
+	open OP,"<$Bin/$releasenumber\_crresolv.txt";
 	@crresolv=<OP>;
 	close OP;
 	print $FILE "<tr><b><td colspan='6'>$releasenumber</td></tr>";
@@ -106,7 +109,7 @@ sub taskinfo()
 {
 	undef @taskinfo;
 	my ($releasenumber)=@_;
-	open OP,"<$Bin/con_taskinfo.txt";
+	open OP,"<$Bin/$releasenumber\_taskinfo.txt";
 	@taskinfo=<OP>;
 	close OP;
 	print $FILE "<tr><b><td colspan='6'>$releasenumber</td></tr>";
@@ -115,6 +118,5 @@ sub taskinfo()
 		($task_number,$task_synopsis,$task_resolver)=split(/@/,$tsk);
 		print $FILE "<tr><b><td>$task_number</td><td>$task_synopsis</td><td>$task_resolver</td></tr><br/>";
 	}
-
 }
 main();
