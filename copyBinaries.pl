@@ -109,7 +109,7 @@ sub copyBinaries()
 	}
 	elsif($coreproject =~ /MS/)
 	{
-		$workarea="$dbbmloc/$coreproject/DSA_MS_Delivery";
+		$delroot="$dbbmloc/$coreproject/DSA_MS_Delivery";
 	}
   foreach $file(@file_list)
   {
