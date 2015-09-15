@@ -111,7 +111,7 @@ sub listfolderTasks()
 	print BN $build_number;
 	close BN;
 	open  FILE, "+> $Bin/MS_3.3.0_README.txt";
-	print FILE "Maintenance Release : MS $mrnumber build $build_number\n\n";
+	print FILE "Maintenance Release : MS 3.3.2 build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
 	print FILE "PRE-REQUISITE : 3.3.0\nSUPERSEDED : 3.3.1\n";
 	undef @tasks;
@@ -271,8 +271,8 @@ sub getTasksnReadme()
     		`dos2unix $Bin/$cr_README.txt 2>&1 1>/dev/null`;
     		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $cr_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'| sed '/^\$/d'`;
 	     	push(@patchbinarylist,@PatchFiles);
-      		$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $cr_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
-      		print SUMM "CR$cr - $sumreadme\n";
+      	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $cr_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
+      	print SUMM "CR$cr - $sumreadme\n";
     }
 		}
 		my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
