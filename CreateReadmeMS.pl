@@ -53,8 +53,6 @@ my @op;
 my @file_list;
 my $mrnumber;
 my @location_explode;
-#my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
-#my $mailto='kiran.daadhi@evolving.com';
 my %hash;
 my $readmeIssue;
 @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
