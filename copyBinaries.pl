@@ -80,9 +80,9 @@ sub copyBinaries()
 	# Choose the platform project
 	$coreproject=~ s/^\s+|\s+$//g;
 	if($coreproject =~ /FUR/)
-	{copy("$dbbmloc/$coreproject/DSA_FUR_Delivery/build/binaryfileinfo.dat","$Bin/fileplacement.fp");}
+	{copy("$dbbmloc/$coreproject/DSA_FUR_Delivery/build/mrfilelist.txt","$Bin/fileplacement.fp");}
 	if($coreproject =~ /MS/)
-	{copy("$dbbmloc/$coreproject/DSA_MS_Delivery/build/binaryfileinfo.dat","$Bin/fileplacement.fp");}
+	{copy("$dbbmloc/$coreproject/DSA_MS_Delivery/build/mrfilelist.txt","$Bin/fileplacement.fp");}
 
   $binarylist="$Bin/fileplacement.fp";
   if($coreproject =~ /linAS5/)
