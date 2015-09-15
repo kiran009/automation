@@ -110,10 +110,10 @@ sub listfolderTasks()
 	open BN,"+>$Bin/build_number.txt";
 	print BN $build_number;
 	close BN;
-	open  FILE, "+> $Bin/FUR_4.1.0_README.txt";
+	open  FILE, "+> $Bin/MS_3.3.0_README.txt";
 	print FILE "Maintenance Release : DSA $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
-	print FILE "PRE-REQUISITE : 4.1.0\nSUPERSEDED : 3.3.1\n";
+	print FILE "PRE-REQUISITE : 3.3.0\nSUPERSEDED : 3.3.1\n";
 	undef @tasks;
 	open SYNOP,"+>$Bin/3.3.2_synopsis.txt";
 	open SUMM,"+>$Bin/3.3.2_summary_readme.txt";
@@ -202,7 +202,7 @@ sub createReadme()
 	print FILE "\nRelease - $deliveryname\n";
 	print FILE "\nTASKS:$formattedtsks\n\n";
 	print FILE "FIXES:@synopsis\n\n";
-	print FILE "AFFECTS: FUR 4.1.0\n";
+	print FILE "AFFECTS: MS 3.3.0\n";
 	print FILE "@uniqbinlist\n\n";
 	print FILE "SUMMARY OF CHANGES: $deliveryname\nThe following changes have been delivered in this Maintenance Release.\n@summary\n";
 }
