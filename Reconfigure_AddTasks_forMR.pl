@@ -228,6 +228,11 @@ sub getTasksnReadme()
 		# close SYNOP;
 		# close CRRESOLV;
 		# close TASKINF;
+		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
+		$mr_number=~ s/^\s+|\s+$//g;
+		open MR,"+> $Bin/mrnumber.txt";
+		print MR "$mr_number";
+		close MR;
 }
 sub reconfigure_project()
 {

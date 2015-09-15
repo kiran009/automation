@@ -154,6 +154,7 @@ sub getTasksnReadme()
 			print "TASKNUMBER is: $task_number \n";
 			push(@tasks,$task_number);
 		}
+		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
 		($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
 		($problem_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_number"`;
 		($requesttype)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%request_type"`;
@@ -173,6 +174,10 @@ sub getTasksnReadme()
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 		print SYNOP "CR$cr $synopsis\n";
+		$mr_number=~ s/^\s+|\s+$//g;
+		open MR,"+> $Bin/mrnumber.txt";
+		print MR "$mr_number";
+		close MR;
 		#fetch readme
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
   	$patch_readme=`$CCM query -u -f %patch_readme`;
