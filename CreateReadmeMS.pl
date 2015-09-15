@@ -111,7 +111,7 @@ sub listfolderTasks()
 	print BN $build_number;
 	close BN;
 	open  FILE, "+> $Bin/MS_3.3.0_README.txt";
-	print FILE "Maintenance Release : DSA $mrnumber build $build_number\n\n";
+	print FILE "Maintenance Release : MS $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
 	print FILE "PRE-REQUISITE : 3.3.0\nSUPERSEDED : 3.3.1\n";
 	undef @tasks;
@@ -250,7 +250,10 @@ sub getTasksnReadme()
 		$task_resolver=~ s/^\s+|\s+$//g;
 		$priority=~ s/^\s+|\s+$//g;
 		print CRRESOLV "$cr\^$synopsis\^$requesttype\^$severity\^$resolver\^$priority\n";
-		print SYNOP "CR$cr $synopsis\n";
+    if($synopsis !~ m/^BM/)
+    {
+		    print SYNOP "CR$cr $synopsis\n";
+    }
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
   	$patch_number=`$CCM query -u -f %patch_number`;
   	$patch_readme=`$CCM query -u -f %patch_readme`;
