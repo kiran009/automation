@@ -154,6 +154,11 @@ sub getTasksnReadme()
 			print "TASKNUMBER is: $task_number \n";
 			push(@tasks,$task_number);
 		}
+		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
+		$mr_number=~ s/^\s+|\s+$//g;
+		open MR,"+> $Bin/mrnumber.txt";
+		print MR "$mr_number";
+		close MR;
 	}
 	# 	($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
 	# 	($problem_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_number"`;
@@ -228,11 +233,7 @@ sub getTasksnReadme()
 		# close SYNOP;
 		# close CRRESOLV;
 		# close TASKINF;
-		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
-		$mr_number=~ s/^\s+|\s+$//g;
-		open MR,"+> $Bin/mrnumber.txt";
-		print MR "$mr_number";
-		close MR;
+
 }
 sub reconfigure_project()
 {
