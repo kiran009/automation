@@ -11,7 +11,6 @@ use FindBin qw($Bin);
 use lib "$Bin/../lib";
 use Sys::Hostname;
 #/************ Setting Environment Variables *******************/
-my $binarylist="$Bin/fileplacement.fp";
 my $hostplatform;
 my $result=GetOptions("coreproject=s"=>\$coreproject,"database=s"=>\$db,"buildnumber=s"=>\$build_number);
 if(!$result)
@@ -67,6 +66,7 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
+my $binarylist;
 #my $tertiodest="/u/kkdaadhi/Tertio_Dest";
 # my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
@@ -79,6 +79,12 @@ sub copyBinaries()
 	umask 002;
 	# Choose the platform project
 	$coreproject=~ s/^\s+|\s+$//g;
+	if($coreproject =~ /FUR/)
+	{copy("$dbbmloc/$coreproject/DSA_FUR_Delivery/build/binaryfileinfo.dat","$Bin/fileplacement.fp");}
+	if($coreproject =~ /MS/)
+	{copy("$dbbmloc/$coreproject/DSA_MS_Delivery/build/binaryfileinfo.dat","$Bin/fileplacement.fp");}
+
+  $binarylist="$Bin/fileplacement.fp";
   if($coreproject =~ /linAS5/)
   {
 		$destdir="/u/kkdaadhi/DSAMS_Deliverable/linAS5";
@@ -107,6 +113,7 @@ sub copyBinaries()
 	}
   foreach $file(@file_list)
   {
+		next if($file =~ m/^#/);
   	if($file =~ /TOMESRC/)
   	{
   		my @del=split(/\s+/,$file);

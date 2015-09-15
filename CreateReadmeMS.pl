@@ -25,7 +25,7 @@ my $hostplatform;
  	$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
  	$CCM="$ENV{'CCM_HOME'}/bin/ccm";
  }
-my $result=GetOptions("database=s"=>\$db,"buildnumber=s"=>\$build_number,"folderset=s"=>\$folderset,"readmefile=s"=>\$readmefile,"prereq=s"=>\$prereq,"supersed=s"=>\$supersed);
+my $result=GetOptions("database=s"=>\$db,"buildnumber=s"=>\$build_number);
 if(!$result)
 {
 	print "Please provide coreprojectname \n";
@@ -35,26 +35,6 @@ if(!$db)
 {
 	print "You need to supply database name \n";
 	exit;
-}
-if(!$folderset)
-{
-  print "You need to provide the folderset \n";
-  exit;
-}
-if(!$readmefile)
-{
-  print "You need to provide the readmefile \n";
-  exit;
-}
-if(!$prereq)
-{
-  print "You need to provide the prereq \n";
-  exit;
-}
-if(!$supersed)
-{
-  print "You need to provide the supersed \n";
-  exit;
 }
 my $database="/data/ccmdb/$db";
 my $dbbmloc="/data/ccmbm/$db";
@@ -73,6 +53,8 @@ my @op;
 my @file_list;
 my $mrnumber;
 my @location_explode;
+#my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
+#my $mailto='kiran.daadhi@evolving.com';
 my %hash;
 my $readmeIssue;
 @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
@@ -91,13 +73,8 @@ my 	@location;
 # my $tertiodest="/u/kkdaadhi/Tertio_Dest";
 #my $tertiodest="/data/releases/tertio/7.6.0/patches";
 # /* Global Environment Variables ******* /
-my @folders=split(/,/,$folderset);
-foreach $folder(@folders)
-{
-  my($name,$number)=split(/:/,$folder);
-}
-# my $f_411='970';
-# my $f_412='960';
+my $f_331='958';
+my $f_332='965';
 sub main()
 {
 		start_ccm();
@@ -106,103 +83,27 @@ sub main()
 }
 sub listfolderTasks()
 {
-  ($name,$number)=@_;
-	@tasks_name=`$CCM folder -show tasks '$number' -u -f "%task_number"`;
-	print "Tasks in $name are => @tasks_name \n\n";
-	foreach $task(@tasks_name)
-	{
-		$task=~ s/^\s+|\s+$//g;
-		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
-		print "CR corresponding to task $task is: $crinfo\n";
-		push(@crs_name,$crinfo);
-	}
-	@uniqname = do { my %seen; grep { !$seen{$_}++ } @crs_name};
-	# foreach $task(@tasks_412)
-	# {
-	# 	$task=~ s/^\s+|\s+$//g;
-	# 	$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
-	# 	print "CR corresponding to task $task is: $crinfo\n";
-	# 	push(@crs_412,$crinfo);
-	# }
-	# @uniq412 = do { my %seen; grep { !$seen{$_}++ } @crs_412};
-	open OP,"<$Bin/mrnumber.txt";
-	$mrnumber=<OP>;
-	close OP;
-	open BN,"+>$Bin/build_number.txt";
-	print BN $build_number;
-	close BN;
-	$readmefile=~ s/^\s+|\s+$//g;
-	open  FILE, "+> $Bin/$readmefile";
-	print FILE "Maintenance Release : DSA $mrnumber build $build_number\n\n";
-	print FILE "Created: $dt\n\n";
-	print FILE "PRE-REQUISITE : $prereq\nSUPERSEDED : $supersed\n";
-	undef @tasks;
-	open SYNOP,"+>$Bin/$name\_synopsis.txt";
-	open SUMM,"+>$Bin/$name\_summary_readme.txt";
-	open CRRESOLV, "+>$Bin/$name\_crresolv.txt";
-	open TASKINF,"+>$Bin/$name\_taskinfo.txt";
-	open PATCHBIN, "+>$Bin/$name\_patchbinarylist.txt";
-	open FORMATTASKS,"+>$Bin/$name\_formattsks.txt";
-	open FOLDER,"+>$Bin/$name\_folder.txt";
-	print FOLDER $f_412;
-	close FOLDER;
-	getTasksnReadme(@uniq412);
-	close SUMM;
-	close SYNOP;
-	close CRRESOLV;
-	close TASKINF;
-	close PATCHBIN;
-	close FORMATTASKS;
-	open SYNOP,"+>$Bin/4.1.1_synopsis.txt";
-	open SUMM,"+>$Bin/4.1.1_summary_readme.txt";
-	open CRRESOLV, "+>$Bin/4.1.1_crresolv.txt";
-	open TASKINF,"+>$Bin/4.1.1_taskinfo.txt";
-	open PATCHBIN, "+>$Bin/4.1.1_patchbinarylist.txt";
-	open FORMATTASKS,"+>$Bin/4.1.1_formattsks.txt";
-	open FOLDER,"+>$Bin/4.1.1_folder.txt";
-	print FOLDER $f_411;
-	close FOLDER;
-	#push(@uniq762a,@uniq762c);
-	#getTasksnReadme(@uniq762c);
-	#getTasksnReadme(@uniq762a);
-	getTasksnReadme(@uniq411);
-	close SUMM;
-	close SYNOP;
-	close CRRESOLV;
-	close TASKINF;
-	close PATCHBIN;
-	close FORMATTASKS;
-	#createReadme('4.1.2a,4.1.1c,4.1.1a');
-	createReadme('4.1.2');
-	createReadme('4.1.1');
-	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\n";
-	print FILE "ISSUES: None";
-	close FILE;
-}
+	@tasks_331=`$CCM folder -show tasks '$f_331' -u -f "%task_number"`;
+	@tasks_332=`$CCM folder -show tasks '$f_332' -u -f "%task_number"`;
 
-sub listfolderTasks()
-{
-	@tasks_411=`$CCM folder -show tasks '$f_411' -u -f "%task_number"`;
-	@tasks_412=`$CCM folder -show tasks '$f_412' -u -f "%task_number"`;
-
-	print "Tasks in 4.1.1 are => @tasks_411 \n\n";
-	print "Tasks in 4.1.2 are => @tasks_412 \n\n";
-	foreach $task(@tasks_411)
+	print "Tasks in 3.3.1 are => @tasks_331 \n\n";
+	print "Tasks in 3.3.2 are => @tasks_332 \n\n";
+	foreach $task(@tasks_331)
 	{
 		$task=~ s/^\s+|\s+$//g;
 		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
 		print "CR corresponding to task $task is: $crinfo\n";
-		push(@crs_411,$crinfo);
+		push(@crs_331,$crinfo);
 	}
-	@uniq411 = do { my %seen; grep { !$seen{$_}++ } @crs_411};
-	foreach $task(@tasks_412)
+	@uniq331 = do { my %seen; grep { !$seen{$_}++ } @crs_331};
+	foreach $task(@tasks_332)
 	{
 		$task=~ s/^\s+|\s+$//g;
 		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
 		print "CR corresponding to task $task is: $crinfo\n";
-		push(@crs_412,$crinfo);
+		push(@crs_332,$crinfo);
 	}
-	@uniq412 = do { my %seen; grep { !$seen{$_}++ } @crs_412};
+	@uniq332 = do { my %seen; grep { !$seen{$_}++ } @crs_332};
 	open OP,"<$Bin/mrnumber.txt";
 	$mrnumber=<OP>;
 	close OP;
@@ -212,47 +113,43 @@ sub listfolderTasks()
 	open  FILE, "+> $Bin/FUR_4.1.0_README.txt";
 	print FILE "Maintenance Release : DSA $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
-	print FILE "PRE-REQUISITE : 4.1.0\nSUPERSEDED : 4.1.1\n";
+	print FILE "PRE-REQUISITE : 4.1.0\nSUPERSEDED : 3.3.1\n";
 	undef @tasks;
-	open SYNOP,"+>$Bin/4.1.2_synopsis.txt";
-	open SUMM,"+>$Bin/4.1.2_summary_readme.txt";
-	open CRRESOLV, "+>$Bin/4.1.2_crresolv.txt";
-	open TASKINF,"+>$Bin/4.1.2_taskinfo.txt";
-	open PATCHBIN, "+>$Bin/4.1.2_patchbinarylist.txt";
-	open FORMATTASKS,"+>$Bin/4.1.2_formattsks.txt";
+	open SYNOP,"+>$Bin/3.3.2_synopsis.txt";
+	open SUMM,"+>$Bin/3.3.2_summary_readme.txt";
+	open CRRESOLV, "+>$Bin/3.3.2_crresolv.txt";
+	open TASKINF,"+>$Bin/3.3.2_taskinfo.txt";
+	open PATCHBIN, "+>$Bin/3.3.2_patchbinarylist.txt";
+	open FORMATTASKS,"+>$Bin/3.3.2_formattsks.txt";
 	#push(@uniq763a,@uniq763b);
-	open FOLDER,"+>$Bin/4.1.2_folder.txt";
-	print FOLDER $f_412;
+	open FOLDER,"+>$Bin/3.3.2_folder.txt";
+	print FOLDER $f_332;
 	close FOLDER;
-	getTasksnReadme(@uniq412);
+	getTasksnReadme(@uniq332);
 	close SUMM;
 	close SYNOP;
 	close CRRESOLV;
 	close TASKINF;
 	close PATCHBIN;
 	close FORMATTASKS;
-	open SYNOP,"+>$Bin/4.1.1_synopsis.txt";
-	open SUMM,"+>$Bin/4.1.1_summary_readme.txt";
-	open CRRESOLV, "+>$Bin/4.1.1_crresolv.txt";
-	open TASKINF,"+>$Bin/4.1.1_taskinfo.txt";
-	open PATCHBIN, "+>$Bin/4.1.1_patchbinarylist.txt";
-	open FORMATTASKS,"+>$Bin/4.1.1_formattsks.txt";
-	open FOLDER,"+>$Bin/4.1.1_folder.txt";
-	print FOLDER $f_411;
+	open SYNOP,"+>$Bin/3.3.1_synopsis.txt";
+	open SUMM,"+>$Bin/3.3.1_summary_readme.txt";
+	open CRRESOLV, "+>$Bin/3.3.1_crresolv.txt";
+	open TASKINF,"+>$Bin/3.3.1_taskinfo.txt";
+	open PATCHBIN, "+>$Bin/3.3.1_patchbinarylist.txt";
+	open FORMATTASKS,"+>$Bin/3.3.1_formattsks.txt";
+	open FOLDER,"+>$Bin/3.3.1_folder.txt";
+	print FOLDER $f_331;
 	close FOLDER;
-	#push(@uniq762a,@uniq762c);
-	#getTasksnReadme(@uniq762c);
-	#getTasksnReadme(@uniq762a);
-	getTasksnReadme(@uniq411);
+	getTasksnReadme(@uniq331);
 	close SUMM;
 	close SYNOP;
 	close CRRESOLV;
 	close TASKINF;
 	close PATCHBIN;
 	close FORMATTASKS;
-	#createReadme('4.1.2a,4.1.1c,4.1.1a');
-	createReadme('4.1.2');
-	createReadme('4.1.1');
+	createReadme('3.3.2');
+	createReadme('3.3.1');
 	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\n";
 	print FILE "ISSUES: None";
 	close FILE;
