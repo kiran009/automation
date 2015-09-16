@@ -76,8 +76,8 @@ sub copyBinaries()
 	umask 002;
 	# Choose the platform project
 	$coreproject=~ s/^\s+|\s+$//g;
-	copy("$dbbmloc/$coreproject/Provident_Dev/build/fileplacement.fp","$Bin/fileplacement.fp") or die("Couldn't able to copy the file, can't proceed with binary copy $!");
-	copy("$dbbmloc/$coreproject/Provident_Dev/build/javabinaries.fp","$Bin/javabinaries.fp") or die("Couldn't able to copy the file, can't proceed with binary copy $!");
+	# copy("$dbbmloc/$coreproject/Provident_Dev/build/fileplacement.fp","$Bin/fileplacement.fp") or die("Couldn't able to copy the file, can't proceed with binary copy $!");
+	# copy("$dbbmloc/$coreproject/Provident_Dev/build/javabinaries.fp","$Bin/javabinaries.fp") or die("Couldn't able to copy the file, can't proceed with binary copy $!");
 	$binarylist="$Bin/fileplacement.fp";
 	$javabinarylist="$Bin/javabinaries.fp";
   if($coreproject =~ /linAS5/)
