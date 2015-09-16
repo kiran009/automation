@@ -76,29 +76,25 @@ sub copyBinaries()
 	umask 002;
 	# Choose the platform project
 	$coreproject=~ s/^\s+|\s+$//g;
+	copy("$dbbmloc/$coreproject/Provident_Dev/build/fileplacement.fp","$Bin/fileplacement.fp") or die("Couldn't able to copy the file, can't proceed with binary copy $!");
+	copy("$dbbmloc/$coreproject/Provident_Dev/build/javabinaries.fp","$Bin/javabinaries.fp") or die("Couldn't able to copy the file, can't proceed with binary copy $!");
+	$binarylist="$Bin/fileplacement.fp";
+	$javabinarylist="$Bin/javabinaries.fp";
   if($coreproject =~ /linAS5/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
-		$binarylist="$Bin/fileplacement.fp";
-		$javabinarylist="$Bin/javabinaries.fp";
 	}
 	elsif($coreproject =~ /sol10/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol10";
-		$binarylist="$Bin/fileplacement.fp";
-		$javabinarylist="$Bin/javabinaries.fp";
 	}
 	elsif($coreproject =~ /hpiav3/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpiav3";
-		$binarylist="$Bin/fileplacement.fp";
-		$javabinarylist="$Bin/javabinaries.fp";
 	}
 	elsif($coreproject =~ /RHEL6/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
-		$binarylist="$Bin/fileplacement_7.7.fp";
-		$javabinarylist="$Bin/javabinaries_7.7.fp";
 	}
 	rmtree($destdir);
 	open OP, "< $binarylist";
