@@ -52,7 +52,6 @@ my @PatchFiles;
 my @files;
 my $patch_number;
 my $problem_number;
-my @crs;
 my @tasks;
 my $tasklist;
 my $CRlist;
@@ -69,8 +68,6 @@ my $cr;
 my %hash;
 my @consumreadme;
 my @task_numbers;
-@crs=split(/,/,$crs);
-print "The following list of CRs to the included in the patch:@crs\n";
 # /* Global Environment Variables ******* /
 sub main()
 {
