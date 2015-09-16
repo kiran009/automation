@@ -113,7 +113,8 @@ sub copyBinaries()
 	}
   foreach $file(@file_list)
   {
-		next if($file =~ m/^#/);
+		next if($file =~ m/^#/); # ignore commented lines
+		next if($file =~ m/^$/); # ignore blank lines
   	if($file =~ /TOMESRC/)
   	{
   		my @del=split(/\s+/,$file);
@@ -159,6 +160,7 @@ sub copyBinaries()
 		$filename=~ s/^\s+|\s+$//g;
 		$permission=~ s/^\s+|\s+$//g;
   	mkpath("$destdir/$dirname");
+		print "$key => $destdir/$filename";
 		copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
 		chmod(oct($permission),"$destdir/$filename") or die("Couldn't able to set the permission $!");
 		print "Permission: $permission for file: $destdir/$filename \n";
