@@ -79,6 +79,7 @@ my $f_762a='1409';
 my $f_762c='1413';
 my $f_763a='1431';
 my $f_763b='1436';
+my $f_764a='1447';
 sub main()
 {
 		start_ccm();
@@ -91,11 +92,13 @@ sub listfolderTasks()
 	@tasks_762c=`$CCM folder -show tasks '$f_762c' -u -f "%task_number"`;
 	@tasks_763a=`$CCM folder -show tasks '$f_763a' -u -f "%task_number"`;
 	@tasks_763b=`$CCM folder -show tasks '$f_763b' -u -f "%task_number"`;
+	@tasks_764b=`$CCM folder -show tasks '$f_764b' -u -f "%task_number"`;
 
 	print "Tasks in 7.6.2.a are => @tasks_762a \n\n";
 	print "Tasks in 7.6.2.c are => @tasks_762c \n\n";
 	print "Tasks in 7.6.3.a are => @tasks_763a \n\n";
 	print "Tasks in 7.6.3.b are => @tasks_763b \n\n";
+	print "Tasks in 7.6.4.a are => @tasks_764a \n\n";
 	foreach $task(@tasks_762a)
 	{
 		$task=~ s/^\s+|\s+$//g;
@@ -128,8 +131,16 @@ sub listfolderTasks()
 		push(@crs_763b,$crinfo);
 	}
 	@uniq763b = do { my %seen; grep { !$seen{$_}++ } @crs_763b};
+	foreach $task(@tasks_764a)
+	{
+		$task=~ s/^\s+|\s+$//g;
+		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
+		print "CR corresponding to task $task is: $crinfo\n";
+		push(@crs_764a,$crinfo);
+	}
+	@uniq764a = do { my %seen; grep { !$seen{$_}++ } @crs_764a};
 
-	print "Uniq CRs in 7.6.2.a are: @uniq762a \nUniq CRs in 7.6.2.c are: @uniq762c \nUniq CRs in 7.6.3.a are: @uniq763a\nUniq CRs in 7.6.3.a are: @uniq763b";
+	print "Uniq CRs in 7.6.2.a are: @uniq762a \nUniq CRs in 7.6.2.c are: @uniq762c \nUniq CRs in 7.6.3.a are: @uniq763a\nUniq CRs in 7.6.3.a are: @uniq763b\n Uniq CRs in 7.6.4.a are: @uniq764a";
 	open OP,"<$Bin/mrnumber.txt";
 	$mrnumber=<OP>;
 	close OP;
@@ -139,10 +150,24 @@ sub listfolderTasks()
 	open  FILE, "+> $Bin/tertio_7.6_README.txt";
 	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
-	print FILE "PRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.2\n";
+	print FILE "PRE-REQUISITE : 7.6.0\nSUPERSEDED : 7.6.3\n";
 	undef @tasks;
+	open SYNOP,"+>$Bin/7.6.4_synopsis.txt";
+	open SUMM,"+>$Bin/7.6.4_summary_readme.txt";
+	open CRRESOLV, "+>$Bin/7.6.4_crresolv.txt";
+	open TASKINF,"+>$Bin/7.6.4_taskinfo.txt";
+	open PATCHBIN, "+>$Bin/7.6.4_patchbinarylist.txt";
+	open FORMATTASKS,"+>$Bin/7.6.4_formattsks.txt";
+	getTasksnReadme(@uniq764a);
+	close SUMM;
+	close SYNOP;
+	close CRRESOLV;
+	close TASKINF;
+	close PATCHBIN;
+	close FORMATTASKS;
+
 	open SYNOP,"+>$Bin/7.6.3_synopsis.txt";
-;	open SUMM,"+>$Bin/7.6.3_summary_readme.txt";
+	open SUMM,"+>$Bin/7.6.3_summary_readme.txt";
 	open CRRESOLV, "+>$Bin/7.6.3_crresolv.txt";
 	open TASKINF,"+>$Bin/7.6.3_taskinfo.txt";
 	open PATCHBIN, "+>$Bin/7.6.3_patchbinarylist.txt";
@@ -172,6 +197,7 @@ sub listfolderTasks()
 	close PATCHBIN;
 	close FORMATTASKS;
 	#createReadme('7.6.3a,7.6.2c,7.6.2a');
+	createReadme('7.6.4');
 	createReadme('7.6.3');
 	createReadme('7.6.2');
 	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\n";
