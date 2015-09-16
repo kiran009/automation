@@ -18,7 +18,7 @@ $year+=1900;
 my $dt="$mday $months[$mon] $year\n";
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my $FILE;
-#my $result=GetOptions("buildnumber=s"=>\$build_number);
+my $result=GetOptions("product=s"=>\$product,"tomeversion=s"=>\$tomeversion);
 sub main()
 {
 	crtnsndMail();
