@@ -202,7 +202,7 @@ sub createReadme()
 	print FILE "FIXES:\n@synopsis\n\n";
 	print FILE "AFFECTS: FUR 4.0.0\n";
 	print FILE "@uniqbinlist\n\n";
-	print FILE "SUMMARY OF CHANGES: $deliveryname\nThe following changes have been delivered in this Maintenance Release.\n@summary\n";
+	print FILE "SUMMARY OF CHANGES: $deliveryname\nThe following changes have been delivered in this Maintenance Release.\n\n@summary\n";
 }
 # 	print "Uniq Binlist is: @uniqbinlist\n";
 # 	print FILE "--";
