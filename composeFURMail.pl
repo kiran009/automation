@@ -48,7 +48,7 @@ sub crtnsndMail()
 	open ($FILE, "+> $Bin/releasenotes.html");
 	print $FILE "<html><head><style>table {border: 1 solid black; white-space: nowrap; font: 12px arial, sans-serif;} body,td,th,tr {font: 12px arial, sans-serif; white-space: nowrap;}</style></head><body>";
 	print $FILE "<table width=\"100%\" border=\"1\"<br/>";
-	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>Menu Server</td></tr><br/>";
+	print $FILE "<tr><b><td>Product</td></b><td colspan=\'2\'>FUR</td></tr><br/>";
 	print $FILE "<tr><b><td>Release</td></b><td colspan=\'2\'>$mrnumber</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Number</td></b><td colspan=\'2\'>$build_number</td></tr><br/>";
 	print $FILE "<tr><b><td>Release Type</td></b><td colspan=\'2\'>Maintenance Release</td></tr><br/>";
@@ -78,7 +78,7 @@ sub crtnsndMail()
 	taskinfo('4.0.2');
 	taskinfo('4.0.1');
 	print $FILE "</table><br/>";
-	print $FILE "<b>Note:</b> To install DSA MS $mrnumber, please use the latest PatchManager<br/></body></html>";
+	print $FILE "<b>Note:</b> To install DSA FUR $mrnumber, please use the latest PatchManager<br/></body></html>";
 	close $FILE;
 }
 sub crresolv()
