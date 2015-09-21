@@ -1,4 +1,4 @@
-  #!/usr/bin/perl
+#!/usr/bin/perl
 # DSA CreateReadme script
 use Cwd;
 use File::Path;
@@ -40,7 +40,7 @@ my $database="/data/ccmdb/$db";
 my $dbbmloc="/data/ccmbm/$db";
 my @PatchFiles;
 my @files;
-my $patch_number;
+#my $patch_number;
 my $problem_number;
 my @crs;
 my @tasks;
@@ -84,8 +84,8 @@ sub listfolderTasks()
 	@tasks_401a=`$CCM folder -show tasks '$f_401a' -u -f "%task_number"`;
 	@tasks_402a=`$CCM folder -show tasks '$f_402a' -u -f "%task_number"`;
 
-	print "Tasks in 4.0.1a are => @tasks_401a \n\n";
-	print "Tasks in 4.0.2a are => @tasks_402a \n\n";
+	print "Tasks in 4.0.1 are => @tasks_401a \n\n";
+	print "Tasks in 4.0.2 are => @tasks_402a \n\n";
 	foreach $task(@tasks_401a)
 	{
 		$task=~ s/^\s+|\s+$//g;
@@ -97,9 +97,9 @@ sub listfolderTasks()
 	foreach $task(@tasks_402a)
 	{
 		$task=~ s/^\s+|\s+$//g;
-		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
-		print "CR corresponding to task $task is: $crinfo\n";
-		push(@crs_402a,$crinfo);
+		@crlist=`$CCM task -show cr $task \-u \-f "%problem_number"`;
+		print "CR corresponding to task $task is: @crlist\n";
+		push(@crs_402a,@crlist);
 	}
 	@uniq402a = do { my %seen; grep { !$seen{$_}++ } @crs_402a};
 	open OP,"<$Bin/mrnumber.txt";
@@ -113,14 +113,14 @@ sub listfolderTasks()
 	print FILE "Created: $dt\n\n";
 	print FILE "PRE-REQUISITE : 4.0.0\nSUPERSEDED : 4.0.1\n";
 	undef @tasks;
-	open SYNOP,"+>$Bin/4.0.2a_synopsis.txt";
-	open SUMM,"+>$Bin/4.0.2a_summary_readme.txt";
-	open CRRESOLV, "+>$Bin/4.0.2a_crresolv.txt";
-	open TASKINF,"+>$Bin/4.0.2a_taskinfo.txt";
-	open PATCHBIN, "+>$Bin/4.0.2a_patchbinarylist.txt";
-	open FORMATTASKS,"+>$Bin/4.0.2a_formattsks.txt";
+	open SYNOP,"+>$Bin/4.0.2_synopsis.txt";
+	open SUMM,"+>$Bin/4.0.2_summary_readme.txt";
+	open CRRESOLV, "+>$Bin/4.0.2_crresolv.txt";
+	open TASKINF,"+>$Bin/4.0.2_taskinfo.txt";
+	open PATCHBIN, "+>$Bin/4.0.2_patchbinarylist.txt";
+	open FORMATTASKS,"+>$Bin/4.0.2_formattsks.txt";
 	#push(@uniq763a,@uniq763b);
-	open FOLDER,"+>$Bin/4.0.2a_folder.txt";
+	open FOLDER,"+>$Bin/4.0.2_folder.txt";
 	print FOLDER $f_402a;
 	close FOLDER;
 	getTasksnReadme(@uniq402a);
@@ -130,13 +130,13 @@ sub listfolderTasks()
 	close TASKINF;
 	close PATCHBIN;
 	close FORMATTASKS;
-	open SYNOP,"+>$Bin/4.0.1a_synopsis.txt";
-	open SUMM,"+>$Bin/4.0.1a_summary_readme.txt";
-	open CRRESOLV, "+>$Bin/4.0.1a_crresolv.txt";
-	open TASKINF,"+>$Bin/4.0.1a_taskinfo.txt";
-	open PATCHBIN, "+>$Bin/4.0.1a_patchbinarylist.txt";
-	open FORMATTASKS,"+>$Bin/4.0.1a_formattsks.txt";
-	open FOLDER,"+>$Bin/4.0.1a_folder.txt";
+	open SYNOP,"+>$Bin/4.0.1_synopsis.txt";
+	open SUMM,"+>$Bin/4.0.1_summary_readme.txt";
+	open CRRESOLV, "+>$Bin/4.0.1_crresolv.txt";
+	open TASKINF,"+>$Bin/4.0.1_taskinfo.txt";
+	open PATCHBIN, "+>$Bin/4.0.1_patchbinarylist.txt";
+	open FORMATTASKS,"+>$Bin/4.0.1_formattsks.txt";
+	open FOLDER,"+>$Bin/4.0.1_folder.txt";
 	print FOLDER $f_401a;
 	close FOLDER;
 	getTasksnReadme(@uniq401a);
@@ -146,8 +146,8 @@ sub listfolderTasks()
 	close TASKINF;
 	close PATCHBIN;
 	close FORMATTASKS;
-	createReadme('4.0.2a');
-	createReadme('4.0.1a');
+	createReadme('4.0.2');
+	createReadme('4.0.1');
 	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\n";
 	print FILE "ISSUES: None";
 	close FILE;
@@ -199,7 +199,7 @@ sub createReadme()
 	print FILE "--";
 	print FILE "\nRelease - $deliveryname\n";
 	print FILE "\nTASKS:$formattedtsks\n\n";
-	print FILE "FIXES:@synopsis\n\n";
+	print FILE "FIXES:\n@synopsis\n\n";
 	print FILE "AFFECTS: FUR 4.0.0\n";
 	print FILE "@uniqbinlist\n\n";
 	print FILE "SUMMARY OF CHANGES: $deliveryname\nThe following changes have been delivered in this Maintenance Release.\n@summary\n";
@@ -222,6 +222,8 @@ sub getTasksnReadme()
 	my @crs=@_;
 	foreach $cr(@crs)
 	{
+		print "*"x80;
+		print "\n";
 		$cr=~ s/^\s+|\s+$//g;
 		@task_numbers=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		push(@tasks,@task_numbers);
@@ -231,15 +233,6 @@ sub getTasksnReadme()
 		($severity)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%severity"`;
 		($priority)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%priority"`;
 		($resolver)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%resolver"`;
-		foreach $task_number(@task_numbers)
-		{
-			$task_number=~ s/^\s+|\s+$//g;
-			($task_synopsis)=`$CCM task -show info $task_number \-u \-format "%task_synopsis"`;
-			($task_resolver)=`$CCM task -show info $task_number \-u \-format "%resolver"`;
-			$task_synopsis=~ s/^\s+|\s+$//g;
-			$task_resolver=~ s/^\s+|\s+$//g;
-			print TASKINF "$task_number\^$task_synopsis\^$task_resolver\n";
-		}
 		$synopsis=~ s/^\s+|\s+$//g;
 		$requesttype=~ s/^\s+|\s+$//g;
 		$severity=~ s/^\s+|\s+$//g;
@@ -247,16 +240,27 @@ sub getTasksnReadme()
 		$task_synopsis=~ s/^\s+|\s+$//g;
 		$task_resolver=~ s/^\s+|\s+$//g;
 		$priority=~ s/^\s+|\s+$//g;
+		print "CRNumber: $cr, MRNumber: $mr_number, Synopsis: $synopsis, RequestType: $requesttype, Severity: $severity, Priority: $priority, Resolver: $resolver \n";
+		foreach $task_number(@task_numbers)
+		{
+			$task_number=~ s/^\s+|\s+$//g;
+			($task_synopsis)=`$CCM task -show info $task_number \-u \-format "%task_synopsis"`;
+			($task_resolver)=`$CCM task -show info $task_number \-u \-format "%resolver"`;
+			$task_synopsis=~ s/^\s+|\s+$//g;
+			$task_resolver=~ s/^\s+|\s+$//g;
+			print "TaskNumber: $task_number TaskSynopsis: $task_synopsis TaskResolver: $task_resolver\n";
+			print TASKINF "$task_number\^$task_synopsis\^$task_resolver\n";
+		}
 		print CRRESOLV "$cr\^$synopsis\^$requesttype\^$severity\^$resolver\^$priority\n";
     if($synopsis !~ m/^BM/)
     {
 		    print SYNOP "CR$cr $synopsis\n";
     }
-		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
-  	$patch_number=`$CCM query -u -f %patch_number`;
+	`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
+  	#$patch_number=`$CCM query -u -f %patch_number`;
   	$patch_readme=`$CCM query -u -f %patch_readme`;
-  	$patch_number=~ s/^\s+|\s+$//g;
-  	$patch_number =~ s/\s+/_/g;
+  	#$patch_number=~ s/^\s+|\s+$//g;
+  	#$patch_number =~ s/\s+/_/g;
     if(($patch_readme =~ /N\/A/) || (not defined $patch_readme))
     {
     		print "The following CR: $cr doesn't have a README \n";
@@ -272,6 +276,8 @@ sub getTasksnReadme()
       	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $cr_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
       	print SUMM "CR$cr - $sumreadme\n";
     }
+		print "*"x80;
+		print "\n";
 		}
 		my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @patchbinarylist};
 		print PATCHBIN @uniqbinlist;
