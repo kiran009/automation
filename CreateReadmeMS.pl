@@ -124,6 +124,9 @@ sub listfolderTasks()
 	print FOLDER $f_332;
 	close FOLDER;
 	getTasksnReadme(@uniq332);
+  open MR,"+> $Bin/mrnumber.txt";
+  print MR "3.3.2";
+  close MR;
 	close SUMM;
 	close SYNOP;
 	close CRRESOLV;
