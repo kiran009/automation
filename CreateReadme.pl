@@ -288,7 +288,11 @@ sub getTasksnReadme()
 		$task_resolver=~ s/^\s+|\s+$//g;
 		$priority=~ s/^\s+|\s+$//g;
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
-		print SYNOP "CR$cr $synopsis\n";
+		if($synopsis !~ m/^BM/)
+    {
+		    print SYNOP "CR$cr $synopsis\n";
+    }
+		#print SYNOP "CR$cr $synopsis\n";
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
   	#$cr=`$CCM query -u -f %patch_number`;
   	$patch_readme=`$CCM query -u -f %patch_readme`;
