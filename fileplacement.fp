@@ -60,7 +60,7 @@ SRC composer/ServiceComposer/Engine/PrismInterface.tcl DEST scripts/service_logi
 SRC composer/ServiceComposer/Engine/XmlParser.tcl DEST scripts/service_logic/System/ServiceComposer/Engine/XmlParser.tcl PERM 0644
 SRC scripts/stp/DbUtils.tcl DEST . PERM 0644
 SRC scripts/stp/DesignerEngine.tcl DEST . PERM 0644
-SRC etc/mr_postinstall.ksh	DEST etc/7.6.3_postinstall.ksh PERM 0644
-SRC etc/mr_postuninstall.ksh	DEST etc/7.6.3_postuninstall.ksh PERM 0644
-SRC etc/mr_preinstall.ksh	DEST etc/7.6.3_preinstall.ksh PERM 0644
-SRC etc/mr_preuninstall.ksh	DEST etc/7.6.3_preuninstall.ksh PERM 0755
+SRC etc/mr_postinstall.ksh	DEST etc/7.6.4_postinstall.ksh PERM 0644
+SRC etc/mr_postuninstall.ksh	DEST etc/7.6.4_postuninstall.ksh PERM 0644
+SRC etc/mr_preinstall.ksh	DEST etc/7.6.4_preinstall.ksh PERM 0644
+SRC etc/mr_preuninstall.ksh	DEST etc/7.6.4_preuninstall.ksh PERM 0755
