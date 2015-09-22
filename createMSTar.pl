@@ -91,7 +91,7 @@ sub createTar()
 		# 	$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
 		$destdir="/u/kkdaadhi/DSAMS_Deliverable/linAS5";
   	chdir($destdir);
-  	copy("$Bin/MS_3.3.0_README.txt",$destdir);
+  	copy("$Bin/MS_3.3_README.txt",$destdir);
   	$hostos="rhel5";
   	$hostplatform="linAS5";
   	`find * -type f -name "*README.txt" | xargs tar cvf ms-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf ms-$mrnumber-$hostos-build$build_number\.tar;gzip ms-$mrnumber-$hostos-build$build_number\.tar;`;
