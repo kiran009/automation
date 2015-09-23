@@ -104,7 +104,7 @@ sub createTar()
 	{
 		$destdir="/u/kkdaadhi/DSAMS_Deliverable/sol10";
   	chdir($destdir);
-  	copy("$Bin/MS_3.3.0_README.txt",$destdir);
+  	copy("$Bin/MS_3.3_README.txt",$destdir);
   	$hostplatform="sol10";
   	`find * -type f -name "*README.txt" | xargs tar cvf ms-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf ms-$mrnumber-$hostplatform-build$build_number\.tar;gzip ms-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	print "ms-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/ms-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
