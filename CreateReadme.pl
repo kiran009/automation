@@ -77,6 +77,7 @@ my $f_762c='1413';
 my $f_763a='1431';
 my $f_763b='1436';
 my $f_764a='1447';
+my $f_764b='1447';
 sub main()
 {
 		start_ccm();
@@ -90,12 +91,14 @@ sub listfolderTasks()
 	@tasks_763a=`$CCM folder -show tasks '$f_763a' -u -f "%task_number"`;
 	@tasks_763b=`$CCM folder -show tasks '$f_763b' -u -f "%task_number"`;
 	@tasks_764a=`$CCM folder -show tasks '$f_764a' -u -f "%task_number"`;
+	@tasks_764b=`$CCM folder -show tasks '$f_764b' -u -f "%task_number"`;
 
 	print "Tasks in 7.6.2.a are => @tasks_762a \n\n";
 	print "Tasks in 7.6.2.c are => @tasks_762c \n\n";
 	print "Tasks in 7.6.3.a are => @tasks_763a \n\n";
 	print "Tasks in 7.6.3.b are => @tasks_763b \n\n";
 	print "Tasks in 7.6.4.a are => @tasks_764a \n\n";
+	print "Tasks in 7.6.4.b are => @tasks_764b \n\n";
 	foreach $task(@tasks_762a)
 	{
 		$task=~ s/^\s+|\s+$//g;
@@ -136,6 +139,14 @@ sub listfolderTasks()
 		push(@crs_764a,$crinfo);
 	}
 	@uniq764a = do { my %seen; grep { !$seen{$_}++ } @crs_764a};
+	foreach $task(@tasks_764b)
+	{
+		$task=~ s/^\s+|\s+$//g;
+		$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
+		print "CR corresponding to task $task is: $crinfo\n";
+		push(@crs_764b,$crinfo);
+	}
+	@uniq764b = do { my %seen; grep { !$seen{$_}++ } @crs_764b};
 
 	print "Uniq CRs in 7.6.2.a are: @uniq762a \nUniq CRs in 7.6.2.c are: @uniq762c \nUniq CRs in 7.6.3.a are: @uniq763a\nUniq CRs in 7.6.3.a are: @uniq763b\n Uniq CRs in 7.6.4.a are: @uniq764a";
 	open OP,"<$Bin/mrnumber.txt";
@@ -155,6 +166,7 @@ sub listfolderTasks()
 	open TASKINF,"+>$Bin/7.6.4_taskinfo.txt";
 	open PATCHBIN, "+>$Bin/7.6.4_patchbinarylist.txt";
 	open FORMATTASKS,"+>$Bin/7.6.4_formattsks.txt";
+	push(@uniq764a,@uniq764b);
 	getTasksnReadme(@uniq764a);
 	close SUMM;
 	close SYNOP;
