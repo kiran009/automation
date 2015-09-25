@@ -17,6 +17,7 @@ SRC stp/stp DEST bin/stp PERM 0755
 SRC conf/tertio.mib DEST . PERM 0644
 SRC psdk/TclProvisioningAgent DEST bin/TclProvisioningAgent PERM 0755
 SRC iagent/TimeBasedScheduling DEST bin/TimeBasedScheduling PERM 0755
+SRC iagent/CoordinationAgent DEST bin/CoordinationAgent PERM 0755
 SRC conf/descriptors/admin.properties DEST . PERM 0444
 SRC conf/descriptors/composer.properties DEST . PERM 0444
 SRC conf/descriptors/designer.properties DEST . PERM 0444
