@@ -61,7 +61,7 @@ SRC designer/systemTasks/COA/CompleteRequest.xml DEST scripts/service_logic/Syst
 SRC designer/systemTasks/COA/Functions.xml DEST scripts/service_logic/System/COA/Functions.xml PERM 0644
 SRC designer/systemTasks/COA/QueueCOABlockingRequest.xml DEST scripts/service_logic/System/COA/QueueCOABlockingRequest.xml PERM 0644
 SRC designer/systemTasks/COA/QueueCOANonBlockingRequest.xml DEST scripts/service_logic/System/COA/QueueCOANonBlockingRequest.xml PERM 0644
-SRC designer/systemTasks/COA/UpdateCOARequest.xml DEST scripts /service_logic/System/COA/UpdateCOARequest.xml PERM 0644
+SRC designer/systemTasks/COA/UpdateCOARequest.xml DEST scripts/service_logic/System/COA/UpdateCOARequest.xml PERM 0644
 SRC composer/ServiceComposer/Engine/PrismInterface.tcl DEST scripts/service_logic/System/ServiceComposer/Engine/PrismInterface.tcl PERM 0644
 SRC composer/ServiceComposer/Engine/XmlParser.tcl DEST scripts/service_logic/System/ServiceComposer/Engine/XmlParser.tcl PERM 0644
 SRC scripts/stp/DbUtils.tcl DEST . PERM 0644
