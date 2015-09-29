@@ -17,7 +17,6 @@ SRC stp/stp DEST bin/stp PERM 0755
 SRC conf/tertio.mib DEST . PERM 0644
 SRC psdk/TclProvisioningAgent DEST bin/TclProvisioningAgent PERM 0755
 SRC iagent/TimeBasedScheduling DEST bin/TimeBasedScheduling PERM 0755
-SRC iagent/CoordinationAgent DEST bin/CoordinationAgent PERM 0755
 SRC conf/descriptors/admin.properties DEST . PERM 0444
 SRC conf/descriptors/composer.properties DEST . PERM 0444
 SRC conf/descriptors/designer.properties DEST . PERM 0444
@@ -57,15 +56,9 @@ TOMESRC /opt/tome/3.0.0_build19/lib/libtome_mon.so DEST lib/libtome_mon.so PERM 
 SRC installer/lib/package.tbc DEST lib/provpkg1.0/package.tbc PERM 0644
 SRC installer/lib/packageutils.tbc DEST lib/provpkg1.0/packageutils.tbc PERM 0644
 SRC designer/systemTasks/ManualIntervention.xml DEST scripts/service_logic/System/ManualIntervention.xml PERM 0644
-SRC designer/systemTasks/COA/CompleteRequest.xml DEST scripts/service_logic/System/COA/CompleteRequest.xml PERM 0644
-SRC designer/systemTasks/COA/Functions.xml DEST scripts/service_logic/System/COA/Functions.xml PERM 0644
-SRC designer/systemTasks/COA/QueueCOABlockingRequest.xml DEST scripts/service_logic/System/COA/QueueCOABlockingRequest.xml PERM 0644
-SRC designer/systemTasks/COA/QueueCOANonBlockingRequest.xml DEST scripts/service_logic/System/COA/QueueCOANonBlockingRequest.xml PERM 0644
-SRC designer/systemTasks/COA/UpdateCOARequest.xml DEST scripts/service_logic/System/COA/UpdateCOARequest.xml PERM 0644
 SRC composer/ServiceComposer/Engine/PrismInterface.tcl DEST scripts/service_logic/System/ServiceComposer/Engine/PrismInterface.tcl PERM 0644
 SRC composer/ServiceComposer/Engine/XmlParser.tcl DEST scripts/service_logic/System/ServiceComposer/Engine/XmlParser.tcl PERM 0644
 SRC scripts/stp/DbUtils.tcl DEST . PERM 0644
-SRC scripts/stp/CoaFormat.tcl DEST scripts/stp/CoaFormat.tcl PERM 0644
 SRC scripts/stp/DesignerEngine.tcl DEST . PERM 0644
 SRC etc/mr_postinstall.ksh	DEST etc/7.6.4_postinstall.ksh PERM 0644
 SRC etc/mr_postuninstall.ksh	DEST etc/7.6.4_postuninstall.ksh PERM 0644
