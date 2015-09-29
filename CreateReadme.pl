@@ -290,7 +290,10 @@ sub getTasksnReadme()
 			($task_resolver)=`$CCM task -show info $task_number \-u \-format "%resolver"`;
 			$task_synopsis=~ s/^\s+|\s+$//g;
 			$task_resolver=~ s/^\s+|\s+$//g;
-			print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
+			if($task_synopsis !~ m/^BM/)
+	    {
+				print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
+			}
 		}
 		$synopsis=~ s/^\s+|\s+$//g;
 		$requesttype=~ s/^\s+|\s+$//g;
@@ -299,7 +302,10 @@ sub getTasksnReadme()
 		$task_synopsis=~ s/^\s+|\s+$//g;
 		$task_resolver=~ s/^\s+|\s+$//g;
 		$priority=~ s/^\s+|\s+$//g;
-		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
+		if($synopsis !~ m/^BM/)
+    {
+			print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
+		}
 		if($synopsis !~ m/^BM/)
     {
 		    print SYNOP "CR$cr $synopsis\n";
