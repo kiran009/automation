@@ -97,13 +97,15 @@ sub crresolv()
 	open OP, "<$Bin/$releasenumber\_folder.txt";
 	$foldernumber=<OP>;
 	close OP;
-	print $FILE "<tr><b><td colspan='6'>Release -- $releasenumber</td><td colspan='6'>Folder -- $foldernumber</td></tr>";
+	print $FILE "<tr><b><td>Release -- $releasenumber</td><td>Folder -- $foldernumber</td></tr>";
 	foreach $cr(@crresolv)
 	{
-		open OP,"<$Bin/$cr\_tasks.txt";
+		print "CRTasks is: @cr_tasks \n";
+		($crid,$synopsis,$requesttype,$severity,$resolver,$priority)=split(/\^/,$cr);
+		open OP,"<$Bin/$crid\_tasks.txt";
+		print "$Bin/$crid\_tasks.txt \n";
 		@cr_tasks=<OP>;
 		close OP;
-		($crid,$synopsis,$requesttype,$severity,$resolver,$priority)=split(/\^/,$cr);
 		print $FILE "<tr><b><td>$crid</td><td>@cr_tasks</td><td>$synopsis</td><td>$requesttype</td><td>$severity</td><td>$resolver</td><td>$priority</td></tr>";
 	}
 }
