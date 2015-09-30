@@ -231,6 +231,9 @@ sub getTasksnReadme()
 		$cr=~ s/^\s+|\s+$//g;
 		@task_numbers=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		push(@tasks,@task_numbers);
+    open CRTASKS, "+> $cr\_tasks.txt";
+    print CRTASKS @task_numbers;
+    close CRTASKS;
 		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
 		($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
 		($requesttype)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%request_type"`;
@@ -253,7 +256,10 @@ sub getTasksnReadme()
 		$task_synopsis=~ s/^\s+|\s+$//g;
 		$task_resolver=~ s/^\s+|\s+$//g;
 		$priority=~ s/^\s+|\s+$//g;
-		print CRRESOLV "$cr\^$synopsis\^$requesttype\^$severity\^$resolver\^$priority\n";
+		if($synopsis !~ m/^BM/)
+    {
+		    print CRRESOLV "$cr\^$synopsis\^$requesttype\^$severity\^$resolver\^$priority\n";
+    }
 		if($synopsis !~ m/^BM/)
     {
 		    print SYNOP "CR$cr $synopsis\n";

@@ -66,18 +66,18 @@ sub crtnsndMail()
 	print $FILE "<tr><b><td>Has the developer documentation been updated?</td></b><td colspan=\"2\">N/A</td></tr></table><br/>";
 	print $FILE "<b>Installation instructions: </b><br/>";
 	print $FILE "Same as previous DSA FUR Maintenance Release<br/><br/>";
-	print $FILE "<b>Additional information about the changes:</b>N/A<br /><b>The Resolved CRs are:</b><br/>";
+	print $FILE "<b>Additional information about the changes:</b>N/A<br /><b>The Implemented CRs are:</b><br/>";
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
-	print $FILE "<tr><b><td>CR ID</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr><br/>";
+	print $FILE "<tr><b><td>CR ID</td><td>Tasks</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr><br/>";
 	crresolv('4.0.2');
 	crresolv('4.0.1');
 	print $FILE "</table><br/>";
-	print $FILE "<b>The checked in tasks since the last build are:</b><br/>";
-	print $FILE "<b><table width=\"100%\" border=\"1\">";
-	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr>";
-	taskinfo('4.0.2');
-	taskinfo('4.0.1');
-	print $FILE "</table><br/>";
+	# print $FILE "<b>The checked in tasks since the last build are:</b><br/>";
+	# print $FILE "<b><table width=\"100%\" border=\"1\">";
+	# print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr>";
+	# taskinfo('4.0.2');
+	# taskinfo('4.0.1');
+	# print $FILE "</table><br/>";
 	print $FILE "<b>Note:</b> To install DSA FUR $mrnumber, please use the latest PatchManager<br/></body></html>";
 	close $FILE;
 }
@@ -97,11 +97,14 @@ sub crresolv()
 	open OP, "<$Bin/$releasenumber\_folder.txt";
 	$foldernumber=<OP>;
 	close OP;
-	print $FILE "<tr><b><td colspan='6'>$releasenumber - $foldernumber</td></tr>";
+	print $FILE "<tr><b><td colspan='6'>Release -- $releasenumber</td><td colspan='6'>Folder -- $foldernumber</td></tr>";
 	foreach $cr(@crresolv)
 	{
+		open OP,"<$Bin/$cr\_tasks.txt";
+		@cr_tasks=<OP>;
+		close OP;
 		($crid,$synopsis,$requesttype,$severity,$resolver,$priority)=split(/\^/,$cr);
-		print $FILE "<tr><b><td>$crid</td><td>$synopsis</td><td>$requesttype</td><td>$severity</td><td>$resolver</td><td>$priority</td></tr>";
+		print $FILE "<tr><b><td>$crid</td><td>@cr_tasks</td><td>$synopsis</td><td>$requesttype</td><td>$severity</td><td>$resolver</td><td>$priority</td></tr>";
 	}
 }
 sub taskinfo()
