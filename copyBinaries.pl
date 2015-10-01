@@ -105,8 +105,8 @@ sub copyBinaries()
   $delroot="$dbbmloc/$coreproject/Provident_Dev/";
   foreach $file(@file_list)
   {
-		next if /^#/;
-		next if (/^\s+$/);
+		next if($file =~ /^#/);
+		next if($file =~ /^\s+$/);
   	if($file =~ /TOMESRC/)
   	{
   		my @del=split(/\s+/,$file);
@@ -150,8 +150,8 @@ sub copyBinaries()
   $delroot="$dbbmloc/$javaprojectname/Provident_Java/";
   foreach $file(@file_list)
   {
-		next if /^#/;
-		next if (/^\s+$/);
+		next if($file =~ /^#/);
+		next if($file =~ /^\s+$/);
   	my @del=split(/\s+/,$file);
   	if($del[3] eq ".")
   	{
