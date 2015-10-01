@@ -283,18 +283,6 @@ sub getTasksnReadme()
 		($severity)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%severity"`;
 		($priority)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%priority"`;
 		($resolver)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%resolver"`;
-		foreach $task_number(@task_numbers)
-		{
-			$task_number=~ s/^\s+|\s+$//g;
-			($task_synopsis)=`$CCM task -show info $task_number \-u \-format "%task_synopsis"`;
-			($task_resolver)=`$CCM task -show info $task_number \-u \-format "%resolver"`;
-			$task_synopsis=~ s/^\s+|\s+$//g;
-			$task_resolver=~ s/^\s+|\s+$//g;
-			if($task_synopsis !~ m/^BM/)
-	    {
-				print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
-			}
-		}
 		$synopsis=~ s/^\s+|\s+$//g;
 		$requesttype=~ s/^\s+|\s+$//g;
 		$severity=~ s/^\s+|\s+$//g;
@@ -302,6 +290,18 @@ sub getTasksnReadme()
 		$task_synopsis=~ s/^\s+|\s+$//g;
 		$task_resolver=~ s/^\s+|\s+$//g;
 		$priority=~ s/^\s+|\s+$//g;
+		foreach $task_number(@task_numbers)
+		{
+			$task_number=~ s/^\s+|\s+$//g;
+			($task_synopsis)=`$CCM task -show info $task_number \-u \-format "%task_synopsis"`;
+			($task_resolver)=`$CCM task -show info $task_number \-u \-format "%resolver"`;
+			$task_synopsis=~ s/^\s+|\s+$//g;
+			$task_resolver=~ s/^\s+|\s+$//g;
+			if($synopsis !~ m/^BM/)
+	    {
+				print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
+			}
+		}
 		if($synopsis !~ m/^BM/)
     {
 			print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
@@ -331,7 +331,10 @@ sub getTasksnReadme()
     			@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $cr\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'`;
     			push(@patchbinarylist,@PatchFiles);
     			$sumreadme=`sed -n '/AFFECTED:/,/ISSUES/ p' $cr\_README.txt  | sed '\$ d' | grep -v 'AFFECTED' | grep -v 'ISSUES' | sed '/^\$/d'`;
-    			print SUMM "CR$cr - $sumreadme\n";
+          if($synopsis !~ m/^BM/)
+          {
+    			     print SUMM "CR$cr - $sumreadme\n";
+          }
     		}
     		else
     		{
@@ -342,7 +345,10 @@ sub getTasksnReadme()
     				@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $cr\_README.txt  | sed '\$ d' | sed '/^\$/d' | grep -v 'AFFECTS'| sed '/^\$/d'`;
 	     		 	push(@patchbinarylist,@PatchFiles);
       			$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $cr\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
-      			print SUMM "CR$cr - $sumreadme\n";
+            if($synopsis !~ m/^BM/)
+            {
+      			     print SUMM "CR$cr - $sumreadme\n";
+            }
     			}
     		}
 		}
