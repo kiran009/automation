@@ -18,7 +18,7 @@ my $binarylist;
 my $javabinarylist;
 #="$Bin/javabinaries.fp";
 my $hostplatform;
-my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number);
+my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number,"crs=s"=>\$crs);
 if(!$result)
 {
 	print "You must supply arguments to the script\n";
@@ -32,6 +32,11 @@ if(!$coreproject)
 if(!$javaprojectname)
 {
 	print "You need to supply java projectname \n";
+	exit;
+}
+if(!$crs)
+{
+	print "CR list is mandatory \n";
 	exit;
 }
 my @PatchFiles;
@@ -71,13 +76,46 @@ my $patch_number;
 # /* Global Environment Variables ******* /
 sub main()
 {
+		constructfp();
 		copyBinaries();
+}
+sub constructfp()
+{
+	open COREFP, "+> $Bin/fileplacement.fp";
+	open JAVAFP, "+> $Bin/javabinaries.fp";
+	foreach $cr(@crs)
+	{
+		$cr=~ s/^\s+|\s+$//g;
+		@deliverable_list=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%deliverable_list"`;
+		foreach $deliverable_list(@deliverable_list)
+		{
+			$deliverable_list=~ s/^\s+|\s+$//g;
+			if($deliverable_list =~ /jar/)
+			{
+					print JAVAFP "$deliverable_list\n";
+			}
+			else
+			{
+					print COREFP "$deliverable_list\n";
+			}
+
+		}
+		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
+    $patch_number=`$CCM query -u -f %patch_number`;
+    $patch_readme=`$CCM query -u -f %patch_readme`;
+    $patch_number=~ s/^\s+|\s+$//g;
+
+		open OP, "+> $Bin/patchnumber.txt";
+		print OP $patch_number;
+		close OP;
 }
 sub copyBinaries()
 {
 	umask 002;
 	# Choose the platform project
 	$coreproject=~ s/^\s+|\s+$//g;
+	#copy("$dbbmloc/$coreproject/Provident_Dev/mr_package/fileplacement.fp","$Bin/fileplacement.fp") or die("Couldn't able to copy the file, can't proceed with binary copy $!");
+	#copy("$dbbmloc/$coreproject/Provident_Dev/mr_package/javabinaries.fp","$Bin/javabinaries.fp") or die("Couldn't able to copy the file, can't proceed with binary copy $!");
 	$binarylist="$Bin/fileplacement.fp";
 	$javabinarylist="$Bin/javabinaries.fp";
   if($coreproject =~ /linAS5/)

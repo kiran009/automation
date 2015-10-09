@@ -109,6 +109,19 @@ sub createTar()
   	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
   	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
 	}
+  elsif($coreproject =~ /linAS4/)
+  {
+		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS3";
+  	chdir($destdir);
+  	copy("$Bin/$patchnumber\_README.txt",$destdir);
+  	$hostos="rhel3";
+  	$hostplatform="linAS4";
+  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-patch$patchnumber\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-patch$patchnumber\.tar;`;
+  	print "tertio-patch$patchnumber\.tar => $tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
+  	copy("tertio-patch$patchnumber\.tar","$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
+  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
+  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
+	}
   elsif($coreproject =~ /linAS3/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS3";
