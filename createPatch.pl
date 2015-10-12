@@ -111,7 +111,7 @@ sub createTar()
 	}
   elsif($coreproject =~ /linAS4/)
   {
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS3";
+		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS4";
   	chdir($destdir);
   	copy("$Bin/$patchnumber\_README.txt",$destdir);
   	$hostos="rhel3";

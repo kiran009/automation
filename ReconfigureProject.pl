@@ -77,47 +77,49 @@ sub getTasksnReadme()
 	open CRRESOLV, "+> $Bin/crresolv.txt";
 	open TASKINF,"+>$Bin/taskinfo.txt";
 
-	open COREFP, "+> $Bin/fileplacement.fp";
-	open JAVAFP, "+> $Bin/javabinaries.fp";
+	# open COREFP, "+> $Bin/fileplacement.fp";
+	# open JAVAFP, "+> $Bin/javabinaries.fp";
 	foreach $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
 		print "CRNumber is : $cr\n";
-		$task_number=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
-		$task_number=~ s/^\s+|\s+$//g;
-		push(@tasks,$task_number);
+		@task_numbers=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
+		#$task_number=~ s/^\s+|\s+$//g;
+		push(@tasks,@task_numbers);
 		#get synopsis and other fields
 		($synopsis)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%problem_synopsis"`;
 		($requesttype)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%request_type"`;
 		($severity)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%severity"`;
 		($priority)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%priority"`;
 		($resolver)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%resolver"`;
-		($task_synopsis)=`$CCM task -show info $task_number -u -format "%task_synopsis"`;
-		($task_resolver)=`$CCM task -show info $task_number -u -format "%resolver"`;
-		@deliverable_list=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%deliverable_list"`;
 		$synopsis=~ s/^\s+|\s+$//g;
 		$requesttype=~ s/^\s+|\s+$//g;
 		$severity=~ s/^\s+|\s+$//g;
 		$resolver=~ s/^\s+|\s+$//g;
-		$task_synopsis=~ s/^\s+|\s+$//g;
-		$task_resolver=~ s/^\s+|\s+$//g;
 		$priority=~ s/^\s+|\s+$//g;
-		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
-		print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 		print SYNOP "CR$cr $synopsis\n";
-		foreach $deliverable_list(@deliverable_list)
+		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
+		foreach $task_number(@task_numbers)
 		{
-			$deliverable_list=~ s/^\s+|\s+$//g;
-			if($deliverable_list =~ /jar/)
-			{
-					print JAVAFP "$deliverable_list\n";
+				($task_synopsis)=`$CCM task -show info $task_number -u -format "%task_synopsis"`;
+				($task_resolver)=`$CCM task -show info $task_number -u -format "%resolver"`;
+				$task_synopsis=~ s/^\s+|\s+$//g;
+				$task_resolver=~ s/^\s+|\s+$//g;
+				print TASKINF "$task_number#$task_synopsis#$task_resolver\n";
 			}
-			else
-			{
-					print COREFP "$deliverable_list\n";
-			}
-
-		}
+		# foreach $deliverable_list(@deliverable_list)
+		# {
+		# 	$deliverable_list=~ s/^\s+|\s+$//g;
+		# 	if($deliverable_list =~ /jar/)
+		# 	{
+		# 			print JAVAFP "$deliverable_list\n";
+		# 	}
+		# 	else
+		# 	{
+		# 			print COREFP "$deliverable_list\n";
+		# 	}
+		#
+		# }
 		#fetch readme
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
     $patch_number=`$CCM query -u -f %patch_number`;
