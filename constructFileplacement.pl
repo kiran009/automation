@@ -83,10 +83,10 @@ $CCM="$ENV{'CCM_HOME'}/bin/ccm";
 # /* Global Environment Variables ******* /
 sub main()
 {
-		#start_ccm();
-		#constructfp();
-		copyBinaries();
-		#ccm_stop();
+		start_ccm();
+		constructfp();
+		#copyBinaries();
+		ccm_stop();
 }
 sub constructfp()
 {
