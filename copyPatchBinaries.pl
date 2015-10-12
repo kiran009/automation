@@ -18,7 +18,7 @@ my $binarylist;
 my $javabinarylist;
 #="$Bin/javabinaries.fp";
 my $hostplatform;
-my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number,"crs=s"=>\$crs);
+my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number,"crlist=s"=>\$crlist);
 if(!$result)
 {
 	print "You must supply arguments to the script\n";
@@ -34,7 +34,7 @@ if(!$javaprojectname)
 	print "You need to supply java projectname \n";
 	exit;
 }
-if(!$crs)
+if(!$crlist)
 {
 	print "CR list is mandatory \n";
 	exit;
@@ -91,6 +91,7 @@ sub constructfp()
 		{
 			$deliverable_list=~ s/^\s+|\s+$//g;
 			if($deliverable_list =~ /jar/)
+
 			{
 					print JAVAFP "$deliverable_list\n";
 			}
