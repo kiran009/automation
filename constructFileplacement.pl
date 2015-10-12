@@ -18,20 +18,11 @@ my $binarylist;
 my $javabinarylist;
 #="$Bin/javabinaries.fp";
 my $hostplatform;
-my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number,"crlist=s"=>\$crlist);
+#my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number,"crlist=s"=>\$crlist);
+my $result=GetOptions("buildnumber=s"=>\$build_number,"crlist=s"=>\$crlist);
 if(!$result)
 {
 	print "You must supply arguments to the script\n";
-	exit;
-}
-if(!$coreproject)
-{
-	print "You need to supply core projectname \n";
-	exit;
-}
-if(!$javaprojectname)
-{
-	print "You need to supply java projectname \n";
 	exit;
 }
 if(!$crlist)
