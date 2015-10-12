@@ -109,6 +109,7 @@ sub constructfp()
 		print OP $patch_number;
 		close OP;
 }
+}
 sub copyBinaries()
 {
 	umask 002;
