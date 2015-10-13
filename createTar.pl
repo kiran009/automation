@@ -122,7 +122,7 @@ sub createTar()
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
   	    chdir($destdir);
-  	    copy("$Bin/tertio_7.6_README.txt",$destdir);
+  	    copy("$Bin/tertio7.7_README.txt",$destdir);
   	    $hostplatform="rhel6";
   	    `find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	    print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
