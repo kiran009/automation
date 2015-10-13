@@ -114,6 +114,13 @@ sub listfolderTasks()
 		my @fold=split(/,/,$folder);
 		foreach $fld(@fold)
 		{
+		    undef @tasks_folder;
+		    undef @crs_folder;
+		    undef $task;
+		    undef $crinfo;
+		    undef @tasks;
+		    undef @uniqfolder;
+		    undef $foldername;
 			@tasks_folder=`$CCM folder -show tasks '$fld' -u -f "%task_number"`;
 			foreach $task(@tasks_folder)
 			{
@@ -123,7 +130,7 @@ sub listfolderTasks()
 				push(@crs_folder,$crinfo);
 			}
 			@uniqfolder = do { my %seen; grep { !$seen{$_}++ } @crs_folder};
-			undef @tasks;
+
 			open SYNOP,"+>$Bin/$foldername\_synopsis.txt";
 			open SUMM,"+>$Bin/$foldername\_summary_readme.txt";
 			open CRRESOLV, "+>$Bin/$foldername\_crresolv.txt";
@@ -145,61 +152,6 @@ sub listfolderTasks()
 	close FILE;
 }
 
-sub createReadme()
-{
-	undef @formattsks;
-	undef @fformattsks;
-	undef @synopsis;
-	undef @summary;
-	undef @crresolv;
-	undef @taskinfo;
-	undef @binarylist;
-	undef @uniqbinlist;
-	undef @uniqtasks;
-	undef @uniqtsks;
-	undef @formattedtsks;
-	undef $formattedtsks;
-	undef @formattsks;
-	undef @fformattsks;
-
-
-    my ($deliveryname)=@_;
-	$deliveryname=~ s/^\s+|\s+$//g;
-	open OP,"<$Bin/$deliveryname\_formattsks.txt";
-	@formattsks=<OP>;
-	my @uniqtasks= do { my %seen; grep { !$seen{$_}++ } @formattsks};
-	my @uniqtsks=grep(s/\s*$//g,@uniqtasks);
-	my @uniqtsks=grep /\S/,@uniqtsks;
-	@fformattsks=map{"$_\n"} @uniqtsks;
-	$formattedtsks=join(",",@fformattsks);
-	$formattedtsks =~ s/[\n\r]//g;
-	close OP;
-	open OP,"<$Bin/$deliveryname\_synopsis.txt";
-	@synopsis=<OP>;
-	close OP;
-	open OP,"<$Bin/$deliveryname\_summary_readme.txt";
-	@summary=<OP>;
-	close OP;
-	open OP,"<$Bin/$deliveryname\_crresolv.txt";
-	@crresolv=<OP>;
-	close OP;
-	open OP,"<$Bin/$deliveryname\_taskinfo.txt";
-	@taskinfo=<OP>;
-	close OP;
-	open OP, "< $Bin/$deliveryname\_patchbinarylist.txt";
-	@binarylist=<OP>;
-	close OP;
-	print "Patch binary list is: @binarylist\n";
-	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @binarylist};
-	print "Uniq Binlist is: @uniqbinlist\n";
-	print FILE "--";
-	print FILE "\nRelease - $deliveryname\n";
-	print FILE "\nTASKS:$formattedtsks\n\n";
-	print FILE "FIXES:@synopsis\n\n";
-	print FILE "AFFECTS: $affects\n";
-	print FILE "@uniqbinlist\n\n";
-	print FILE "SUMMARY OF CHANGES: $deliveryname\nThe following changes have been delivered in this Maintenance Release.\n@summary\n";
-}
 sub getTasksnReadme()
 {
 	undef @patchbinarylist;
@@ -287,6 +239,62 @@ sub getTasksnReadme()
 		@formattsks=join("\n", map { 'PROV_' . $_ } @tasks);
 		print FORMATTASKS @formattsks;
 }
+sub createReadme()
+{
+	undef @formattsks;
+	undef @fformattsks;
+	undef @synopsis;
+	undef @summary;
+	undef @crresolv;
+	undef @taskinfo;
+	undef @binarylist;
+	undef @uniqbinlist;
+	undef @uniqtasks;
+	undef @uniqtsks;
+	undef @formattedtsks;
+	undef $formattedtsks;
+	undef @formattsks;
+	undef @fformattsks;
+
+
+    my ($deliveryname)=@_;
+	$deliveryname=~ s/^\s+|\s+$//g;
+	open OP,"<$Bin/$deliveryname\_formattsks.txt";
+	@formattsks=<OP>;
+	my @uniqtasks= do { my %seen; grep { !$seen{$_}++ } @formattsks};
+	my @uniqtsks=grep(s/\s*$//g,@uniqtasks);
+	my @uniqtsks=grep /\S/,@uniqtsks;
+	@fformattsks=map{"$_\n"} @uniqtsks;
+	$formattedtsks=join(",",@fformattsks);
+	$formattedtsks =~ s/[\n\r]//g;
+	close OP;
+	open OP,"<$Bin/$deliveryname\_synopsis.txt";
+	@synopsis=<OP>;
+	close OP;
+	open OP,"<$Bin/$deliveryname\_summary_readme.txt";
+	@summary=<OP>;
+	close OP;
+	open OP,"<$Bin/$deliveryname\_crresolv.txt";
+	@crresolv=<OP>;
+	close OP;
+	open OP,"<$Bin/$deliveryname\_taskinfo.txt";
+	@taskinfo=<OP>;
+	close OP;
+	open OP, "< $Bin/$deliveryname\_patchbinarylist.txt";
+	@binarylist=<OP>;
+	close OP;
+	print "Patch binary list is: @binarylist\n";
+	my @uniqbinlist = do { my %seen; grep { !$seen{$_}++ } @binarylist};
+	print "Uniq Binlist is: @uniqbinlist\n";
+	print FILE "--";
+	print FILE "\nRelease - $deliveryname\n";
+	print FILE "\nTASKS:$formattedtsks\n\n";
+	print FILE "FIXES:@synopsis\n\n";
+	print FILE "AFFECTS: $affects\n";
+	print FILE "@uniqbinlist\n\n";
+	print FILE "SUMMARY OF CHANGES: $deliveryname\nThe following changes have been delivered in this Maintenance Release.\n@summary\n";
+}
+
 sub start_ccm()
 {
 	print "In Start CCM \n";
