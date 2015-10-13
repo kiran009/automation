@@ -158,6 +158,10 @@ sub createReadme()
 	undef @uniqtasks;
 	undef @uniqtsks;
 	undef @formattedtsks;
+	undef $formattedtsks;
+	undef @formattsks;
+	undef @fformattsks;
+
 
     my ($deliveryname)=@_;
 	$deliveryname=~ s/^\s+|\s+$//g;
