@@ -162,7 +162,9 @@ sub copyBinaries()
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
 	}
-	rmtree($destdir);
+	#rmtree($destdir);
+	# Remove Destnation directory keeping the root
+	`rm -rf $destdir/*`;
 	open OP, "< $binarylist";
   @file_list=<OP>;
   close OP;
