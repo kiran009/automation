@@ -111,6 +111,7 @@ sub listfolderTasks()
 	foreach $set(@folder_set)
 	{
 		($foldername,$folder)=split(/:/,$set);
+		$foldername=~ s/^\s+|\s+$//g;
 		my @fold=split(/,/,$folder);
 		undef @tasks_folder;
 		undef @crs_folder;
@@ -118,7 +119,7 @@ sub listfolderTasks()
 		undef $crinfo;
 		undef @tasks;
 		undef @uniqfolder;
-		undef $foldername;
+		#undef $foldername;
 		foreach $fld(@fold)
 		{
 			@tasks_folder=`$CCM folder -show tasks '$fld' -u -f "%task_number"`;
@@ -144,6 +145,7 @@ sub listfolderTasks()
 		close TASKINF;
 		close PATCHBIN;
 		close FORMATTASKS;
+		print "CreateREADME: createReadme($foldername)";
 		createReadme($foldername);
 	}
 	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\n";
