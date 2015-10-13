@@ -43,7 +43,7 @@ if(!$readmename)
 	print "README name should be mentioned\n";
 	exit;
 }
-if(!$preq)
+if(!$prereq)
 {
 	print "Please mention prerequisite for the patch\n";
 	exit;
