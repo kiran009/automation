@@ -112,15 +112,15 @@ sub listfolderTasks()
 	{
 		($foldername,$folder)=split(/:/,$set);
 		my @fold=split(/,/,$folder);
+		undef @tasks_folder;
+		undef @crs_folder;
+		undef $task;
+		undef $crinfo;
+		undef @tasks;
+		undef @uniqfolder;
+		undef $foldername;
 		foreach $fld(@fold)
 		{
-		    undef @tasks_folder;
-		    undef @crs_folder;
-		    undef $task;
-		    undef $crinfo;
-		    undef @tasks;
-		    undef @uniqfolder;
-		    undef $foldername;
 			@tasks_folder=`$CCM folder -show tasks '$fld' -u -f "%task_number"`;
 			foreach $task(@tasks_folder)
 			{
@@ -130,21 +130,20 @@ sub listfolderTasks()
 				push(@crs_folder,$crinfo);
 			}
 			@uniqfolder = do { my %seen; grep { !$seen{$_}++ } @crs_folder};
-
-			open SYNOP,"+>$Bin/$foldername\_synopsis.txt";
-			open SUMM,"+>$Bin/$foldername\_summary_readme.txt";
-			open CRRESOLV, "+>$Bin/$foldername\_crresolv.txt";
-			open TASKINF,"+>$Bin/$foldername\_taskinfo.txt";
-			open PATCHBIN, "+>$Bin/$foldername\_patchbinarylist.txt";
-			open FORMATTASKS,"+>$Bin/$foldername\_formattsks.txt";
-			getTasksnReadme(@uniqfolder);
-			close SUMM;
-			close SYNOP;
-			close CRRESOLV;
-			close TASKINF;
-			close PATCHBIN;
-			close FORMATTASKS;
-		}
+        }
+		open SYNOP,"+>$Bin/$foldername\_synopsis.txt";
+		open SUMM,"+>$Bin/$foldername\_summary_readme.txt";
+		open CRRESOLV, "+>$Bin/$foldername\_crresolv.txt";
+		open TASKINF,"+>$Bin/$foldername\_taskinfo.txt";
+		open PATCHBIN, "+>$Bin/$foldername\_patchbinarylist.txt";
+		open FORMATTASKS,"+>$Bin/$foldername\_formattsks.txt";
+		getTasksnReadme(@uniqfolder);
+		close SUMM;
+		close SYNOP;
+		close CRRESOLV;
+		close TASKINF;
+		close PATCHBIN;
+		close FORMATTASKS;
 		createReadme($foldername);
 	}
 	print FILE "\nTO INSTALL AND UNINSTALL:\nRefer Patch Release Notes.\n\n";
