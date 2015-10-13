@@ -206,6 +206,7 @@ sub getTasksnReadme()
 	undef @PatchFiles;
 	undef @tasks;
 	undef @formattsks;
+	undef $tasklist;
 	my @crs=@_;
 	foreach $cr(@crs)
 	{
