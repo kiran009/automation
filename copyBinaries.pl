@@ -80,8 +80,8 @@ sub copyBinaries()
 	copy("$dbbmloc/$coreproject/Provident_Dev/mr_package/javabinaries.fp","$Bin/javabinaries.fp") or die("Couldn't able to copy the file, can't proceed with binary copy $!");
 	$binarylist="$Bin/fileplacement.fp";
 	$javabinarylist="$Bin/javabinaries.fp";
-  if($coreproject =~ /linAS5/)
-  {
+    if($coreproject =~ /linAS5/)
+    {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
 	}
 	elsif($coreproject =~ /sol10/)
@@ -96,86 +96,94 @@ sub copyBinaries()
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
 	}
-#	rmtree($destdir);
+	elsif($coreproject =~ /sol9/)
+	{
+		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol9";
+	}
+	elsif($coreproject =~ /hpia/)
+	{
+		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpia";
+	}
+    #	rmtree($destdir);
     # Remove destdir contents
     `rm -rf $destdir/*`;
 	open OP, "< $binarylist";
-  @file_list=<OP>;
-  close OP;
-  my %deliveryhash;
+    @file_list=<OP>;
+    close OP;
+    my %deliveryhash;
 	# Select the basedirectory of the project and construct the delivery hash
-  $delroot="$dbbmloc/$coreproject/Provident_Dev/";
-  foreach $file(@file_list)
-  {
+    $delroot="$dbbmloc/$coreproject/Provident_Dev/";
+    foreach $file(@file_list)
+    {
 		next if($file =~ /^#/);
 		next if($file =~ /^\s+$/);
-  	if($file =~ /TOMESRC/)
-  	{
-  		my @del=split(/\s+/,$file);
-  		if($del[3] eq ".")
-  		{
-  			$deliveryhash{$del[1]}="$del[1],$del[5]";
-  		}
-  		else
-  		{
-  			$deliveryhash{$del[1]}="$del[3],$del[5]";
-  		}
+  	    if($file =~ /TOMESRC/)
+  	    {
+  		    my @del=split(/\s+/,$file);
+  		    if($del[3] eq ".")
+  		    {
+  			    $deliveryhash{$del[1]}="$del[1],$del[5]";
+  		    }
+  		    else
+  		    {
+      			$deliveryhash{$del[1]}="$del[3],$del[5]";
+  	    	}
+  	    }
+  	    elsif($file =~ /DASHBOARDSRC/)
+  	    {
+  		    my @del=split(/\s+/,$file);
+  		    if($del[3] eq ".")
+  		    {
+  			    $deliveryhash{$del[1]}="$del[1],$del[5]";
+  		    }
+  		    else
+  		    {
+  			    $deliveryhash{$del[1]}="$del[3],$del[5]";
+  		    }
+  	    }
+  	    else
+  	    {
+  		    my @del=split(/\s+/,$file);
+  		    if($del[3] eq ".")
+  		    {
+    			$deliveryhash{"$delroot/$del[1]"}="$del[1],$del[5]";
+  	    	}
+      		else
+  	    	{
+  		    	$deliveryhash{"$delroot/$del[1]"}="$del[3],$del[5]";
+  		    }
+  	    }
   	}
-  	elsif($file =~ /DASHBOARDSRC/)
-  	{
-  		my @del=split(/\s+/,$file);
-  		if($del[3] eq ".")
-  		{
-  			$deliveryhash{$del[1]}="$del[1],$del[5]";
-  		}
-  		else
-  		{
-  			$deliveryhash{$del[1]}="$del[3],$del[5]";
-  		}
-  	}
-  	else
-  	{
-  		my @del=split(/\s+/,$file);
-  		if($del[3] eq ".")
-  		{
-				$deliveryhash{"$delroot/$del[1]"}="$del[1],$del[5]";
-  		}
-  		else
-  		{
-  			$deliveryhash{"$delroot/$del[1]"}="$del[3],$del[5]";
-  		}
-  	}
-  	}
-  open OP, "< $javabinarylist";
-  @file_list=<OP>;
-  close OP;
-  $delroot="$dbbmloc/$javaprojectname/Provident_Java/";
-  foreach $file(@file_list)
-  {
+    open OP, "< $javabinarylist";
+    @file_list=<OP>;
+    close OP;
+    $delroot="$dbbmloc/$javaprojectname/Provident_Java/";
+    foreach $file(@file_list)
+    {
 		next if($file =~ /^#/);
 		next if($file =~ /^\s+$/);
-  	my @del=split(/\s+/,$file);
-  	if($del[3] eq ".")
-  	{
+  	    my @del=split(/\s+/,$file);
+  	    if($del[3] eq ".")
+  	    {
  			$deliveryhash{"$delroot/$del[1]"}="$del[1],$del[5]";
 		}
-  	else
-  	{
-			$deliveryhash{"$delroot/$del[1]"}="$del[3],$del[5]";
-  	}
-  }
+  	    else
+  	    {
+		    $deliveryhash{"$delroot/$del[1]"}="$del[3],$del[5]";
+  	    }
+    }
 	# Read the hash and copy the binaries
 	foreach $key(keys %deliveryhash)
-  {
+    {
 		$dirname=dirname($deliveryhash{$key});
 		($filename,$permission)=split(/,/,$deliveryhash{$key});
 		$filename=~ s/^\s+|\s+$//g;
 		$permission=~ s/^\s+|\s+$//g;
-  	mkpath("$destdir/$dirname");
+  	    mkpath("$destdir/$dirname");
 		#copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
 		copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $key $!");
 		chmod(oct($permission),"$destdir/$filename") or die("Couldn't able to set the permission $!");
 		print "Permission: $permission for file: $destdir/$filename \n";
-  }
+    }
   }
 main();
