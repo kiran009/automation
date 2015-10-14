@@ -28,29 +28,30 @@ elsif($hostname =~ /pedsun2/)
 elsif($hostname =~ /pesthp2/)
 {	$hostplatform="hpiav3";}
 
-$result=GetOptions("devproject=s"=>\$devprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs);
-#$result=GetOptions("devproject=s"=>\$devprojectname,"javaproject=s"=>\$javaprojectname,"folder=s"=>\$folder,"crs=s"=>\$crs);
+$result=GetOptions("devprojects=s"=>\$devprojectlist,"folder=s"=>\$folder,"crs=s"=>\$crs);
 if(!$result)
 {
 	print "Please provide devprojectname \n";
 	exit;
 }
-if(!$devprojectname)
+if(!$devprojectlist)
 {
-	print "Projectname is mandatory \n";
+	print "Projectlist is mandatory \n";
 	exit;
 }
 if(!$folder)
 {
 	print "No folder is mentioned to add the TASKS corresponding to the above CRs, proceeding with existing one's\n";
+	exit;
 }
 if(!$crs)
 {
 	print "No extra CRs are provided for this build, proceeding with already added one's \n";
+	exit;
 }
+@devprojects=split(/;/,$devprojectlist);
 my @PatchFiles;
 my @files;
-#my $patch_number;
 my $problem_number;
 my @crs;
 my @tasks;
@@ -66,10 +67,7 @@ my @file_list;
 my $mr_number;
 my @patchbinarylist;
 my $cr;
-#my $mailto='kiran.daadhi@evolving.com hari.annamalai@evolving.com Srikanth.Bhaskar@evolving.com anand.gubbi@evolving.com shreraam.gurumoorthy@evolving.com';
-#my $mailto='kiran.daadhi@evolving.com';
 my %hash;
-#$destdir="/u/kkdaadhi/Tertio_Deliverable";
 my $readmeIssue;
 my @consumreadme;
 
@@ -80,7 +78,10 @@ sub main()
 {
 		start_ccm();
 		getTasksnReadme();
-		reconfigure_devproject();
+		foreach $devprojectname(@devprojects)
+		{
+		    reconfigure_devproject($devprojectname);
+		}
 		ccm_stop();
 }
 sub getTasksnReadme()
@@ -129,10 +130,7 @@ sub getTasksnReadme()
 		close MR;
 		#fetch readme
 		`$CCM query "cvtype=\'problem\' and problem_number=\'$cr\'"`;
-    #$patch_number=`$CCM query -u -f %patch_number`;
-    $patch_readme=`$CCM query -u -f %patch_readme`;
-    #	$patch_number=~ s/^\s+|\s+$//g;
-
+        $patch_readme=`$CCM query -u -f %patch_readme`;
 
     	if($patch_readme =~ /N\/A/)
     	{
@@ -145,15 +143,6 @@ sub getTasksnReadme()
     		close OP1;
     		`dos2unix $Bin/$cr\_README.txt 2>&1 1>/dev/null`;
     		@PatchFiles=`sed -n '/AFFECTS:/,/TO/ p' $cr\_README.txt  | sed '\$ d' | sed '/^\$/d'`;
-
-    		#print "Binary file list is: @PatchFiles \n";
-        	#chomp(@PatchFiles);
-        	#my @newPatchFiles;
-        	#foreach my $patchfile(@PatchFiles)
-        	#{
-        	#	$newpatchfile=($patchfile=~s/mr_/$mr_number\_/g);
-        	#	push(@newPatchFiles, $newpatchfile);
-        	#}
         	push(@patchbinarylist,@PatchFiles);
         	$sumreadme=`sed -n '/CHANGES:/,/ISSUES/ p' $cr\_README.txt  | sed '\$ d' | grep -v 'CHANGES' | grep -v 'ISSUES' | sed '/^\$/d'`;
         	print SUMM "CR$cr - $sumreadme\n";
@@ -172,7 +161,6 @@ sub getTasksnReadme()
 	print "Tasks are: @tasks \n";
 	chomp(@tasks);
 	chomp(@tasks);
-	#@fmtsks=join("\n",@tasks);
 	$tasklist=join(",",@tasks);
 	$tasklist=~ s/\s+//g;
 	print "Tasklist is: $tasklist \n";
@@ -182,8 +170,10 @@ sub getTasksnReadme()
 	close OP;
 }
 
-sub reconfigure_devproject()
+sub reconfigure_devproject($)
 {
+    ($devprojectname)=@_;
+    print "Reconfiguring Devproject: $devprojectname \n";
 	$ccmworkarea=`$CCM wa -show -recurse $devprojectname`;
 	($temp,$workarea)=split(/'/,$ccmworkarea);
 	$workarea=~ s/^\s+|\s+$//g;
