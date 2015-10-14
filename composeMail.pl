@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.6 send E-mail Script
+# Tertio E-mail Template
 use Cwd;
 use File::Path;
 use File::Find;
@@ -18,7 +18,18 @@ $year+=1900;
 my $dt="$mday $months[$mon] $year\n";
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my $FILE;
-#my $result=GetOptions("buildnumber=s"=>\$build_number);
+my $result=GetOptions("buildnumber=s"=>\$build_number,"folderset=s"=>\$folderset,"productname=s"=>\$productname,"externaldependencies=s"=>\$externaldependencies);
+($tome,$tertioadk,$caf,$dashboard,$dda,$menuserver,$smspayload,$rmcdk,$pecdk)=split(/;/,$externaldependencies);
+($tomeversion,$tomebuild)=split(/,/,$tome);
+($tertioadkversion,$tertioadkbuild)=split(/,/,$tertioadk);
+($cafversion,$cafbuild)=split(/,/,$caf);
+($dashboardversion,$dashboardbuild)=split(/,/,$dashboard);
+($ddaversion,$ddabuild)=split(/,/,$dda);
+($menuversion,$menubuild)=split(/,/,$menuserver);
+($smsversion,$smsbuild)=split(/,/,$smspayload);
+($rmcdkversion,$rmcdkbuild)=split(/,/,$rmcdk);
+($pecdkversion,$pecdkbuild)=split(/,/,$pecdk);
+@folder_set=split(/;/,$folderset);
 sub main()
 {
 	crtnsndMail();
@@ -55,31 +66,35 @@ sub crtnsndMail()
 	print $FILE "<tr><b><td>Location</td></b><td colspan=\'2\'>@location_explode</td></tr><br/>";
 	print $FILE "<tr><b><td>Build Date</td></b><td colspan=\'2\'>$dtformat</td></tr><br/>";
 	print $FILE "<tr><b><td>Major changes in the new build</td></b><td colspan=\'2\'>BUG FIXES</td></tr><br/>";
-	print $FILE "<tr><b><td>TOME</td></b><td>3.0.0</td><td>BUILD19</td></tr><br/>";
-	print $FILE "<tr><b><td>Tertio ADK</td></b><td>-</td><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>CAF</td></b><td>-</td><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>Dashboard SDK</td></b><td>-</td><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>DDA Protocol Version</td></b><td>-</td><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>Menu Server Extension</td></b><td>-</td><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>SMS payload STK</td></b><td>-</td><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>RM CDK</td><td>-</td></b><td>-</td></tr><br/>";
-	print $FILE "<tr><b><td>PE CDK</td><td>-</td></b><td>-</td></tr><br/>";
+	print $FILE "<tr><b><td>TOME</td></b><td>$tomeversion</td><td>$tomebuild</td></tr><br/>";
+	print $FILE "<tr><b><td>Tertio ADK</td></b><td>$tertioadkversion</td><td>$tertioadkbuild</td></tr><br/>";
+	print $FILE "<tr><b><td>CAF</td></b><td>$cafversion</td><td>$cafbuild</td></tr><br/>";
+	print $FILE "<tr><b><td>Dashboard SDK</td></b><td>$dashboardversion</td><td>$dashboardbuild</td></tr><br/>";
+	print $FILE "<tr><b><td>DDA Protocol Version</td></b><td>$ddaversion</td><td>$ddabuild</td></tr><br/>";
+	print $FILE "<tr><b><td>Menu Server Extension</td></b><td>$menuversion</td><td>$menubuild</td></tr><br/>";
+	print $FILE "<tr><b><td>SMS payload STK</td></b><td>$smsversion</td><td>$smsbuild</td></tr><br/>";
+	print $FILE "<tr><b><td>RM CDK</td><td>$rmcdkversion</td></b><td>$rmcdkbuild</td></tr><br/>";
+	print $FILE "<tr><b><td>PE CDK</td><td>$pecdkversion</td></b><td>$pecdkbuild</td></tr><br/>";
 	print $FILE "<tr><b><td>Has the developer documentation been updated?</td></b><td colspan=\"2\">N/A</td></tr></table><br/>";
 	print $FILE "<b>Installation instructions: </b><br/>";
 	print $FILE "Same as previous Tertio Maintenance Release<br/><br/>";
 	print $FILE "<b>Additional information about the changes:</b>N/A<br /><b>The Resolved CRs are:</b><br/>";
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
 	print $FILE "<tr><b><td>CR ID</td><td>Synopsis</td><td>Request Type</td><td>Severity</td><td>Resolver</td><td>Priority</td></tr><br/>";
-	crresolv('7.6.4');
-	crresolv('7.6.3');
-	crresolv('7.6.2');
+	foreach $set(@folder_set)
+	{
+	    $set=~ s/^\s+|\s+$//g;
+	    crresolv($set);
+	 }
 	print $FILE "</table><br/>";
 	print $FILE "<b>The checked in tasks since the last build are:</b><br/>";
 	print $FILE "<b><table width=\"100%\" border=\"1\">";
 	print $FILE "<tr><b><td>Task ID</td><td>Synopsis</td><td>Resolver</td></tr>";
-	taskinfo('7.6.4');
-	taskinfo('7.6.3');
-	taskinfo('7.6.2');
+	foreach $set(@folder_set)
+	{
+	    $set=~ s/^\s+|\s+$//g;
+	    taskinfo($set);
+	}
 	print $FILE "</table><br/>";
 	print $FILE "<b>Note:</b> To install Tertio $mrnumber, please use the latest PatchManager<br/></body></html>";
 	close $FILE;
