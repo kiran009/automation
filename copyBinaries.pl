@@ -97,6 +97,10 @@ sub copyBinaries()
 	{
 		$destdir="/u/kkdaadhi/DSAMS_Deliverable/hpiav3";
 	}
+	elsif($coreproject =~ /RHEL6/)
+	{
+		$destdir="/u/kkdaadhi/DSAMS_Deliverable/rhel6";
+	}
 	rmtree($destdir);
 	open OP, "< $binarylist";
   @file_list=<OP>;
