@@ -100,6 +100,20 @@ sub createTar()
   	push(@location,"$destination/$hostplatform/NotTested/ms-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
   	print LOCATION "$destination/$hostplatform/NotTested/ms-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
 	}
+	elsif($coreproject =~ /RHEL6/)
+    {
+                #       $destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
+        $destdir="/u/kkdaadhi/DSAMS_Deliverable/rhel6";
+        chdir($destdir);
+        copy("$Bin/MS_3.4_README.txt",$destdir);
+        $hostos="rhel6";
+        `find * -type f -name "*README.txt" | xargs tar cvf ms-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf ms-$mrnumber-$hostos-build$build_number\.tar;gzip ms-$mrnumber-$hostos-build$build_number\.tar;`;
+        print "ms-$mrnumber-$hostos-build$build_number\.tar\.gz => $destination/$hostos/NotTested/ms-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
+        copy("ms-$mrnumber-$hostos-build$build_number\.tar\.gz","$destination/$hostos/NotTested/ms-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+        push(@location,"$destination/$hostos/NotTested/ms-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
+        print LOCATION "$destination/$hostos/NotTested/ms-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
+        }
+
 	elsif($coreproject =~ /sol10/)
 	{
 		$destdir="/u/kkdaadhi/DSAMS_Deliverable/sol10";
