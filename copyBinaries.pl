@@ -8,17 +8,15 @@ use Switch;
 use Getopt::Long;
 use File::Copy;
 use FindBin qw($Bin);
-use lib "$Bin/../lib";
+use lib qw("$Bin/../lib" "$Bin");
 use Sys::Hostname;
 #/************ Setting Environment Variables *******************/
 my $database="/data/ccmdb/provident/";
 my $dbbmloc="/data/ccmbm/provident/";
 my $binarylist;
-#="$Bin/fileplacement.fp";
 my $javabinarylist;
-#="$Bin/javabinaries.fp";
 my $hostplatform;
-my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"buildnumber=s"=>\$build_number);
+my $result=GetOptions("coreproject=s"=>\$coreproject,"javaproject=s"=>\$javaprojectname,"pseudoroot=s"=>\$pseudoroot,"buildnumber=s"=>\$build_number);
 if(!$result)
 {
 	print "You must supply arguments to the script\n";
@@ -28,6 +26,11 @@ if(!$coreproject)
 {
 	print "You need to supply core projectname \n";
 	exit;
+}
+if(!$pseudoroot)
+{
+    print "Pseudoroot is mandatory \n";
+    exit;
 }
 if(!$javaprojectname)
 {
@@ -64,8 +67,7 @@ my @formattsks;
 my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
-my $tertiodest="/u/kkdaadhi/Tertio_Dest";
-#my $tertiodest="/data/releases/tertio/7.6.0/patches";
+$pseudoroot=~ s/^\s+|\s+$//g;
 # /* Global Environment Variables ******* /
 sub main()
 {
@@ -80,33 +82,43 @@ sub copyBinaries()
 	copy("$dbbmloc/$coreproject/Provident_Dev/mr_package/javabinaries.fp","$Bin/javabinaries.fp") or die("Couldn't able to copy the file, can't proceed with binary copy $!");
 	$binarylist="$Bin/fileplacement.fp";
 	$javabinarylist="$Bin/javabinaries.fp";
+	if((-z "$Bin/fileplacement.fp") && (-z "$Bin/javabinaries.fp"))
+	{
+	    print "No point proceeding with Packaging if the fileplacement files being blank \n";
+	    exit 1;
+	}
     if($coreproject =~ /linAS5/)
     {
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
+		$destdir="$pseudoroot/linAS5";
 	}
 	elsif($coreproject =~ /sol10/)
 	{
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol10";
+		$destdir="$pseudoroot/sol10";
 	}
 	elsif($coreproject =~ /hpiav3/)
 	{
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpiav3";
+		$destdir="$pseudoroot/hpiav3";
 	}
 	elsif($coreproject =~ /RHEL6/)
 	{
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
+		$destdir="$pseudoroot/rhel6";
 	}
 	elsif($coreproject =~ /sol9/)
 	{
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol9";
+		$destdir="$pseudoroot/sol9";
 	}
 	elsif($coreproject =~ /hpia/)
 	{
-		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpia";
+		$destdir="$pseudoroot/hpia";
 	}
-    #	rmtree($destdir);
-    # Remove destdir contents
-    `rm -rf $destdir/*`;
+    if( -d $destdir)
+    {
+        remove_tree('$destdir', {keep_root => 1});
+    }
+    else
+    {
+        make_path($destdir);
+    }
 	open OP, "< $binarylist";
     @file_list=<OP>;
     close OP;
@@ -180,7 +192,6 @@ sub copyBinaries()
 		$filename=~ s/^\s+|\s+$//g;
 		$permission=~ s/^\s+|\s+$//g;
   	    mkpath("$destdir/$dirname");
-		#copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
 		copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $key $!");
 		chmod(oct($permission),"$destdir/$filename") or die("Couldn't able to set the permission $!");
 		print "Permission: $permission for file: $destdir/$filename \n";

@@ -27,7 +27,7 @@ if($hostname !~ /pesthp2/)
 	$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
 	$CCM="$ENV{'CCM_HOME'}/bin/ccm";
 }
-my $result=GetOptions("folderset=s"=>\$folderset,"readmename=s"=>\$readmename,"prereq=s"=>\$prereq,"supersed=s"=>\$supersed,"buildnumber=s"=>\$build_number,"affects=s"=>\$affects);
+my $result=GetOptions("folderset=s"=>\$folderset,"productname=s"=>\$productname,"readmename=s"=>\$readmename,"prereq=s"=>\$prereq,"supersed=s"=>\$supersed,"buildnumber=s"=>\$build_number,"affects=s"=>\$affects);
 if(!$result)
 {
 	print "Please provide coreprojectname \n";
@@ -56,6 +56,11 @@ if(!$supersed)
 if(!$affects)
 {
 	print "Please mention affects section for the patch\n";
+	exit;
+}
+if(!$productname)
+{
+	print "Productname is mandatory\n";
 	exit;
 }
 my @PatchFiles;
@@ -89,6 +94,7 @@ my @binarylist;
 my $dtformat="$year$months[$mon]$mday$hour$min";
 my 	@location;
 # /* Global Environment Variables ******* /
+$productname=~ s/^\s+|\s+$//g;
 @folder_set=split(/;/,$folderset);
 sub main()
 {
@@ -105,7 +111,7 @@ sub listfolderTasks()
 	print BN $build_number;
 	close BN;
 	open  FILE, "+> $Bin/$readmename";
-	print FILE "Maintenance Release : Tertio $mrnumber build $build_number\n\n";
+	print FILE "Maintenance Release : $productname $mrnumber build $build_number\n\n";
 	print FILE "Created: $dt\n\n";
 	print FILE "PRE-REQUISITE : $prereq\nSUPERSEDED : $supersed\n";
 	foreach $set(@folder_set)

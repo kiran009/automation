@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.7 Build Script
+# Tertio 7.X Build Script
 use Cwd;
 use File::Path;
 use File::Find;
@@ -8,7 +8,7 @@ use Switch;
 use Getopt::Long;
 use File::Copy;
 use FindBin qw($Bin);
-use lib "$Bin/../lib";
+use lib qw("$Bin/../lib" "$Bin");
 use Sys::Hostname;
 
 #/************ Setting Environment Variables *******************/
@@ -125,6 +125,7 @@ sub getTasksnReadme()
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		print SYNOP "CR$cr $synopsis\n";
 		$mr_number=~ s/^\s+|\s+$//g;
+		print "MRNumber is: $mr_number \n";
 		open MR,"+> $Bin/mrnumber.txt";
 		print MR "$mr_number";
 		close MR;
