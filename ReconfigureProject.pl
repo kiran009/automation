@@ -159,6 +159,7 @@ sub getTasksnReadme()
 	close SYNOP;
 	close CRRESOLV;
 	close TASKINF;
+	map { s/\s+\z// } @tasks;
 	$tasklist=join(",",@tasks);
 	@formattsks=join("\n", map { 'PROV_' . $_ } @tasks);
 	open OP,"+>$Bin/formattsks.txt";
