@@ -101,6 +101,7 @@ sub getTasksnReadme()
 		print CRRESOLV "$cr#$synopsis#$requesttype#$severity#$resolver#$priority\n";
 		foreach $task_number(@task_numbers)
 		{
+		        $task_number=~ s/^\s+|\s+$//g; # Remove spaces around
 				($task_synopsis)=`$CCM task -show info $task_number -u -format "%task_synopsis"`;
 				($task_resolver)=`$CCM task -show info $task_number -u -format "%resolver"`;
 				$task_synopsis=~ s/^\s+|\s+$//g;
