@@ -27,6 +27,16 @@ if(!$readmename)
     print "Readme name is mandatory \n";
     exit;
 }
+if(!$pseudoroot)
+{
+    print "The Pseudoroot is mandatory \n";
+    exit;
+}
+if(!$mrprefix)
+{
+    print "MRname is mandatory \n";
+    exit;
+}
 if(!$destination)
 {
     print "Destination directory is mandatory \n";
