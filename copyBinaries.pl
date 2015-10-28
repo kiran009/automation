@@ -111,14 +111,14 @@ sub copyBinaries()
 	{
 		$destdir="$pseudoroot/hpia";
 	}
-    if( -d $destdir)
-    {
-        remove_tree('$destdir', {keep_root => 1});
-    }
-    else
-    {
-        make_path($destdir);
-    }
+    #if( -d $destdir)
+    #{
+    #    remove_tree('$destdir', {keep_root => 1});
+    #}
+    #else
+    #{
+     #   make_path($destdir);
+    #}
 	open OP, "< $binarylist";
     @file_list=<OP>;
     close OP;
