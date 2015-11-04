@@ -99,11 +99,13 @@ sub createTar()
     {
 		$destdir="$pseudoroot/linAS5";
   	    chdir($destdir);
+  	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
   	    $hostos="rhel5";
   	    $hostplatform="linAS5";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostos-build$build_number\.tar;gzip $mrprefix-$mrnumber-$hostos-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostos-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
+  	    unlink "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz" if -e "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
   	    copy("$mrprefix-$mrnumber-$hostos-build$build_number\.tar\.gz","$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   	    push(@location,"$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
   	    print LOCATION "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
@@ -112,11 +114,13 @@ sub createTar()
     {
 		$destdir="$pseudoroot/linAS4";
   	    chdir($destdir);
+  	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
   	    $hostos="rhel4";
   	    $hostplatform="linAS5";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostos-build$build_number\.tar;gzip $mrprefix-$mrnumber-$hostos-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostos-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
+  	    unlink "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz" if -e "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
   	    copy("$mrprefix-$mrnumber-$hostos-build$build_number\.tar\.gz","$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   	    push(@location,"$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
   	    print LOCATION "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
@@ -125,10 +129,12 @@ sub createTar()
 	{
 		$destdir="$pseudoroot/sol10";
   	    chdir($destdir);
+  	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
   	    $hostplatform="sol10";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; gzip $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	    unlink "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz" if -e "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
   	    copy("$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   	    push(@location,"$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
   	    print LOCATION "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
@@ -137,10 +143,12 @@ sub createTar()
 	{
 		$destdir="$pseudoroot/hpiav3";
   	    chdir($destdir);
+  	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
   	    $hostplatform="hpiav3";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; gzip $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	    unlink "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz" if -e "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
   	    copy("$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   	    push(@location,"$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
   	    print LOCATION "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
@@ -149,10 +157,12 @@ sub createTar()
 	{
 		$destdir="$pseudoroot/sol9";
   	    chdir($destdir);
+  	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
   	    $hostplatform="sol9";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; gzip $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	    unlink "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz" if -e "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
   	    copy("$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   	    push(@location,"$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
   	    print LOCATION "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
@@ -161,10 +171,12 @@ sub createTar()
 	{
 		$destdir="$pseudoroot/hpia";
   	    chdir($destdir);
+  	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
   	    $hostplatform="hpia";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; gzip $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	    unlink "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz" if -e "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz"l
   	    copy("$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   	    push(@location,"$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
   	    print LOCATION "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
@@ -173,10 +185,12 @@ sub createTar()
 	{
 		$destdir="$pseudoroot/rhel6";
   	    chdir($destdir);
+  	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
   	    $hostplatform="rhel6";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; gzip $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	    unlink "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz" if -e "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
   	    copy("$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   	    push(@location,"$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
   	    print LOCATION "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";

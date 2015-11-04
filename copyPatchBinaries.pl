@@ -233,8 +233,10 @@ sub copyBinaries()
 		($filename,$permission)=split(/,/,$deliveryhash{$key});
 		$filename=~ s/^\s+|\s+$//g;
 		$permission=~ s/^\s+|\s+$//g;
-  	mkpath("$destdir/$dirname");
+  	    mkpath("$destdir/$dirname");
 		#copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $!");
+		# Remove the file prior to copying
+  	    unlink "$destdir/$filename" if -e "$destdir/$filename";
 		copy("$key","$destdir/$filename") or die("Couldn't able to copy the file $key $!");
 		chmod(oct($permission),"$destdir/$filename") or die("Couldn't able to set the permission $!");
 		print "Permission: $permission for file: $destdir/$filename \n";
