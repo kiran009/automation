@@ -171,7 +171,7 @@ sub getTasksnReadme()
 	{
 		$cr=~ s/^\s+|\s+$//g;
 		undef @task_numbers;
-		undef @tasks;
+		#undef @tasks;
 		@task_numbers=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		push(@tasks,@task_numbers);
 		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
