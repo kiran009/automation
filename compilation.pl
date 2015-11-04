@@ -32,6 +32,8 @@ elsif($hostname =~ /pedlinux6/)
 {	$hostplatform="rhel6";$gmake='/usr/bin/gmake';}
 elsif($hostname =~ /pedsun2/)
 {	$hostplatform="sol10";$gmake='/usr/bin/gmake';}
+elsif($hostname =~ /pedsun3/)
+{	$hostplatform="sol9";$gmake='/usr/bin/gmake';}
 elsif($hostname =~ /pesthp2/)
 {	$hostplatform="hpiav3";$gmake='/usr/local/bin/gmake';}
 elsif($hostname =~ /pedhp1/)
