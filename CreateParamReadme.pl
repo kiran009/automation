@@ -134,7 +134,7 @@ sub listfolderTasks()
 				$task=~ s/^\s+|\s+$//g;
 				@crs=`$CCM task -show cr $task \-u \-f "%problem_number"`;
 				print "CR corresponding to task $task is: @crs\n";
-				push(@crs_folder,$crs);
+				push(@crs_folder,@crs);
 			}
 			@uniqfolder = do { my %seen; grep { !$seen{$_}++ } @crs_folder};
         }
