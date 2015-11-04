@@ -132,9 +132,9 @@ sub listfolderTasks()
 			foreach $task(@tasks_folder)
 			{
 				$task=~ s/^\s+|\s+$//g;
-				$crinfo=`$CCM task -show cr $task \-u \-f "%problem_number"`;
-				print "CR corresponding to task $task is: $crinfo\n";
-				push(@crs_folder,$crinfo);
+				@crs=`$CCM task -show cr $task \-u \-f "%problem_number"`;
+				print "CR corresponding to task $task is: @crs\n";
+				push(@crs_folder,$crs);
 			}
 			@uniqfolder = do { my %seen; grep { !$seen{$_}++ } @crs_folder};
         }
@@ -170,6 +170,8 @@ sub getTasksnReadme()
 	foreach $cr(@crs)
 	{
 		$cr=~ s/^\s+|\s+$//g;
+		undef @task_numbers;
+		undef @tasks;
 		@task_numbers=`$CCM query "is_associated_task_of(cvtype='problem' and problem_number='$cr')" -u -f "%task_number"`;
 		push(@tasks,@task_numbers);
 		($mr_number)=`$CCM query "cvtype='problem' and problem_number='$cr'" -u -f "%MRnumber"`;
