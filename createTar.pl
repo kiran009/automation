@@ -176,7 +176,7 @@ sub createTar()
   	    $hostplatform="hpia";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; gzip $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-  	    unlink "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz" if -e "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz"l
+  	    unlink "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz" if -e "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
   	    copy("$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
   	    push(@location,"$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
   	    print LOCATION "$destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
