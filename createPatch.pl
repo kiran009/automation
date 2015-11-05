@@ -87,103 +87,175 @@ sub createTar()
   if($coreproject =~ /linAS5/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS5";
-  	chdir($destdir);
-  	copy("$Bin/$patchnumber\_README.txt",$destdir);
-  	$hostos="rhel5";
-  	$hostplatform="linAS5";
-  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostos-build$build_number\.tar;gzip tertio-$mrnumber-$hostos-build$build_number\.tar;`;
-  	print "tertio-$mrnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
-  	copy("tertio-$mrnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
-	}
+  	    chdir($destdir);
+  	    copy("$Bin/$patchnumber\_README.txt",$destdir);
+  	    $hostos="rhel5";
+  	    $hostplatform="linAS5";
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+           unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+          warn "No files to unlink!\n";
+        }
+  	    `find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostos-build$build_number\.tar;gzip tertio-$mrnumber-$hostos-build$build_number\.tar;`;
+  	    print "tertio-$mrnumber-$hostos-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz";
+  	    copy("tertio-$mrnumber-$hostos-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  	    push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz");
+  	    print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostos-build$build_number\_$dtformat\.tar\.gz \n";
+    }
 	elsif($coreproject =~ /hpiav3/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpiav3";
-  	chdir($destdir);
-  	copy("$Bin/$patchnumber\_README.txt",$destdir);
-  	$hostplatform="hpiav3";
-  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
-  	print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-  	copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+  	    chdir($destdir);
+  	    copy("$Bin/$patchnumber\_README.txt",$destdir);
+  	    $hostplatform="hpiav3";
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+               unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+              warn "No files to unlink!\n";
+        }
+      	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  	    print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	    copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  	    push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  	    print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
 	}
   elsif($coreproject =~ /linAS4/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS4";
-  	chdir($destdir);
-  	copy("$Bin/$patchnumber\_README.txt",$destdir);
-  	$hostos="rhel3";
-  	$hostplatform="linAS4";
-  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-patch$patchnumber\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-patch$patchnumber\.tar;`;
-  	print "tertio-patch$patchnumber\.tar => $tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
-  	copy("tertio-patch$patchnumber\.tar","$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
+  	    chdir($destdir);
+  	    copy("$Bin/$patchnumber\_README.txt",$destdir);
+  	    $hostos="rhel3";
+  	    $hostplatform="linAS4";
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+           unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+              warn "No files to unlink!\n";
+        }
+  	    `find * -type f -name "*README.txt" | xargs tar cvf tertio-patch$patchnumber\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-patch$patchnumber\.tar;`;
+  	    print "tertio-patch$patchnumber\.tar => $tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
+  	    copy("tertio-patch$patchnumber\.tar","$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
+  	    push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
+  	    print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
 	}
   elsif($coreproject =~ /linAS3/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/linAS3";
-  	chdir($destdir);
-  	copy("$Bin/$patchnumber\_README.txt",$destdir);
-  	$hostos="rhel3";
-  	$hostplatform="linAS3";
-  	#`find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;gzip tertio-$patchnumber-$hostos-build$build_number\.tar;`;
-  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-patch$patchnumber\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-patch$patchnumber\.tar;`;
-  	print "tertio-patch$patchnumber\.tar => $tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
-  	copy("tertio-patch$patchnumber\.tar","$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
+  	    chdir($destdir);
+  	    copy("$Bin/$patchnumber\_README.txt",$destdir);
+  	    $hostos="rhel3";
+  	    $hostplatform="linAS3";
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+               unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+              warn "No files to unlink!\n";
+        }
+  	    #`find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$patchnumber-$hostos-build$build_number\.tar;gzip tertio-$patchnumber-$hostos-build$build_number\.tar;`;
+  	    `find * -type f -name "*README.txt" | xargs tar cvf tertio-patch$patchnumber\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-patch$patchnumber\.tar;`;
+  	    print "tertio-patch$patchnumber\.tar => $tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
+  	    copy("tertio-patch$patchnumber\.tar","$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
+  	    push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
+  	    print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
 	}
   elsif($coreproject =~ /sol9/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol9";
-  	chdir($destdir);
-  	copy("$Bin/$patchnumber\_README.txt",$destdir);
-  	$hostplatform="sol9";
-  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-patch$patchnumber\.tar;find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-patch$patchnumber\.tar;`;
-  	print "tertio-patch$patchnumber\.tar => $tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
-  	copy("tertio-patch$patchnumber\.tar","$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
+  	    chdir($destdir);
+  	    copy("$Bin/$patchnumber\_README.txt",$destdir);
+  	    $hostplatform="sol9";
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+               unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+              warn "No files to unlink!\n";
+        }
+  	    `find * -type f -name "*README.txt" | xargs tar cvf tertio-patch$patchnumber\.tar;find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-patch$patchnumber\.tar;`;
+  	    print "tertio-patch$patchnumber\.tar => $tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
+  	    copy("tertio-patch$patchnumber\.tar","$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
+  	    push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
+  	    print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
 	}
   elsif($coreproject =~ /hpia/)
   {
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/hpia";
-  	chdir($destdir);
-  	copy("$Bin/$patchnumber\_README.txt",$destdir);
-  	$hostplatform="hpia";
-  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-patch$patchnumber\.tar;find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-patch$patchnumber\.tar;`;
-  	print "tertio-patch$patchnumber\.tar => $tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
-  	copy("tertio-patch$patchnumber\.tar","$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
+  	    chdir($destdir);
+  	    copy("$Bin/$patchnumber\_README.txt",$destdir);
+  	    $hostplatform="hpia";
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+               unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+              warn "No files to unlink!\n";
+        }
+  	    `find * -type f -name "*README.txt" | xargs tar cvf tertio-patch$patchnumber\.tar;find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-patch$patchnumber\.tar;`;
+  	    print "tertio-patch$patchnumber\.tar => $tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar";
+  	    copy("tertio-patch$patchnumber\.tar","$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar") or die("Couldn't copy to destination $!");
+  	    push(@location,"$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar");
+  	    print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-patch$patchnumber\.tar \n";
 	}
 	elsif($coreproject =~ /sol10/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/sol10";
-  	chdir($destdir);
-  	copy("$Bin/$patchnumber\_README.txt",$destdir);
-  	$hostplatform="sol10";
-  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
-  	print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-  	copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-		#dummy comment.
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+  	    chdir($destdir);
+  	    copy("$Bin/$patchnumber\_README.txt",$destdir);
+  	    $hostplatform="sol10";
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+               unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+       {
+              warn "No files to unlink!\n";
+        }
+  	    `find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  	    print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	    copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+    	#dummy comment.
+      	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  	    print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
 	}
 	elsif($coreproject =~ /RHEL6/)
 	{
 		$destdir="/u/kkdaadhi/Tertio_Deliverable/rhel6";
-  	chdir($destdir);
-  	copy("$Bin/$patchnumber\_README.txt",$destdir);
-  	$hostplatform="rhel6";
-  	`find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
-  	print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
-  	copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
-  	push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
-  	print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
+      	chdir($destdir);
+  	    copy("$Bin/$patchnumber\_README.txt",$destdir);
+  	    $hostplatform="rhel6";
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+               unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+              warn "No files to unlink!\n";
+        }
+  	    `find * -type f -name "*README.txt" | xargs tar cvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf tertio-$mrnumber-$hostplatform-build$build_number\.tar; gzip tertio-$mrnumber-$hostplatform-build$build_number\.tar;`;
+  	    print "tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
+  	    copy("tertio-$mrnumber-$hostplatform-build$build_number\.tar\.gz","$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz") or die("Couldn't copy to destination $!");
+  	    push(@location,"$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz");
+  	    print LOCATION "$tertiodest/$hostplatform/NotTested/tertio-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz  \n";
 	}
   close LOCATION;
 }

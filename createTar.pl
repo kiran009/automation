@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Tertio 7.6 createTarfile script
+# Tertio 7.X createTarfile script
 use Cwd;
 use File::Path;
 use File::Find;
@@ -101,6 +101,15 @@ sub createTar()
   	    chdir($destdir);
   	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+            unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+            warn "No files to unlink!\n";
+        }
   	    $hostos="rhel5";
   	    $hostplatform="linAS5";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostos-build$build_number\.tar;gzip $mrprefix-$mrnumber-$hostos-build$build_number\.tar;`;
@@ -116,6 +125,15 @@ sub createTar()
   	    chdir($destdir);
   	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+            unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+            warn "No files to unlink!\n";
+        }
   	    $hostos="rhel4";
   	    $hostplatform="linAS5";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostos-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostos-build$build_number\.tar;gzip $mrprefix-$mrnumber-$hostos-build$build_number\.tar;`;
@@ -131,6 +149,15 @@ sub createTar()
   	    chdir($destdir);
   	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+            unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+            warn "No files to unlink!\n";
+        }
   	    $hostplatform="sol10";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; gzip $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
@@ -145,6 +172,15 @@ sub createTar()
   	    chdir($destdir);
   	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+            unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+            warn "No files to unlink!\n";
+        }
   	    $hostplatform="hpiav3";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; gzip $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
@@ -159,6 +195,15 @@ sub createTar()
   	    chdir($destdir);
   	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+            unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+            warn "No files to unlink!\n";
+        }
   	    $hostplatform="sol9";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; gzip $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
@@ -173,6 +218,15 @@ sub createTar()
   	    chdir($destdir);
   	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+            unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+            warn "No files to unlink!\n";
+        }
   	    $hostplatform="hpia";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; gzip $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
@@ -187,6 +241,15 @@ sub createTar()
   	    chdir($destdir);
   	    unlink "$destdir/$readmename" if -e "$destdir/$readmename";
   	    copy("$Bin/$readmename",$destdir);
+  	    my @files = <*.gz>;
+        if (@files)
+        {
+            unlink @files or warn "Problem unlinking @files: $!";
+        }
+        else
+        {
+            warn "No files to unlink!\n";
+        }
   	    $hostplatform="rhel6";
   	    `find * -type f -name "*README.txt" | xargs tar cvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; find * -type f  \\( ! -name "*README.txt" ! -name "*.tar" \\) | xargs tar uvf $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar; gzip $mrprefix-$mrnumber-$hostplatform-build$build_number\.tar;`;
   	    print "$mrprefix-$mrnumber-$hostplatform-build$build_number\.tar\.gz => $destination/$hostplatform/NotTested/$mrprefix-$mrnumber-$hostplatform-build$build_number\_$dtformat\.tar\.gz";
