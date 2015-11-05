@@ -24,10 +24,26 @@ if($hostname !~ /pesthp2/)
 	$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
 	$CCM="$ENV{'CCM_HOME'}/bin/ccm";
 }
+if($hostname !~ /pedhp2/)
+{
+	# On HPUX, CCM client doesn't exist, ignore setting this environment there
+	$ENV{'CCM_HOME'}="/opt/ccm71";
+	$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
+	$CCM="$ENV{'CCM_HOME'}/bin/ccm";
+}
+if($hostname !~ /pedhp1/)
+{
+	# On HPUX, CCM client doesn't exist, ignore setting this environment there
+	$ENV{'CCM_HOME'}="/opt/ccm71";
+	$ENV{'PATH'}="$ENV{'CCM_HOME'}/bin:$ENV{'PATH'}";
+	$CCM="$ENV{'CCM_HOME'}/bin/ccm";
+}
 if($hostname =~ /pedlinux5/)
 {	$hostplatform="linas5"; $gmake='/usr/bin/gmake';}
 if($hostname =~ /pedlinux2/)
 {	$hostplatform="linas4"; $gmake='/usr/bin/gmake';}
+if($hostname =~ /pedlinux1/)
+{	$hostplatform="linas3"; $gmake='/usr/bin/gmake';}
 elsif($hostname =~ /pedlinux6/)
 {	$hostplatform="rhel6";$gmake='/usr/bin/gmake';}
 elsif($hostname =~ /pedsun2/)
@@ -37,7 +53,7 @@ elsif($hostname =~ /pedsun3/)
 elsif($hostname =~ /pesthp2/)
 {	$hostplatform="hpiav3";$gmake='/usr/local/bin/gmake';}
 elsif($hostname =~ /pedhp1/)
-{	$hostplatform="hpiav3";$gmake='/usr/local/bin/gmake';}
+{	$hostplatform="hppa";$gmake='/usr/local/bin/gmake';}
 elsif($hostname =~ /pedhp2/)
 {	$hostplatform="hpia";$gmake='/usr/local/bin/gmake';}
 
